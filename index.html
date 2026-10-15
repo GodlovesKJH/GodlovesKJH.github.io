@@ -74,6 +74,16 @@ p{margin:0}
 .item .body{display:flex;flex-direction:column;gap:12px;min-width:0}
 .item .facts{font-size:14px;color:var(--muted)}
 .item .note{font-size:13.5px;color:var(--warm)}
+.item .body.with-shot{display:grid;grid-template-columns:minmax(0,1fr) 9.5rem;gap:12px 24px;align-items:start}
+.item .text{display:flex;flex-direction:column;gap:12px;min-width:0}
+.shot{margin:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface);aspect-ratio:390/700;max-width:100%}
+.shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.links a{font-size:14px;font-weight:500;color:var(--accent);text-decoration:none;padding:5px 13px;border:1px solid var(--accent);border-radius:999px;line-height:1.4}
+.links a:hover{background:var(--accent);color:var(--bg)}
+.links a:focus-visible{outline:2px solid var(--warm);outline-offset:2px}
+.links a.live{border-color:var(--line);color:var(--ink)}
+.list-note{font-size:14px;color:var(--muted)}
 .status{align-self:flex-start;font-size:12.5px;font-weight:600;padding:1px 9px;border-radius:4px;border:1px solid currentColor}
 .s-on{color:var(--accent)} .s-wip{color:var(--warm)} .s-done{color:var(--muted)}
 .closing{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:32px;color:var(--muted)}
@@ -92,6 +102,7 @@ p{margin:0}
   .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
   .cols{grid-template-columns:1fr}
   .item{grid-template-columns:1fr}
+  .item .body.with-shot{grid-template-columns:minmax(0,1fr) 6.5rem;gap:12px 16px}
   .wrap{padding-block:36px 56px;gap:48px}
 }
 </style>
@@ -144,6 +155,7 @@ p{margin:0}
   <section aria-labelledby="l-title">
     <div class="list-head">
       <h2 id="l-title">그 밖의 프로젝트</h2>
+      <p class="list-note">「직접 해 보기」가 있는 프로젝트는 실제 앱을 가상 데이터로 바로 써 볼 수 있습니다. 입력한 내용은 보시는 브라우저에만 남습니다.</p>
       <div class="filters" role="group" aria-label="분야 선택">
         <button type="button" data-f="all" aria-pressed="true">전체</button>
         <button type="button" data-f="biz" aria-pressed="false">사업체·농원</button>
@@ -174,26 +186,30 @@ p{margin:0}
 const GROUPS={biz:"사업체·농원",church:"교회·공동체",gov:"공공·행정",school:"학교·교육",learn:"배움과 기록"};
 const ST={on:["운영 중","s-on"],wip:["작업 중","s-wip"],test:["시험 중","s-wip"],talk:["협의 중","s-wip"],pre:["배포 전","s-wip"],done:["완료","s-done"],sold:["판매 완료","s-done"]};
 const P=[
- {g:"biz",s:"on",t:"SPOTPLAN 촬영 스튜디오 업무 시스템",w:"푸드스타일리스트인 지인은 스튜디오에 거의 매일 들어오는 요청서를 보고 참고 사진을 찾아 정리한 뒤 촬영 담당자와 협의합니다. 이 일에만 2시간 가까이 걸려, 그 시간을 줄여 주고 싶어 만들었습니다. 운영 방법을 업체에 직접 전수해, 지금은 업체가 스스로 고쳐 가며 쓰고 있습니다.",f:"요청서 한 건의 자료 조사·협의 약 2시간 → 30분 이내 · 고객 요청서 → 회차별 제안서 → 촬영팀 인계 → 결과물 납품 → 입금 기록 · 통화 내용을 Claude로 요청서로 정리 · 직원·촬영팀 권한별 계정 관리",k:["Supabase","GitHub Pages","Claude API"]},
+ {g:"biz",s:"on",t:"SPOTPLAN 촬영 스튜디오 업무 시스템",im:"spotplan",d:[["고객 화면 해 보기","https://godloveskjh.github.io/demo/spotplan/"],["스튜디오 화면 해 보기","https://godloveskjh.github.io/demo/spotplan/#/studio"]],w:"푸드스타일리스트인 지인은 스튜디오에 거의 매일 들어오는 요청서를 보고 참고 사진을 찾아 정리한 뒤 촬영 담당자와 협의합니다. 이 일에만 2시간 가까이 걸려, 그 시간을 줄여 주고 싶어 만들었습니다. 운영 방법을 업체에 직접 전수해, 지금은 업체가 스스로 고쳐 가며 쓰고 있습니다.",f:"요청서 한 건의 자료 조사·협의 약 2시간 → 30분 이내 · 고객 요청서 → 회차별 제안서 → 촬영팀 인계 → 결과물 납품 → 입금 기록 · 통화 내용을 Claude로 요청서로 정리 · 직원·촬영팀 권한별 계정 관리",k:["Supabase","GitHub Pages","Claude API"]},
  {g:"biz",s:"talk",t:"촬영 제안서 생성기",w:"지인이 일하는 스튜디오의 업무를 보니 비효율적인 단계가 있었고, 재방문 고객에 비해 신규 고객이 훨씬 적었습니다. 홍보와 첫 상담에 문제가 있다고 보고, 첫 연락부터 계약·진행·납품까지 한 흐름으로 보면서 신규 고객이 실제 계약까지 이어지도록 돕고 싶었습니다.",f:"요청서 분석 → 참고 사진 검색 → Claude 자동 선별 → 예전 제안서와 겹치는 사진 제거 → PDF·PPTX 출력 · 직원 로그인",k:["Python","Flask","Claude API","Firestore"]},
- {g:"biz",s:"sold",t:"과수원 직거래 장터",w:"교우가 운영하는 과수원이 판로를 찾지 못해 어려움을 겪고 있었습니다. 홍보부터 주문, 배송 관리까지 쉽고 빠르게 할 수 있는 시스템을 만들어 드리고 싶었습니다.",f:"앱을 연 지 3주 만에 전량 판매",k:["Apps Script","Google Sheets"]},
- {g:"biz",s:"pre",t:"팜슈가 농원 주문 앱",w:"선교사님의 캄보디아 팜슈가 농원 제품이 어떻게 팔리고 있는지 궁금했습니다. 과수원 직거래 장터가 3주 만에 완판되는 것을 보면서, 교회가 파송한 선교사님의 일터사역 농원 제품도 그렇게 잘 팔리기를 바라며 만들었습니다.",f:"한국어·영어·크메르어 · 장바구니와 주문 조회 · 농장주와 대화 · 농장 관리 화면 · 2027년 1월 현지 방문 때 선교사님과 배포 결정",k:["Apps Script","Google Sheets"]},
+ {g:"biz",s:"sold",t:"과수원 직거래 장터",im:"orchard",d:[["직접 해 보기","https://godloveskjh.github.io/demo/orchard/"]],w:"교우가 운영하는 과수원이 판로를 찾지 못해 어려움을 겪고 있었습니다. 홍보부터 주문, 배송 관리까지 쉽고 빠르게 할 수 있는 시스템을 만들어 드리고 싶었습니다.",f:"앱을 연 지 3주 만에 전량 판매",k:["Apps Script","Google Sheets"]},
+ {g:"biz",s:"pre",t:"팜슈가 농원 주문 앱",im:"palmsugar",d:[["직접 해 보기","https://godloveskjh.github.io/demo/palmsugar/"]],w:"선교사님의 캄보디아 팜슈가 농원 제품이 어떻게 팔리고 있는지 궁금했습니다. 과수원 직거래 장터가 3주 만에 완판되는 것을 보면서, 교회가 파송한 선교사님의 일터사역 농원 제품도 그렇게 잘 팔리기를 바라며 만들었습니다.",f:"한국어·영어·크메르어 · 장바구니와 주문 조회 · 농장주와 대화 · 농장 관리 화면 · 2027년 1월 현지 방문 때 선교사님과 배포 결정",k:["Apps Script","Google Sheets"]},
  {g:"church",s:"on",t:"예배 영상 자동 편집·업로드",w:"현장에 오지 못하는 성도들도 예배의 감동을 좋은 소리로 함께 누리기를 바랐습니다. 매주 반복되는 편집 작업이 봉사자에게 짐이 되지 않도록 자동화했습니다.",f:"녹화본에서 찬양·설교 구간 자동 분리 · 고음질 음원 싱크 · 찬양 가사자막과 설교 음성자막 자동 생성 · 유튜브·드라이브 업로드와 보관까지 한 번에 · 6.15판",k:["Python","Flask","FFmpeg","음성 인식","글자 인식"]},
  {g:"church",s:"test",t:"예배 쇼츠 만들기",w:"목사님께서 설교와 찬양을 쇼츠로 올리고 싶어 하셨지만, 편집 프로그램으로 자르고 자막을 넣어 올리는 일은 쉽지 않습니다. 원하는 구간만 고르면 자막이 들어간 쇼츠가 만들어지고 유튜브·인스타그램까지 올라가는 도구를 드리고 싶었습니다.",f:"세로 쇼츠·릴스 제작과 자막 · 컴퓨터에 익숙하지 않은 사역자도 더블클릭으로 설치",k:["Python","Flask","FFmpeg"]},
- {g:"church",s:"wip",t:"교회 카페 결제 앱",w:"작은 교회 카페에서는 몇 안 되는 봉사자가 결제, 주문, 제조, 전달까지 모두 감당해야 합니다. 이 과정을 덜어 봉사자들이 지치지 않고 즐겁게 섬길 수 있도록 만들었습니다.",f:"메뉴 주문 → 제조 → 전달 흐름 완성 · 카드 결제 연동 작업 중",k:["Firebase"]},
+ {g:"church",s:"wip",t:"교회 카페 주문 앱",im:"cafe",d:[["손님 화면 해 보기","https://godloveskjh.github.io/demo/cafe/"],["봉사자 화면 해 보기","https://godloveskjh.github.io/demo/cafe/?staff"]],w:"작은 교회 카페에서는 몇 안 되는 봉사자가 결제, 주문, 제조, 전달까지 모두 감당해야 합니다. 이 과정을 덜어 봉사자들이 지치지 않고 즐겁게 섬길 수 있도록 만들었습니다.",f:"손님은 QR로 주문 · 봉사자는 태블릿으로 제조·입금 확인·픽업 번호판 관리 · 완료 현황판 · 계좌이체·현금 결제 동작, 카드 결제는 아직",k:["Firebase","Firestore"]},
  {g:"church",s:"on",t:"교회 시설 예약 시스템",w:"공간 예약이 겹치거나 누가 어디를 쓰는지 몰라 생기는 혼선이 잦았습니다. 공간 때문에 생기는 불편이 모임의 즐거움을 가리지 않기를 바랐습니다.",f:"4개 공간 · 30분 단위 예약 · 반복 예약 지원 · 2.0판",k:["Apps Script","Sheets","Firestore"]},
  {g:"church",s:"on",t:"주차 차량 관리 시스템",w:"손으로 적어 관리하던 교인 차량 등록부를 온라인으로 옮겨, 주차위원들이 더 쉽고 정확하게 차량을 관리할 수 있도록 돕고 싶었습니다.",f:"교인 차량 등록과 조회",k:["Apps Script"]},
  {g:"church",s:"on",t:"캄보디아 선교 답사 운영",w:"답사팀이 일정을 함께 보는 것은 물론, 선교지와 캄보디아 문화를 미리 이해하고 떠나기를 바랐습니다. 다녀온 뒤 답사 보고서와 영상도 더 쉽게 만들고 싶어 참가자용 웹북과 운영 시트를 만들었습니다.",f:"참가자 7명 · 운영 시트와 웹북 자동 연동 · 명단·방 배정·예산 자동 맞춤 · 2027년 1월 출발",k:["Apps Script","Google Sheets","GitHub Pages"]},
  {g:"gov",s:"on",t:"도 체육대회 경기 운영 협업 앱",w:"지자체 체육 부서 팀장인 지인이 2027년 장애인 경기까지 포함된 대규모 도 단위 체육대회를 맡게 되었습니다. 경기 운영을 맡은 시·도 담당자와 종목별 담당자가 중요한 연락을 그동안 메신저 단체방으로만 주고받아 왔는데, 이를 더 쉽고 체계적으로 하고 싶어 해 만들어 드렸습니다. 지금은 팀장님이 직접 고쳐 가며 쓰고 있습니다.",f:"경기장 안내 · 운영 매뉴얼 · 경기 일정 · 현장 특이사항 공동 관리 · 경기장 준비 현황",k:["Astro","Firebase","ChatGPT"]},
- {g:"school",s:"on",t:"상담기록 앱",w:"학생, 학부모와의 다양한 갈등과 상담 내용을 손으로 정리하는 데 한계가 많았습니다. 녹음, 학습지, 상담지, 성격검사지를 그대로 스캔하고 정리해 기록 시간을 줄이고, 상담의 본질인 아이와 부모에게 집중하고 싶었습니다.",f:"손글씨 자료 사진을 글로 옮기기 · 기록 유형 자동 분류 · 진로검사(홀랜드 6유형)·성격검사 정리 · 학부모 상담 기록",n:"학생 정보 보호를 위해 화면은 공개하지 않습니다.",k:["Claude API","Google Sheets"]},
+ {g:"school",s:"on",t:"상담기록 앱",im:"counsel",d:[["직접 해 보기","https://godloveskjh.github.io/demo/counsel/"]],w:"학생, 학부모와의 다양한 갈등과 상담 내용을 손으로 정리하는 데 한계가 많았습니다. 녹음, 학습지, 상담지, 성격검사지를 그대로 스캔하고 정리해 기록 시간을 줄이고, 상담의 본질인 아이와 부모에게 집중하고 싶었습니다.",f:"손글씨 자료 사진을 글로 옮기기 · 기록 유형 자동 분류 · 진로검사(홀랜드 6유형)·성격검사 정리 · 학부모 상담 기록",n:"실제 학생 정보는 공개하지 않습니다. 체험판은 가상의 학급으로 동작합니다.",k:["Claude API","Google Sheets"]},
  {g:"school",s:"on",t:"평가지 영문 변환 파이프라인",w:"한국어가 서툰 다문화 학생이 평가지를 이해하지 못해 실력과 상관없이 낮은 점수를 받는 것이 안타까웠습니다. 언어가 아니라 배운 내용으로 평가받을 수 있도록 만들었습니다.",f:"8차례 개선 · 자동 자가검증 후 출력 · 수학·국어 평가지 실제 적용",k:["Claude Vision","Python","WeasyPrint"]},
  {g:"school",s:"on",t:"NEIS 시간표 대조 도구",w:"교사들이 학기마다 시간표를 한 칸씩 눈으로 대조하는 시간이 아까웠습니다. 그 시간을 수업 준비와 아이들에게 돌려주고 싶었습니다.",f:"여러 학년·학기 대조에 사용 · 수정 부분을 빨간색으로 표시한 문서 생성",k:["Claude 스킬","DOCX"]},
- {g:"learn",s:"on",t:"Arrow English 학습앱",w:"영어를 다시 배우고 싶어도 마땅한 교재와 꾸준히 공부할 방법을 찾기 어려운 실버 세대 성도들을 돕고 싶었습니다.",f:"7단계 · 481문항 · 오답 추적과 학습 통계",k:["웹앱"]},
- {g:"learn",s:"on",t:"수어공부방 앱",w:"수어를 배우며 익힌 단어와 아직 익히지 못한 단어를 구분해 효율적으로 공부하고 싶었습니다. 이 자료를 함께 배우는 수강생들과 나누어, 결석한 분들도 뒤처지거나 중도에 포기하지 않기를 바랐습니다.",f:"5주차까지 단어 266개 · 대화 102개 · 국립국어원 사전 수형 그림을 이용 허락 범위 안에서 사용 · 매주 갱신",k:["GitHub Pages","웹앱"]},
- {g:"learn",s:"done",t:"대디캠프 15주년 웹북",w:"꿈의학교 대디캠프 15주년을 맞아 그 역사를 정리하고, 새로운 세대의 스태프와 참석자들이 캠프의 목적을 바르게 이해하고 준비하며 참여하기를 바라는 마음으로 만들었습니다.",f:"15년의 발자취 · 참가자 고백 · 준비 8주 전부터 마무리까지 운영 가이드 · 영상·사진 기록",k:["웹북"]},
- {g:"learn",s:"wip",t:"응용근신경학(AK) 학습 노트",w:"새로운 분야를 공부하며 배운 내용을 체계적으로 정리하고 싶어 만들었습니다.",f:"12주 과정 강의별 정리 · 직접 그린 도해",k:["HTML","Python"]}
+ {g:"learn",s:"on",t:"Arrow English 학습앱",w:"영어를 다시 배우고 싶어도 마땅한 교재와 꾸준히 공부할 방법을 찾기 어려운 실버 세대 성도들을 돕고 싶었습니다.",f:"생활영어 카드 289개(6분야) · 성경 이야기 30편 · 단어 뜻 풀이 488개 · 카드 퀴즈 · 발음 듣기 · 카카오톡으로 파일 하나만 보내면 바로 실행",k:["단일 HTML","음성 합성"]},
+ {g:"learn",s:"on",t:"수어공부방 앱",im:"sueo",l:[["실제 사이트","https://godloveskjh.github.io/sueo-study/"]],w:"수어를 배우며 익힌 단어와 아직 익히지 못한 단어를 구분해 효율적으로 공부하고 싶었습니다. 이 자료를 함께 배우는 수강생들과 나누어, 결석한 분들도 뒤처지거나 중도에 포기하지 않기를 바랐습니다.",f:"5주차까지 단어 266개 · 대화 102개 · 국립국어원 사전 수형 그림을 이용 허락 범위 안에서 사용 · 매주 갱신",k:["GitHub Pages","웹앱"]},
+ {g:"learn",s:"done",t:"대디캠프 15주년 웹북",im:"daddy",l:[["웹북 보기","https://godloveskjh.github.io/DaddyCamp/"]],w:"꿈의학교 대디캠프 15주년을 맞아 그 역사를 정리하고, 새로운 세대의 스태프와 참석자들이 캠프의 목적을 바르게 이해하고 준비하며 참여하기를 바라는 마음으로 만들었습니다.",f:"15년의 발자취 · 참가자 고백 · 준비 8주 전부터 마무리까지 운영 가이드 · 영상·사진 기록",k:["웹북"]},
+ {g:"learn",s:"wip",t:"응용근신경학(AK) 학습 노트",im:"ak",l:[["노트 보기","https://godloveskjh.github.io/ak-study-notes/"]],w:"새로운 분야를 공부하며 배운 내용을 체계적으로 정리하고 싶어 만들었습니다.",f:"12주 과정 강의별 정리 · 직접 그린 도해",k:["HTML","Python"]}
 ];
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function links(p){
+  const a=(p.d||[]).map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(t)} →</a>`).concat((p.l||[]).map(([t,u])=>`<a class="live" href="${u}" target="_blank" rel="noopener">${esc(t)} ↗</a>`));
+  return a.length?`<div class="links">${a.join("")}</div>`:"";
+}
 function render(f){
   const keys=f==="all"?Object.keys(GROUPS):[f];
   document.getElementById("list").innerHTML=keys.map(g=>`
@@ -201,7 +217,7 @@ function render(f){
     ${P.filter(p=>p.g===g).map(p=>`
       <article class="item">
         <div class="meta"><h3>${esc(p.t)}</h3>${p.s?`<span class="status ${ST[p.s][1]}">${ST[p.s][0]}</span>`:""}${p.k.length?`<div class="tags">${p.k.map(k=>`<span class="tag">${esc(k)}</span>`).join("")}</div>`:""}</div>
-        <div class="body"><p>${esc(p.w)}</p>${p.f?`<p class="facts">${esc(p.f)}</p>`:""}${p.n?`<p class="note">${esc(p.n)}</p>`:""}</div>
+        <div class="body${p.im?" with-shot":""}"><div class="text"><p>${esc(p.w)}</p>${p.f?`<p class="facts">${esc(p.f)}</p>`:""}${p.n?`<p class="note">${esc(p.n)}</p>`:""}${links(p)}</div>${p.im?`<figure class="shot"><img src="img/${p.im}.webp" alt="${esc(p.t)} 화면" loading="lazy" width="390" height="700"></figure>`:""}</div>
       </article>`).join("")}
     </div>`).join("");
 }

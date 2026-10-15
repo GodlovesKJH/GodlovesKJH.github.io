@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>과수원 직거래 장터</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+:root{
+  --bg:#F4F0E1; --bgAlt:#ECE6D2; --ink:#22261D; --inkSoft:#5B5A47;
+  --forest:#24402F; --forestDark:#182C20; --persimmon:#C1531B; --persimmonDark:#9C3F12;
+  --gold:#C99A3D; --wood:#8B5E34; --line:#D8CFB0; --white:#FFFDF7; --alert:#D63B3B;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans KR',sans-serif;-webkit-text-size-adjust:100%;overflow-x:hidden;}
+h1,.display{font-family:'Gowun Batang',serif;}
+.tabular{font-variant-numeric:tabular-nums;}
+input,button,select,textarea{font-size:16px;font-family:inherit;}
+button{touch-action:manipulation;cursor:pointer;}
+input[type="date"],input[type="time"],select{min-height:44px;}
+
+.header{background:var(--forest);color:#fff;padding:24px 16px 56px;position:relative;overflow:hidden;}
+.header::before{content:"";position:absolute;inset:0;opacity:.08;background-image:repeating-linear-gradient(135deg,#fff 0 2px,transparent 2px 26px);}
+.header.has-photo{padding:34px 16px 64px;min-height:230px;display:flex;align-items:flex-end;}
+.header.has-photo::before{display:none;}
+.hero-photos{position:absolute;inset:0;z-index:0;}
+.hero-photo{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:heroFade 21s infinite;}
+.hero-photo:nth-child(1){animation-delay:0s;}
+.hero-photo:nth-child(2){animation-delay:7s;}
+.hero-photo:nth-child(3){animation-delay:14s;}
+@keyframes heroFade{
+  0%{opacity:0;transform:scale(1.0);}
+  4%{opacity:1;}
+  28%{opacity:1;transform:scale(1.05);}
+  33%{opacity:0;transform:scale(1.05);}
+  100%{opacity:0;}
+}
+.hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(24,44,32,.12) 0%, rgba(24,44,32,.34) 45%, rgba(24,44,32,.84) 100%);}
+.header-inner{max-width:720px;margin:0 auto;position:relative;z-index:2;}
+.eyebrow{font-size:12px;letter-spacing:2px;color:var(--gold);margin-bottom:6px;}
+.header h1{font-size:clamp(24px,7vw,32px);margin:0;font-weight:700;line-height:1.25;}
+.header p{margin-top:8px;color:#D9E0D3;font-size:13.5px;line-height:1.6;}
+
+.tabs-wrap{max-width:720px;margin:-30px auto 0;padding:0 16px;position:relative;z-index:2;}
+.tabs{display:flex;gap:8px;justify-content:center;}
+.tab-btn{flex:1 1 140px;max-width:200px;display:flex;align-items:center;justify-content:center;gap:6px;padding:12px 16px;min-height:46px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--inkSoft);font-weight:600;font-size:14px;box-shadow:0 2px 6px -3px rgba(0,0,0,.15);}
+.tab-btn.active{border-color:var(--forest);background:var(--forest);color:#fff;box-shadow:0 6px 14px -6px rgba(36,64,47,.5);}
+
+main{max-width:720px;margin:0 auto;padding:32px 16px 60px;}
+
+.section-label{font-size:12.5px;font-weight:700;color:var(--wood);letter-spacing:.5px;margin-bottom:8px;}
+.field{margin-bottom:18px;}
+.field-head{display:flex;justify-content:space-between;margin-bottom:6px;}
+.field-label{font-size:13.5px;font-weight:600;}
+.req{color:var(--persimmon);}
+.hint{font-size:11.5px;color:var(--inkSoft);}
+.err{font-size:11.5px;color:var(--persimmonDark);margin-top:4px;}
+.input{width:100%;box-sizing:border-box;padding:12px 13px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);outline:none;min-height:44px;}
+select.input{background:var(--bg);}
+
+.btn-primary{padding:13px 20px;border-radius:8px;border:none;background:var(--persimmon);color:#fff;font-weight:700;font-size:15px;min-height:46px;box-shadow:0 6px 14px -6px rgba(193,83,27,.55);width:100%;}
+.btn-primary:disabled{opacity:.6;}
+.btn-forest{padding:13px 20px;border-radius:8px;border:none;background:var(--forest);color:#fff;font-weight:700;font-size:15px;min-height:46px;width:100%;}
+.btn-ghost{padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--inkSoft);font-weight:600;font-size:13.5px;min-height:40px;}
+.btn-ghost.danger{color:var(--persimmonDark);}
+
+.divider{height:1px;background:var(--line);margin:18px 0;}
+
+.landing{display:flex;flex-direction:column;gap:16px;max-width:420px;margin:10px auto 0;}
+.landing-btn{display:flex;align-items:center;gap:14px;padding:20px 18px;border-radius:12px;border:1.5px solid var(--line);background:#fff;text-align:left;box-shadow:0 2px 0 rgba(34,38,29,.05),0 8px 16px -10px rgba(34,38,29,.25);}
+.landing-btn .emoji{font-size:30px;}
+.landing-btn .title{font-weight:700;font-size:16px;color:var(--forest);}
+.landing-btn .desc{font-size:12.5px;color:var(--inkSoft);margin-top:3px;}
+
+.fruit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;}
+.fruit-card{cursor:pointer;border-radius:10px;padding:14px 12px;border:1.5px solid var(--line);background:#fff;text-align:center;}
+.fruit-card.active{border-color:var(--persimmon);background:#FBEAE0;}
+.fruit-card .name{font-weight:700;font-size:15px;color:var(--forest);margin-bottom:4px;}
+.fruit-card .price{font-size:13px;color:var(--inkSoft);}
+.fruit-card .stock{font-size:11px;color:var(--gold);margin-top:3px;}
+.fruit-thumb{width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;margin-bottom:8px;background:var(--bgAlt);display:flex;align-items:center;justify-content:center;}
+.fruit-thumb img{width:100%;height:100%;object-fit:cover;}
+.fruit-thumb.placeholder{font-size:34px;}
+.fruit-thumb-admin{width:56px;height:56px;border-radius:8px;overflow:hidden;background:var(--bgAlt);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:24px;}
+.fruit-thumb-admin img{width:100%;height:100%;object-fit:cover;}
+
+.qty-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;}
+.stepper{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;overflow:hidden;}
+.stepper button{width:44px;height:44px;border:none;background:var(--bg);font-size:18px;color:var(--forest);}
+.stepper input{width:56px;text-align:center;border:none;outline:none;font-size:16px;padding:9px 0;background:#fff;}
+.qty-amount{font-weight:700;color:var(--persimmonDark);font-size:16px;}
+
+.delivery-opts{display:flex;flex-wrap:wrap;gap:10px;}
+.delivery-opt{flex:1 1 100px;display:flex;align-items:center;justify-content:center;gap:7px;padding:12px 8px;border-radius:9px;border:1.5px solid var(--line);background:#fff;color:var(--inkSoft);font-weight:700;font-size:13.5px;}
+.delivery-opt.active{border-color:var(--forest);background:var(--forest);color:#fff;}
+.shipping-note{margin-top:10px;font-size:12.5px;color:var(--inkSoft);background:var(--bgAlt);border-radius:8px;padding:8px 12px;}
+
+.gift-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:var(--inkSoft);padding:6px 0;min-height:32px;margin-bottom:18px;}
+.gift-toggle input{width:20px;height:20px;flex-shrink:0;}
+
+.box-panel{display:flex;flex-direction:column;gap:14px;background:var(--bgAlt);border-radius:10px;padding:14px;margin-bottom:18px;}
+.visit-notice{font-size:13px;line-height:1.6;color:var(--forestDark);background:#E9F0E4;border:1px solid #BFD4B2;border-left:4px solid var(--forest);border-radius:8px;padding:10px 12px;}
+.visit-notice b{color:var(--persimmonDark);}
+.visit-notice.warn{color:var(--persimmonDark);background:#FBEAE0;border-color:#EBC6B0;border-left-color:var(--persimmon);}
+.box-panel .field{margin-bottom:0;}
+.two-col{display:flex;flex-wrap:wrap;gap:10px;}
+.two-col>div{flex:1 1 130px;}
+
+.cart-item{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
+.cart-qty-row{display:flex;align-items:center;gap:10px;margin-top:10px;}
+.cart-qty-label{font-size:12.5px;color:var(--inkSoft);font-weight:600;}
+.stepper-sm button{width:38px;height:38px;font-size:17px;}
+.stepper-sm .stepper-val{min-width:46px;text-align:center;font-size:15px;font-weight:700;color:var(--ink);background:#fff;padding:9px 0;}
+.stepper button:disabled{opacity:.35;}
+.cart-item-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+.cart-item .badge{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--bgAlt);color:var(--forest);margin-top:4px;}
+
+.summary-box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:13.5px;display:flex;flex-direction:column;gap:6px;}
+.summary-row{display:flex;justify-content:space-between;}
+.summary-total{font-weight:700;color:var(--persimmonDark);font-size:15px;}
+
+.account-box{background:var(--forestDark);color:#fff;border-radius:10px;padding:14px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;}
+.account-box .meta{font-size:12px;color:#B9C6BB;margin-bottom:3px;word-break:break-word;}
+.account-box .num{font-size:17px;font-weight:700;letter-spacing:.5px;word-break:break-word;}
+.copy-btn{flex-shrink:0;background:rgba(255,255,255,.12);border:none;border-radius:8px;padding:10px 12px;min-height:40px;color:#fff;font-size:12.5px;}
+
+.crate{position:relative;box-sizing:border-box;background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px 18px 16px;box-shadow:0 2px 0 rgba(34,38,29,.05),0 8px 16px -10px rgba(34,38,29,.25);}
+.crate::before{content:"";position:absolute;top:-9px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:var(--bg);border:2px solid var(--wood);}
+
+.empty-note{font-size:13.5px;color:var(--inkSoft);text-align:center;padding:30px 0;}
+
+.mini-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;}
+.mini-tab{padding:9px 14px;min-height:40px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--inkSoft);font-size:13px;font-weight:600;}
+.mini-tab.active{border-color:var(--forest);background:var(--forest);color:#fff;}
+.count-alert{color:var(--alert);font-weight:800;}
+.mini-tab.active .count-alert{color:#FFB4A8;}
+
+.admin-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:20px;}
+.add-fruit-row{display:flex;flex-wrap:wrap;gap:8px;}
+.add-fruit-row input{flex:2 1 160px;}
+.add-fruit-row input.num{flex:1 1 110px;}
+
+.fruit-row{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
+.fruit-row.inactive{opacity:.55;}
+.fruit-row-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.fruit-row-top .name{font-weight:700;color:var(--forest);font-size:15px;}
+.fruit-row-sub{font-size:12.5px;color:var(--inkSoft);margin-top:2px;}
+.fruit-row-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+
+.avail-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+.avail-row .d{font-weight:700;color:var(--forest);}
+
+.order-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px;}
+.order-card.modified{border-color:var(--alert);}
+.order-card-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px;}
+.order-card .meta{font-size:12.5px;color:var(--inkSoft);margin-top:8px;line-height:1.7;}
+.msg-thread{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.msg-bubble{max-width:85%;padding:8px 11px;border-radius:12px;font-size:12.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word;}
+.msg-bubble .who{font-size:10.5px;opacity:.7;margin-bottom:2px;}
+.msg-buyer{align-self:flex-start;background:var(--bgAlt);color:var(--ink);border-bottom-left-radius:3px;}
+.msg-farmer{align-self:flex-end;background:#E9F0E4;color:var(--forestDark);border-bottom-right-radius:3px;}
+.msg-empty{font-size:12px;color:var(--inkSoft);font-style:italic;}
+.msg-input-row{display:flex;gap:6px;margin-top:8px;}
+.msg-input-row textarea{flex:1;resize:vertical;min-height:38px;}
+.news-banner{max-width:480px;margin:16px auto 0;background:linear-gradient(180deg,#FBF3DF,#F7ECCB);border:1px solid #E4D08A;border-radius:12px;padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px -5px rgba(160,120,20,.4);}
+.news-banner .npin{font-size:18px;}
+.news-banner .ntxt{flex:1;min-width:0;}
+.news-banner .ntitle{font-weight:700;color:var(--persimmonDark);font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.news-banner .ndate{font-size:11px;color:var(--wood);margin-top:1px;}
+.news-banner .nchev{color:var(--wood);font-size:13px;}
+.news-panel{max-width:480px;margin:8px auto 0;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;}
+.news-item{padding:14px 16px;border-bottom:1px solid var(--line);}
+.news-item:last-child{border-bottom:none;}
+.news-item .nih{font-weight:700;color:var(--forest);font-size:14.5px;}
+.news-item .nid{font-size:11.5px;color:var(--inkSoft);margin:2px 0 8px;}
+.news-item .nib{font-size:13px;line-height:1.75;color:var(--ink);white-space:pre-wrap;word-break:break-word;}
+.news-item img{width:100%;border-radius:8px;margin-top:10px;display:block;}
+.news-more{text-align:center;padding:10px;font-size:12.5px;color:var(--wood);cursor:pointer;background:var(--bgAlt);}
+.news-new{display:inline-block;font-size:9.5px;font-weight:700;color:#fff;background:var(--persimmon);border-radius:4px;padding:1px 5px;vertical-align:middle;letter-spacing:.3px;}
+.news-head-row{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);cursor:pointer;}
+.news-head-row:last-child{border-bottom:none;}
+.news-head-row .nhr-t{flex:1;min-width:0;font-size:13.5px;font-weight:600;color:var(--forest);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.news-head-row .nhr-d{font-size:11px;color:var(--inkSoft);white-space:nowrap;}
+.news-hidden-badge{display:inline-block;font-size:9.5px;font-weight:700;color:var(--inkSoft);background:var(--bgAlt);border:1px solid var(--line);border-radius:4px;padding:1px 5px;vertical-align:middle;}
+.order-item-line{font-size:12.5px;color:var(--ink);padding:6px 0;border-top:1px dashed var(--line);}
+.modified-badge{display:inline-block;background:var(--alert);color:#fff;font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 8px;margin-left:6px;vertical-align:middle;}
+
+.my-order-item{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:10px;}
+.my-order-item .top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(24,38,29,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50;}
+.modal{background:var(--white);border-radius:14px;padding:20px;max-width:420px;width:100%;max-height:90vh;overflow:auto;}
+
+.setup-warning{background:#FBEAE0;border:1px solid var(--persimmon);color:var(--persimmonDark);padding:14px 16px;border-radius:10px;margin-bottom:20px;font-size:13px;line-height:1.7;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modal-root"></div>
+
+<script>window.DEMO_BANNER={resetKeys:["orchard-demo-v1"],hint:"농장 관리 화면 번호: 0000"};</script>
+<script src="../_shared/banner.js"></script>
+<script src="mock.js"></script>
+<script>
+/* =========================================================
+   설정 — APPS_SCRIPT_URL만 본인 것으로 바꿔주세요
+   ========================================================= */
+const CONFIG = {
+  APPS_SCRIPT_URL: "demo",
+  ADMIN_PIN: "0000",
+  FARM_ADDRESS: "(예시) 경기도 ○○시 과수원길 1",
+  SHIPPING_FEE: 4000,
+  FREE_SHIPPING_BOX_COUNT: 2,
+  POLL_MS: 15000,
+};
+
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const won = (n) => (Number(n) || 0).toLocaleString() + "원";
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const digits = (s) => String(s || "").replace(/\D/g, "");
+// 전화번호 비교용 정규화: 맨앞 0이 있든 없든 동일하게 취급
+// (예전에 숫자로 저장돼 앞 0이 사라진 데이터도 매칭되도록)
+const phoneKey = (s) => { let d = digits(s); return d.replace(/^0+/, ""); };
+const methodLabel = (m) => m === "pickup" ? "🚗 농장 방문 수령/픽업" : m === "church" ? "🎁 직접 전달/맞춤 배달" : "🚚 택배 배송";
+// 과일 판매 상태: 시작일이 없거나 오늘이거나 지났으면 판매중, 미래면 예정
+function _todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function isOnSale(f){ return f.active && (!f.saleStartDate || f.saleStartDate <= _todayStr()); }
+function isUpcoming(f){ return f.active && f.saleStartDate && f.saleStartDate > _todayStr(); }
+function fmtSaleDate(s){ if(!s) return ""; const p=s.split("-"); return p.length===3?`${parseInt(p[1])}월 ${parseInt(p[2])}일`:s; }
+// 어떤 형태로 들어와도 "YYYY-MM-DD"로 정규화.
+// 서버가 재배포 전이라 "Wed Jul 22 2026 00:00:00 GMT+0900 (한국 표준시)" 같은
+// 깨진 문자열을 보내도 여기서 안전하게 날짜만 뽑아냄.
+function normDate(s){
+  if(!s) return "";
+  const str=String(s).trim();
+  // 이미 2026-07-22 형태
+  let m=str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m){ return m[1]+"-"+String(+m[2]).padStart(2,"0")+"-"+String(+m[3]).padStart(2,"0"); }
+  // 2026.7.22 형태
+  m=str.match(/^(\d{4})[.\/](\d{1,2})[.\/](\d{1,2})/);
+  if(m){ return m[1]+"-"+String(+m[2]).padStart(2,"0")+"-"+String(+m[3]).padStart(2,"0"); }
+  // "Wed Jul 22 2026 ..." 형태: 월 이름·일·연도를 직접 뽑아 타임존 변환 오차 방지
+  const MON={Jan:1,Feb:2,Mar:3,Apr:4,May:5,Jun:6,Jul:7,Aug:8,Sep:9,Oct:10,Nov:11,Dec:12};
+  m=str.match(/\b([A-Z][a-z]{2})\s+(\d{1,2})\s+(\d{4})\b/);
+  if(m && MON[m[1]]){ return m[3]+"-"+String(MON[m[1]]).padStart(2,"0")+"-"+String(+m[2]).padStart(2,"0"); }
+  // 최후 수단: JS Date 파싱
+  const d=new Date(str);
+  if(!isNaN(d.getTime())){ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+  return str;
+}
+// 시간 문자열 정규화: "09:00" 또는 깨진 "Sat Dec 30 1899 12:00:00 ..." → "HH:mm"
+function normTime(s){
+  if(!s) return "";
+  const str=String(s).trim();
+  let m=str.match(/(\d{1,2}):(\d{2})/);
+  if(m){ return String(+m[1]).padStart(2,"0")+":"+m[2]; }
+  return str;
+}
+// "2026-07-10"(또는 깨진 값) → "2026.7.10(수)" 형태로 표기
+const _WD=["일","월","화","수","목","금","토"];
+function fmtKDate(s){ const n=normDate(s); const p=n.split("-"); if(p.length!==3) return n; const y=+p[0],m=+p[1],d=+p[2]; const wd=_WD[new Date(y,m-1,d).getDay()]; return `${y}.${m}.${d}(${wd})`; }
+
+// 장바구니에 담기 전 "지금 담는 항목" 편집 폼
+const EMPTY_ITEM = () => ({
+  fruitId: "", qty: 1,
+  deliveryMethod: "delivery",
+  address: "",
+  visitDate: "", visitTime: "", visitPhone: "",
+  churchDate: "",
+  isGift: false, receiverName: "", receiverPhone: "", giftArrivalDate: "",
+  errors: {},
+});
+
+let STATE = {
+  view: "order",
+  orderStep: "landing", // landing → identify → editList → build(담기+장바구니) → done
+  identifyMode: "new",
+  identify: { name: "", phone: "", error: "" },
+  buyer: { name: "", phone: "", referrer: "" },
+  buyerForm: { name: "", phone: "", referrer: "", err: false },
+  requestNote: "",         // 새 주문 시 농장주께 요청/문의 (첫 메시지)
+  msgDraft: {},            // {orderId: "작성 중 텍스트"} 주문자 추가 메시지
+  replyDraft: {},          // {orderId: "작성 중 텍스트"} 관리자 답글
+  msgSending: {},          // {orderId: true} 전송 중 표시
+  news: [],                // 농장 소식 [{id,title,body,image,createdAt}]
+  openNewsId: null,        // 대문에서 펼쳐 보는 소식
+  newsForm: { title: "", body: "", image: "" }, // 관리자 소식 작성
+  cart: [],
+  item: EMPTY_ITEM(),
+  editingItemId: null,     // 장바구니 안에서 특정 항목 수정 중
+  myOrders: [],
+  editingOrderId: null,    // 기존 제출 주문을 통째로 다시 편집 중
+  editingCreatedAt: null,
+  submitting: false,
+  doneMode: "new",
+  showDoneNotice: false,
+  copied: false,
+  adminUnlocked: false,
+  pinInput: "",
+  pinError: false,
+  fruits: [],
+  orders: [],
+  account: { bank: "", number: "", holder: "", phone: "" },
+  businessName: "",
+  greeting: "",
+  farmPhone: "",
+  farmAddress: "",
+  smsTemplate: "",
+  smsTemplateDelay: "",
+  smsDefault: "normal",
+  notifyEmail: "",
+  landingPhotos: ["", "", ""], // 대문화면 배경사진 최대 3장
+  availability: [], // [{id, date, start, end}]
+  loaded: false,
+  loadError: "",
+  saveError: "",
+  adminTab: "orders",
+  workSub: "delivery",
+  fruitForm: { name: "", price: "", stock: "", image: "", saleStartDate: "" },
+  accountForm: null,
+  availForm: { date: "", start: "09:00", end: "18:00" },
+  editFruit: null, // 과일 수정 모달 대상
+  editOrderItem: null, // 관리자 주문 품목 수정 모달 {orderId, itemId, ...필드}
+};
+
+function setState(patch){ STATE = { ...STATE, ...patch }; render(); }
+function setStateSilent(patch){ STATE = { ...STATE, ...patch }; }
+function setItem(patch){ STATE.item = { ...STATE.item, ...patch }; render(); }
+
+/* ---------------- API ---------------- */
+// 응답이 영영 안 와서 화면이 멈추는 것을 막기 위해 시간 제한을 둠
+async function fetchWithTimeout(url, opts, ms){
+  const ctrl = (typeof AbortController!=="undefined") ? new AbortController() : null;
+  const timer = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch(e){} }, ms||20000);
+  try{
+    return await fetch(url, Object.assign({}, opts||{}, ctrl?{signal:ctrl.signal}:{}));
+  } finally { clearTimeout(timer); }
+}
+async function apiGet(){ return MOCK.get(); }
+async function apiPost(body){ return MOCK.post(body); }
+async function loadAll(silent){
+  if(CONFIG.APPS_SCRIPT_URL.indexOf("PASTE_YOUR")===0 || !CONFIG.APPS_SCRIPT_URL){
+    setState({ loaded:true, loadError:"SETUP_NEEDED" }); return;
+  }
+  try{
+    const data = await apiGet();
+    const orders = (data.orders||[]).map(o=>{
+      const items=(o.items||[]).map((it,idx)=>({ ...it, itemId: it.itemId || (o.id+"-"+idx) }));
+      return { ...o, items, messages: Array.isArray(o.messages)?o.messages:[], cancelRequested: o.cancelRequested===true||o.cancelRequested==="TRUE" };
+    });
+    const patch = {
+      fruits: data.fruits||[], orders,
+      account: data.account||STATE.account,
+      businessName: data.businessName!==undefined?data.businessName:STATE.businessName,
+      greeting: data.greeting!==undefined?data.greeting:STATE.greeting,
+      farmPhone: data.farmPhone!==undefined?data.farmPhone:STATE.farmPhone,
+      farmAddress: data.farmAddress!==undefined?data.farmAddress:STATE.farmAddress,
+      smsTemplate: data.smsTemplate!==undefined?data.smsTemplate:STATE.smsTemplate,
+      smsTemplateDelay: data.smsTemplateDelay!==undefined?data.smsTemplateDelay:STATE.smsTemplateDelay,
+      smsDefault: data.smsDefault!==undefined?data.smsDefault:STATE.smsDefault,
+      notifyEmail: data.notifyEmail!==undefined?data.notifyEmail:STATE.notifyEmail,
+      landingPhotos: [data.landingPhoto1||"", data.landingPhoto2||"", data.landingPhoto3||""],
+      availability: (data.availability||[]).map(a=>({ ...a, date: normDate(a.date), start: normTime(a.start), end: normTime(a.end) })),
+      news: (data.news||[]).map(n=>({ ...n, active: n.active!==false })).sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)),
+      loaded:true, loadError:"",
+    };
+    const typing = document.activeElement && /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+    if(silent && typing) setStateSilent(patch); else setState(patch);
+  }catch(e){
+    const aborted = e && (e.name==="AbortError");
+    // 첫 로딩(또는 아직 데이터를 못 받은 상태)에서는 반드시 안내를 띄움
+    if(!silent || !STATE.loaded){
+      setState({ loaded:true, loadError: aborted
+        ? "서버 응답이 너무 느려요. 인터넷 상태를 확인하고 새로고침해주세요."
+        : "데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요." });
+    }
+  }
+}
+
+render();   // 데이터를 기다리지 않고 화면부터 먼저 그림 (응답이 늦어도 백지가 안 되도록)
+loadAll();
+setInterval(()=>{ if(STATE.view==="order") loadAll(true); }, CONFIG.POLL_MS);
+document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible" && STATE.view==="order") loadAll(true); });
+
+/* ---------------- helpers ---------------- */
+function fruitById(id){ return STATE.fruits.find(f=>f.id===id); }
+function itemAmount(it){ const f=fruitById(it.fruitId); return f? f.price*it.qty : 0; }
+function itemShipping(it){ return it.deliveryMethod==="delivery" ? (it.qty>=CONFIG.FREE_SHIPPING_BOX_COUNT?0:CONFIG.SHIPPING_FEE) : 0; }
+function itemTotal(it){ return itemAmount(it)+itemShipping(it); }
+function cartTotal(){ return STATE.cart.reduce((s,it)=>s+itemTotal(it),0); }
+// 특정 날짜의 상주 시간대 목록
+function windowsForDate(date){ return STATE.availability.filter(a=>a.date===date); }
+function availableDates(){ return [...new Set(STATE.availability.map(a=>a.date))].sort(); }
+// 30분 간격 시간 옵션 생성 (start~end)
+function timeSlots(date){
+  const wins = windowsForDate(date);
+  const slots = [];
+  wins.forEach(w=>{
+    const [sh,sm]=w.start.split(":").map(Number);
+    const [eh,em]=w.end.split(":").map(Number);
+    let t=sh*60+sm; const end=eh*60+em;
+    while(t<=end){ const hh=String(Math.floor(t/60)).padStart(2,"0"); const mm=String(t%60).padStart(2,"0"); slots.push(hh+":"+mm); t+=30; }
+  });
+  return [...new Set(slots)].sort();
+}
+// 등록된 모든 상주 시간대를 합쳐 30분 단위 슬롯으로 (날짜와 무관하게 시간 선택용)
+function allTimeSlots(){
+  const slots=[];
+  STATE.availability.forEach(w=>{
+    if(!w.start||!w.end) return;
+    const [sh,sm]=String(w.start).split(":").map(Number);
+    const [eh,em]=String(w.end).split(":").map(Number);
+    if(isNaN(sh)||isNaN(eh)) return;
+    let t=sh*60+(sm||0); const end=eh*60+(em||0);
+    while(t<=end){ const hh=String(Math.floor(t/60)).padStart(2,"0"); const mm=String(t%60).padStart(2,"0"); slots.push(hh+":"+mm); t+=30; }
+  });
+  return [...new Set(slots)].sort();
+}
+
+/* ---------------- Render root ---------------- */
+function render(){
+  const app = document.getElementById("app");
+  if(!STATE.loaded){ app.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;"><div class="display" style="color:var(--forest);font-size:18px;">과수원 문을 여는 중…</div></div>`; return; }
+  if(STATE.loadError==="SETUP_NEEDED"){
+    app.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;"><div class="crate" style="max-width:420px;"><div class="display" style="font-size:20px;color:var(--forest);margin-bottom:10px;">설정이 필요해요</div><div style="font-size:13.5px;line-height:1.8;color:var(--inkSoft);">index.html 맨 위 <code>CONFIG.APPS_SCRIPT_URL</code> 값을 구글 Apps Script 웹 앱 URL로 바꿔주세요. 설치 가이드를 참고해주세요.</div></div></div>`;
+    return;
+  }
+  const heroPhotos=(STATE.landingPhotos||[]).filter(Boolean);
+  const showHero = heroPhotos.length>0 && STATE.view==="order" && STATE.orderStep==="landing";
+  app.innerHTML = `
+    <div class="header ${showHero?"has-photo":""}">
+      ${showHero?`<div class="hero-photos">${heroPhotos.map(src=>`<div class="hero-photo" style="background-image:url('${esc(src)}')"></div>`).join("")}</div><div class="hero-overlay"></div>`:""}
+      <div class="header-inner">
+      <div class="eyebrow">${STATE.businessName?esc(STATE.businessName):"ORCHARD DIRECT"}</div>
+      <h1>과수원 직거래 장터</h1>
+      <p>나무에서 바로 딴 과일을, 믿을 수 있는 분께 직접 보내드립니다.</p>
+    </div></div>
+    <div class="tabs-wrap"><div class="tabs">
+      <button class="tab-btn ${STATE.view==="order"?"active":""}" data-action="setView" data-v="order">🧺 주문하기</button>
+      <button class="tab-btn ${STATE.view==="admin"?"active":""}" data-action="setView" data-v="admin">📋 농장 관리</button>
+    </div></div>
+    <main>
+      ${STATE.loadError && STATE.loadError!=="SETUP_NEEDED"?`<div class="setup-warning">${esc(STATE.loadError)} <button class="btn-ghost" style="margin-top:8px;width:100%;" data-action="retryLoad">다시 시도</button></div>`:""}
+      ${(!STATE.loaded && !STATE.loadError)?`<div class="empty-note">불러오는 중이에요…</div>`:""}
+      ${STATE.saveError?`<div class="setup-warning">${esc(STATE.saveError)}</div>`:""}
+      ${STATE.view==="order"?renderOrderArea():renderAdminArea()}
+    </main>`;
+  renderModal();
+  bindEvents();
+}
+
+/* ---------------- Order area ---------------- */
+function renderOrderArea(){
+  if(STATE.orderStep==="landing") return renderLanding();
+  if(STATE.orderStep==="identify") return renderIdentify();
+  if(STATE.orderStep==="editList") return renderEditList();
+  if(STATE.orderStep==="done") return renderDone();
+  return renderBuild();
+}
+
+function renderNewsSection(){
+  // 주문자 화면에는 "공개(활성)" 상태인 소식만 보임
+  const news=(STATE.news||[]).filter(n=>n.active!==false);
+  if(!news.length) return "";
+  const open=STATE.openNewsId;
+  const dateStr=(iso)=>{ const d=new Date(iso); return isNaN(d)?"":d.toLocaleDateString("ko-KR",{month:"long",day:"numeric"}); };
+  // 접힘: 올라온 소식 제목을 모두 목록으로 표시
+  if(!open){
+    return `<div class="news-banner" data-action="toggleNews" data-id="open">
+      <span class="npin">📢</span>
+      <span class="ntxt"><span class="ntitle">농장 소식</span><span class="ndate">${news.length}개</span></span>
+      <span class="nchev">눌러서 보기 ▾</span>
+    </div>
+    <div class="news-panel">
+      ${news.map((n,i)=>`<div class="news-head-row" data-action="toggleNews" data-id="open">
+        <span class="nhr-t">${i===0?`<span class="news-new">NEW</span> `:""}${esc(n.title||"농장 소식")}</span>
+        <span class="nhr-d">${dateStr(n.createdAt)}</span>
+      </div>`).join("")}
+    </div>`;
+  }
+  // 펼침: 올라온 소식 전체를 최신순으로 모두 표시 (사진은 lazy 로딩)
+  return `<div class="news-banner" data-action="toggleNews" data-id="close">
+      <span class="npin">📢</span>
+      <span class="ntxt"><span class="ntitle">농장 소식</span><span class="ndate">${news.length}개</span></span>
+      <span class="nchev">접기 ▴</span>
+    </div>
+    <div class="news-panel">
+      ${news.map((n,i)=>`<div class="news-item">
+        <div class="nih">${i===0?`<span class="news-new">NEW</span> `:""}${esc(n.title||"농장 소식")}</div>
+        <div class="nid">${dateStr(n.createdAt)}</div>
+        ${n.body?`<div class="nib">${esc(n.body)}</div>`:""}
+        ${n.image?`<img src="${esc(n.image)}" alt="농장 소식 사진" loading="lazy"/>`:""}
+      </div>`).join("")}
+    </div>`;
+}
+function renderLanding(){
+  const addr = STATE.farmAddress || CONFIG.FARM_ADDRESS;
+  const onSale = STATE.fruits.filter(isOnSale);
+  const upcoming = STATE.fruits.filter(isUpcoming).sort((a,b)=>(a.saleStartDate||"").localeCompare(b.saleStartDate||""));
+  return `
+    <div class="landing">
+      <button class="landing-btn" data-action="startNew"><span class="emoji">🧺</span><span><span class="title">새 주문</span><br/><span class="desc">새로 주문하시는 분은 여기를 눌러주세요</span></span></button>
+      <button class="landing-btn" data-action="startEdit"><span class="emoji">✏️</span><span><span class="title">주문 변경</span><br/><span class="desc">이미 넣은 주문을 확인하거나 수정해요</span></span></button>
+    </div>
+
+    ${renderNewsSection()}
+
+    ${STATE.greeting?`
+      <div class="crate" style="max-width:480px;margin:24px auto 0;">
+        <div class="section-label" style="color:var(--gold);">농장주 인사말</div>
+        <div style="font-size:14px;line-height:1.8;color:var(--ink);white-space:pre-wrap;">${esc(STATE.greeting)}</div>
+      </div>`:""}
+
+    ${onSale.length?`
+      <div style="max-width:560px;margin:24px auto 0;">
+        <div class="section-label">🍎 지금 판매 중인 과일</div>
+        <div class="fruit-grid">
+          ${onSale.map(fr=>`<div class="fruit-card">
+            ${fr.image?`<div class="fruit-thumb"><img src="${esc(fr.image)}" alt="${esc(fr.name)}" loading="lazy"/></div>`:`<div class="fruit-thumb placeholder">🍎</div>`}
+            <div class="name">${esc(fr.name)}</div>
+            <div class="price tabular">${won(fr.price)}</div>
+            ${typeof fr.stock==="number"?`<div class="stock">재고 ${fr.stock}</div>`:""}
+          </div>`).join("")}
+        </div>
+      </div>`:""}
+
+    ${upcoming.length?`
+      <div style="max-width:560px;margin:24px auto 0;">
+        <div class="section-label" style="color:var(--gold);">🌱 곧 판매 예정</div>
+        <div class="fruit-grid">
+          ${upcoming.map(fr=>`<div class="fruit-card" style="opacity:.9;">
+            ${fr.image?`<div class="fruit-thumb"><img src="${esc(fr.image)}" alt="${esc(fr.name)}" loading="lazy"/></div>`:`<div class="fruit-thumb placeholder">🌱</div>`}
+            <div class="name">${esc(fr.name)}</div>
+            <div class="price tabular">${won(fr.price)}</div>
+            <div style="font-size:11px;color:var(--persimmonDark);font-weight:700;margin-top:3px;">${fmtSaleDate(fr.saleStartDate)}부터</div>
+          </div>`).join("")}
+        </div>
+      </div>`:""}
+
+    <div class="crate" style="max-width:480px;margin:24px auto 0;">
+      <div class="section-label">농장 안내</div>
+      <div style="font-size:13.5px;line-height:1.9;color:var(--ink);">
+        ${STATE.businessName?`<div style="font-weight:700;color:var(--forest);font-size:15px;margin-bottom:4px;">${esc(STATE.businessName)}</div>`:""}
+        📍 ${esc(addr)}<br/>
+        ${STATE.farmPhone?`☎ ${esc(STATE.farmPhone)}`:""}
+      </div>
+    </div>
+  `;
+}
+
+function renderIdentify(){
+  const idn=STATE.identify; const isNew=STATE.identifyMode==="new";
+  return `<div style="display:flex;justify-content:center;padding:6px 0 30px;">
+    <div class="crate" style="width:100%;max-width:360px;">
+      <div class="display" style="font-size:18px;color:var(--forest);margin-bottom:4px;">${isNew?"주문자 정보":"내 주문 찾기"}</div>
+      <div style="font-size:12.5px;color:var(--inkSoft);margin-bottom:16px;">${isNew?"성함과 연락처를 입력해주세요.":"주문하실 때 입력한 성함과 연락처를 입력해주세요."}</div>
+      <div class="field"><div class="field-head"><label class="field-label">이름 <span class="req">*</span></label></div><input class="input" data-bind="idName" placeholder="성함" value="${esc(idn.name)}" /></div>
+      <div class="field"><div class="field-head"><label class="field-label">연락처 <span class="req">*</span></label></div><input class="input" type="tel" inputmode="tel" data-bind="idPhone" placeholder="010-0000-0000" value="${esc(idn.phone)}" /></div>
+      ${idn.error?`<div class="err" style="margin-bottom:10px;">${esc(idn.error)}</div>`:""}
+      <button class="btn-primary" data-action="${isNew?"identifyNext":"lookupOrders"}">${isNew?"다음":"내 주문 조회"}</button>
+      <button class="btn-ghost" style="width:100%;margin-top:10px;" data-action="backToLanding">← 처음으로</button>
+    </div></div>`;
+}
+
+function needsReply(msgs){
+  const list=Array.isArray(msgs)?msgs:[];
+  if(!list.length) return false;
+  return list[list.length-1].from==="buyer";
+}
+function renderThread(msgs){
+  const list=Array.isArray(msgs)?msgs:[];
+  if(!list.length) return `<div class="msg-empty">아직 주고받은 메시지가 없어요.</div>`;
+  return `<div class="msg-thread">${list.map(m=>{
+    const mine=m.from==="buyer";
+    const who=mine?"나(주문자)":"🧑‍🌾 농장주";
+    const when=m.at?new Date(m.at).toLocaleString("ko-KR",{month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit"}):"";
+    return `<div class="msg-bubble ${mine?"msg-buyer":"msg-farmer"}"><div class="who">${who}${when?" · "+when:""}</div>${esc(m.text)}</div>`;
+  }).join("")}</div>`;
+}
+function renderEditList(){
+  const list=STATE.myOrders;
+  return `<div style="max-width:480px;margin:0 auto;">
+    <div class="section-label">내 주문 내역 (${list.length}건)</div>
+    ${list.map(o=>{
+      const t = (o.items||[]).reduce((s,it)=>s+(it.totalAmount??0),0);
+      const kinds = [...new Set((o.items||[]).map(it=>methodLabel(it.deliveryMethod)))].join(", ");
+      return `<div class="my-order-item">
+        <div class="top">
+          <div>
+            <div style="font-weight:700;color:var(--forest);">${(o.items||[]).length}개 품목 ${o.modified?`<span class="modified-badge">수정됨</span>`:""}${o.cancelRequested?`<span class="modified-badge">취소 요청됨</span>`:""}</div>
+            <div style="font-size:12px;color:var(--inkSoft);margin-top:3px;">${esc(kinds)} · ${new Date(o.createdAt).toLocaleDateString("ko-KR")}</div>
+          </div>
+          <div class="tabular" style="font-weight:700;color:var(--persimmonDark);">${won(t)}</div>
+        </div>
+        ${o.cancelRequested
+          ? `<div style="margin-top:10px;font-size:12.5px;color:var(--persimmonDark);background:#FBEAE0;border-radius:8px;padding:8px 12px;">취소 요청이 접수됐어요. 농장에서 확인 후 처리해드립니다.</div>`
+          : `<div style="display:flex;gap:8px;margin-top:10px;">
+              <button class="btn-ghost" style="flex:1;" data-action="editOrder" data-id="${esc(o.id)}">주문 수정</button>
+              <button class="btn-ghost danger" style="flex:1;" data-action="requestCancel" data-id="${esc(o.id)}">주문 취소</button>
+            </div>`}
+        <div class="divider" style="margin:12px 0 6px;"></div>
+        <div class="section-label" style="margin-bottom:4px;">💬 농장주와 주고받기</div>
+        ${renderThread(o.messages)}
+        <div class="msg-input-row">
+          <textarea class="input" data-bind="msgDraft" data-id="${esc(o.id)}" rows="1" placeholder="농장주께 메시지 남기기…">${esc(STATE.msgDraft[o.id]||"")}</textarea>
+          <button class="btn-ghost" style="white-space:nowrap;" data-action="sendBuyerMsg" data-id="${esc(o.id)}" ${STATE.msgSending[o.id]?"disabled":""}>${STATE.msgSending[o.id]?"…":"보내기"}</button>
+        </div>
+      </div>`;
+    }).join("")}
+    <button class="btn-ghost" style="width:100%;margin-top:6px;" data-action="backToLanding">← 처음으로</button>
+  </div>`;
+}
+
+function renderDone(){
+  const edited = STATE.doneMode==="edit";
+  return `<div style="display:flex;justify-content:center;padding:10px 0 40px;">
+    <div class="crate" style="width:100%;max-width:440px;text-align:center;">
+      <div style="font-size:34px;margin-bottom:4px;">🧺</div>
+      <div class="display" style="font-size:20px;color:var(--forest);margin-bottom:6px;">${edited?"주문이 수정됐어요":"주문이 접수됐어요"}</div>
+      <div style="font-size:13.5px;color:var(--inkSoft);line-height:1.7;margin-bottom:16px;">아래 계좌로 총 <span class="tabular" style="font-weight:700;color:var(--persimmonDark);">${won(STATE._doneTotal||0)}</span> 입금해주시면 준비해서 보내드릴게요.</div>
+      ${renderAccountBox()}
+      <button class="btn-ghost" style="width:100%;margin-top:16px;" data-action="backToLanding">처음으로</button>
+    </div></div>`;
+}
+
+/* ---- build step: 과일 담기 + 장바구니 ---- */
+function renderBuild(){
+  const activeFruits = STATE.fruits.filter(isOnSale);
+  if(!activeFruits.length){
+    return `<div style="text-align:center;padding:40px 0;color:var(--inkSoft);"><div class="display" style="font-size:20px;color:var(--forest);margin-bottom:8px;">지금은 주문 가능한 과일이 없어요</div><div style="font-size:13.5px;">수확 소식이 올라오면 다시 찾아주세요.</div></div>`;
+  }
+  const it=STATE.item; const e=it.errors||{};
+  if(!it.fruitId) it.fruitId = activeFruits[0].id;
+  const editingCartItem = !!STATE.editingItemId;
+  const amount=itemAmount(it), shipping=itemShipping(it);
+  const dates = availableDates();
+
+  return `
+    ${STATE.buyer.name?`<div style="font-size:12.5px;color:var(--inkSoft);margin-bottom:16px;">${esc(STATE.buyer.name)}님 (${esc(STATE.buyer.phone)}) ${STATE.editingOrderId?"· 기존 주문 수정 중":""}</div>`:`<div style="font-size:13px;color:var(--forest);font-weight:700;margin-bottom:16px;">🧺 원하시는 과일을 담아주세요</div>`}
+
+    ${STATE.cart.length?`
+      <div class="section-label">장바구니 (${STATE.cart.length})</div>
+      ${STATE.cart.map(ci=>{
+        const f=fruitById(ci.fruitId);
+        const beingEdited = STATE.editingItemId===ci._id;
+        return `<div class="cart-item" style="${beingEdited?"border-color:var(--forest);box-shadow:0 0 0 2px rgba(36,64,47,.12);":""}">
+          <div class="cart-item-top">
+            <div style="min-width:0;">
+              <div style="font-weight:700;color:var(--forest);">${esc(f?f.name:"?")}${beingEdited?` <span class="modified-badge">아래에서 수정 중</span>`:""}</div>
+              <div class="badge">${methodLabel(ci.deliveryMethod)}${ci.isGift?" · 🎁 선물":""}</div>
+            </div>
+            <div class="tabular" style="font-weight:700;color:var(--persimmonDark);white-space:nowrap;">${won(itemTotal(ci))}</div>
+          </div>
+          <div class="cart-qty-row">
+            <span class="cart-qty-label">수량</span>
+            <div class="stepper stepper-sm">
+              <button data-action="cartQtyMinus" data-id="${esc(ci._id)}" ${ci.qty<=1?"disabled":""}>−</button>
+              <span class="tabular stepper-val">${ci.qty}</span>
+              <button data-action="cartQtyPlus" data-id="${esc(ci._id)}">＋</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <button class="btn-ghost" style="font-size:12px;padding:6px 10px;" data-action="editCartItem" data-id="${esc(ci._id)}">수령방법·선물 수정</button>
+            <button class="btn-ghost danger" style="font-size:12px;padding:6px 10px;" data-action="removeCartItem" data-id="${esc(ci._id)}">빼기</button>
+          </div>
+        </div>`;
+      }).join("")}
+      <div class="divider"></div>
+    `:""}
+
+    <div class="section-label" id="itemEditAnchor">${editingCartItem?"✏️ 항목 수정 중":"과일 담기"}</div>
+    <div class="fruit-grid">
+      ${activeFruits.map(fr=>`<div class="fruit-card ${fr.id===it.fruitId?"active":""}" data-action="pickFruit" data-id="${esc(fr.id)}">
+        ${fr.image?`<div class="fruit-thumb"><img src="${esc(fr.image)}" alt="${esc(fr.name)}" loading="lazy"/></div>`:`<div class="fruit-thumb placeholder">🍎</div>`}
+        <div class="name">${esc(fr.name)}</div>
+        <div class="price tabular">${won(fr.price)}</div>
+        ${typeof fr.stock==="number"?`<div class="stock">재고 ${fr.stock}</div>`:""}
+      </div>`).join("")}
+    </div>
+    ${e.fruitId?`<div class="err">${e.fruitId}</div>`:""}
+
+    <div class="field" style="margin-top:18px;">
+      <div class="field-head"><label class="field-label">수량 <span class="req">*</span></label></div>
+      <div class="qty-row">
+        <div class="stepper"><button data-action="itemQtyMinus">−</button><input class="tabular" data-bind="itemQty" type="number" min="1" value="${it.qty}" /><button data-action="itemQtyPlus">＋</button></div>
+        <div class="qty-amount tabular">${won(amount)}</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="section-label">수령 방법</div>
+      <div class="delivery-opts">
+        <button class="delivery-opt ${it.deliveryMethod==="delivery"?"active":""}" data-action="itemDelivery" data-v="delivery">🚚 택배 배송</button>
+        <button class="delivery-opt ${it.deliveryMethod==="pickup"?"active":""}" data-action="itemDelivery" data-v="pickup">🚗 방문 수령/픽업</button>
+        <button class="delivery-opt ${it.deliveryMethod==="church"?"active":""}" data-action="itemDelivery" data-v="church">🎁 직접 전달/맞춤 배달</button>
+      </div>
+      ${it.deliveryMethod==="delivery"?`<div class="shipping-note">택배비: 1박스 ${won(CONFIG.SHIPPING_FEE)} · ${CONFIG.FREE_SHIPPING_BOX_COUNT}박스 이상 무료 — 이 품목 <strong style="color:${shipping===0?"var(--forest)":"var(--persimmonDark)"};">${shipping===0?"무료 배송":won(shipping)}</strong></div>`:""}
+    </div>
+
+    ${it.deliveryMethod==="delivery"?`
+      <div class="field"><div class="field-head"><label class="field-label">주소</label><span class="hint">선택사항</span></div><input class="input" data-bind="itemAddress" placeholder="배송받으실 주소" value="${esc(it.address)}" /></div>
+      <div class="field"><div class="field-head"><label class="field-label">받으실 날짜</label><span class="hint">선택사항</span></div><input class="input" type="date" data-bind="itemGiftArrival" value="${esc(it.giftArrivalDate)}" /></div>`:""}
+
+    ${it.deliveryMethod==="pickup"?renderVisitFields(it,e,dates):""}
+
+    ${it.deliveryMethod==="church"?`
+      <div class="box-panel">
+        <div style="font-size:13px;color:var(--forest);font-weight:700;">🎁 농장에서 원하시는 곳으로 직접 전달해드려요.</div>
+        <div class="field"><div class="field-head"><label class="field-label">받으실 곳 <span class="req">*</span></label></div><input class="input" data-bind="itemAddress" placeholder="예: ○○교회 본당 앞, △△아파트 경비실" value="${esc(it.address)}" />${e.address?`<div class="err">${e.address}</div>`:""}</div>
+        <div class="field"><div class="field-head"><label class="field-label">수령 날짜 <span class="req">*</span></label></div><input class="input" type="date" data-bind="itemChurchDate" value="${esc(it.churchDate)}" />${e.churchDate?`<div class="err">${e.churchDate}</div>`:""}</div>
+      </div>`:""}
+
+    <label class="gift-toggle"><input type="checkbox" data-bind="itemIsGift" ${it.isGift?"checked":""}/> 🎁 선물이에요 (받는 분이 따로 있어요)</label>
+    ${it.isGift?`
+      <div class="box-panel">
+        <div class="field"><div class="field-head"><label class="field-label">수령자 성함 <span class="req">*</span></label></div><input class="input" data-bind="itemReceiverName" placeholder="선물 받으실 분" value="${esc(it.receiverName)}" />${e.receiverName?`<div class="err">${e.receiverName}</div>`:""}</div>
+        <div class="field"><div class="field-head"><label class="field-label">수령자 연락처</label><span class="hint">선택사항</span></div><input class="input" type="tel" inputmode="tel" data-bind="itemReceiverPhone" placeholder="010-0000-0000" value="${esc(it.receiverPhone)}" /></div>
+      </div>`:""}
+
+    <button class="btn-forest" data-action="addToCart">${editingCartItem?"항목 저장":"＋ 장바구니에 담기"}</button>
+    ${editingCartItem?`<button class="btn-ghost" style="width:100%;margin-top:10px;" data-action="cancelCartEdit">담기 취소</button>`:""}
+
+    ${STATE.cart.length?`
+      <div class="divider"></div>
+      <div class="section-label">결제 금액</div>
+      <div class="summary-box">
+        ${STATE.cart.map(ci=>{const f=fruitById(ci.fruitId);return `<div class="summary-row"><span>${esc(f?f.name:"?")} × ${ci.qty} (${methodLabel(ci.deliveryMethod).replace(/^[^ ]+ /,"")})</span><span class="tabular">${won(itemTotal(ci))}</span></div>`;}).join("")}
+        <div style="height:1px;background:var(--line);margin:2px 0;"></div>
+        <div class="summary-row summary-total"><span>합계</span><span class="tabular">${won(cartTotal())}</span></div>
+      </div>
+      <div class="field" style="margin-top:16px;"><div class="section-label">입금 계좌</div>${renderAccountBox()}</div>
+
+      ${!STATE.buyer.name?`
+        <div class="divider"></div>
+        <div class="section-label">주문자 정보</div>
+        <div class="field"><div class="field-head"><label class="field-label">이름 <span class="req">*</span></label></div><input class="input" data-bind="buyerName" placeholder="주문자 성함" value="${esc(STATE.buyerForm.name)}" />${STATE.buyerForm.err&&!STATE.buyerForm.name.trim()?`<div class="err">이름을 입력해주세요.</div>`:""}</div>
+        <div class="field"><div class="field-head"><label class="field-label">연락처 <span class="req">*</span></label></div><input class="input" type="tel" inputmode="tel" data-bind="buyerPhone" placeholder="010-0000-0000" value="${esc(STATE.buyerForm.phone)}" />${STATE.buyerForm.err&&!digits(STATE.buyerForm.phone)?`<div class="err">연락처를 입력해주세요.</div>`:""}</div>
+        <div class="field"><div class="field-head"><label class="field-label">소개해주신 분</label><span class="hint">선택 · 안 적으셔도 돼요</span></div><input class="input" data-bind="buyerReferrer" placeholder="예) 김철수님" value="${esc(STATE.buyerForm.referrer)}" /></div>
+        <div class="field"><div class="field-head"><label class="field-label">농장주께 요청/문의</label><span class="hint">선택 · 나중에 답을 받을 수 있어요</span></div><textarea class="input" data-bind="requestNote" rows="2" placeholder="예) 23일 오후에 찾으러 갈게요 / 무른 건 빼주세요" style="resize:vertical;">${esc(STATE.requestNote)}</textarea></div>
+      `:""}
+
+      <button class="btn-primary" data-action="submitOrder" ${STATE.submitting?"disabled":""}>${STATE.submitting?`<span class="spinner"></span> ${STATE.editingOrderId?"저장 중…":"접수 중…"}`:`${STATE.editingOrderId?"수정 내용 저장":"주문 완료하기"} (${won(cartTotal())})`}</button>
+      ${STATE.editingOrderId?`<button class="btn-ghost" style="width:100%;margin-top:10px;" data-action="cancelOrderEdit">수정 취소</button>`:""}
+    `:`<div class="empty-note">과일을 담으면 여기에 장바구니와 결제 정보가 나타나요.</div>`}
+  `;
+}
+
+function renderVisitFields(it,e,dates){
+  // 상주 일정이 등록돼 있으면 그 날짜/시간만 선택지로 제공
+  const hasWindows = dates.length>0;
+  // 방문 시간: 날짜와 무관하게 등록된 모든 상주 시간대를 합쳐 별도 선택
+  const allSlots = allTimeSlots();
+  return `<div class="box-panel">
+    <div style="font-size:13px;color:var(--forest);font-weight:700;">📍 과수원 주소: ${esc(CONFIG.FARM_ADDRESS)}</div>
+    ${hasWindows?`
+      <div class="visit-notice">📅 <b>농장주 상주일에만</b> 방문하실 수 있어요. 아래 목록에서 골라주세요.</div>
+      <div class="field"><div class="field-head"><label class="field-label">방문 날짜 <span class="req">*</span></label></div>
+        <select class="input" data-bind="itemVisitDate">
+          <option value="">날짜 선택</option>
+          ${dates.map(d=>`<option value="${d}" ${it.visitDate===d?"selected":""}>${fmtKDate(d)}</option>`).join("")}
+        </select>${e.visitDate?`<div class="err">${e.visitDate}</div>`:""}</div>
+      <div class="field"><div class="field-head"><label class="field-label">방문 시간 <span class="req">*</span></label><span class="hint">30분 단위</span></div>
+        <select class="input" data-bind="itemVisitTime">
+          <option value="">시간 선택</option>
+          ${allSlots.map(s=>`<option value="${s}" ${it.visitTime===s?"selected":""}>${s}</option>`).join("")}
+        </select>${e.visitTime?`<div class="err">${e.visitTime}</div>`:""}</div>
+    `:`
+      <div class="visit-notice warn">아직 농장주 상주 일정이 등록되지 않았어요. 관리자에게 방문 가능 일정을 문의해주세요.</div>
+      <div class="two-col">
+        <div class="field"><div class="field-head"><label class="field-label">방문 날짜 <span class="req">*</span></label></div><input class="input" type="date" data-bind="itemVisitDate" value="${esc(it.visitDate)}" />${e.visitDate?`<div class="err">${e.visitDate}</div>`:""}</div>
+        <div class="field"><div class="field-head"><label class="field-label">방문 시간 <span class="req">*</span></label></div><input class="input" type="time" data-bind="itemVisitTime" value="${esc(it.visitTime)}" />${e.visitTime?`<div class="err">${e.visitTime}</div>`:""}</div>
+      </div>
+    `}
+    <div class="field"><div class="field-head"><label class="field-label">방문자 연락처 <span class="req">*</span></label><span class="hint">실제 방문하실 분 번호</span></div><input class="input" type="tel" inputmode="tel" data-bind="itemVisitPhone" placeholder="010-0000-0000" value="${esc(it.visitPhone)}" />${e.visitPhone?`<div class="err">${e.visitPhone}</div>`:""}</div>
+  </div>`;
+}
+
+function renderAccountBox(){
+  const a=STATE.account;
+  if(!a||!a.number) return `<div style="font-size:13px;color:var(--inkSoft);">아직 계좌 정보가 등록되지 않았어요. 농장 관리자에게 문의해주세요.</div>`;
+  return `<div class="account-box">
+    <div style="min-width:0;"><div class="meta">${esc(a.bank)} · ${esc(a.holder)}${a.phone?" · "+esc(a.phone):""}</div><div class="num tabular">${esc(a.number)}</div></div>
+    <button class="copy-btn" data-action="copyAccount">${STATE.copied?"✓ 복사됨":"📋 복사"}</button>
+  </div>`;
+}
+
+/* ---------------- Admin ---------------- */
+function renderAdminArea(){
+  if(!STATE.adminUnlocked) return renderPinGate();
+  const modCount = STATE.orders.filter(o=>o.modified).length;
+  const countHtml = modCount>0 ? `주문 확인 (<span class="count-alert">${STATE.orders.length}</span>)` : `주문 확인 (${STATE.orders.length})`;
+  return `<div class="mini-tabs">
+    <button class="mini-tab ${STATE.adminTab==="orders"?"active":""}" data-action="setAdminTab" data-v="orders">${countHtml}</button>
+    <button class="mini-tab ${STATE.adminTab==="work"?"active":""}" data-action="setAdminTab" data-v="work">작업 목록</button>
+    <button class="mini-tab ${STATE.adminTab==="fruits"?"active":""}" data-action="setAdminTab" data-v="fruits">과일 관리</button>
+    <button class="mini-tab ${STATE.adminTab==="avail"?"active":""}" data-action="setAdminTab" data-v="avail">상주 일정</button>
+    <button class="mini-tab ${STATE.adminTab==="news"?"active":""}" data-action="setAdminTab" data-v="news">농장 소식</button>
+    <button class="mini-tab ${STATE.adminTab==="account"?"active":""}" data-action="setAdminTab" data-v="account">가게 설정</button>
+  </div>
+  ${STATE.adminTab==="orders"?renderOrderManager():""}
+  ${STATE.adminTab==="work"?renderWorkList():""}
+  ${STATE.adminTab==="fruits"?renderFruitManager():""}
+  ${STATE.adminTab==="avail"?renderAvailManager():""}
+  ${STATE.adminTab==="news"?renderNewsManager():""}
+  ${STATE.adminTab==="account"?renderAccountManager():""}`;
+}
+
+function renderPinGate(){
+  return `<div style="display:flex;justify-content:center;padding:20px 0 40px;">
+    <div class="crate" style="width:100%;max-width:280px;text-align:center;">
+      <div style="font-size:22px;color:var(--wood);margin-bottom:8px;">🔒</div>
+      <div class="display" style="font-size:18px;margin-bottom:4px;">관리자 확인</div>
+      <div style="font-size:12.5px;color:var(--inkSoft);margin-bottom:14px;">농장 관리 화면은 관리자만 볼 수 있어요.</div>
+      <input class="input" id="pinInput" type="password" inputmode="numeric" placeholder="PIN 번호" style="text-align:center;letter-spacing:4px;" value="${esc(STATE.pinInput)}" />
+      ${STATE.pinError?`<div class="err" style="margin-top:6px;">PIN이 올바르지 않아요.</div>`:""}
+      <button class="btn-primary" style="margin-top:12px;" data-action="checkPin">확인</button>
+    </div></div>`;
+}
+
+function renderFruitManager(){
+  const ff=STATE.fruitForm;
+  return `<div class="admin-card">
+    <div class="section-label">새 과일 추가</div>
+    <div class="add-fruit-row">
+      <input class="input" data-bind="fruitFormName" placeholder="과일명 (예: 사과)" value="${esc(ff.name)}" />
+      <input class="input num" data-bind="fruitFormPrice" type="number" inputmode="numeric" placeholder="금액(원)" value="${esc(ff.price)}" />
+      <input class="input num" data-bind="fruitFormStock" type="number" inputmode="numeric" placeholder="재고(선택)" value="${esc(ff.stock)}" />
+    </div>
+    <div class="field" style="margin-top:10px;margin-bottom:0;"><div class="field-head"><label class="field-label">판매 시작일</label><span class="hint">비우면 즉시 판매 · 미래 날짜면 '곧 판매 예정'에 표시</span></div><input class="input" type="date" data-bind="fruitFormSaleStart" value="${esc(ff.saleStartDate)}" /></div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px;">
+      <div class="fruit-thumb-admin">${ff.image?`<img src="${esc(ff.image)}" alt=""/>`:"🍎"}</div>
+      <label class="btn-ghost" style="margin:0;">${ff.image?"사진 변경":"📷 사진 선택"}<input type="file" accept="image/*" data-imgfor="new" style="display:none;" /></label>
+      ${ff.image?`<button class="btn-ghost danger" data-action="clearNewFruitImage">사진 삭제</button>`:""}
+    </div>
+    <button class="btn-primary" style="margin-top:10px;" data-action="addFruit">＋ 과일 추가</button>
+  </div>
+  ${STATE.fruits.length===0?`<div class="empty-note">아직 등록된 과일이 없어요. 위에서 추가해보세요.</div>`:""}
+  ${STATE.fruits.map(f=>`<div class="fruit-row ${f.active?"":"inactive"}">
+    <div class="fruit-row-top">
+      <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+        <div class="fruit-thumb-admin">${f.image?`<img src="${esc(f.image)}" alt="" loading="lazy"/>`:"🍎"}</div>
+        <div style="min-width:0;"><div class="name">${esc(f.name)}${isUpcoming(f)?` <span style="font-size:11px;color:var(--persimmonDark);font-weight:700;">🌱 ${fmtSaleDate(f.saleStartDate)}부터</span>`:""}</div><div class="fruit-row-sub">${won(f.price)}${typeof f.stock==="number"?` · 재고 ${f.stock}`:""}</div></div>
+      </div>
+      <button class="btn-ghost" style="padding:6px 10px;min-height:32px;font-size:12px;" data-action="toggleFruit" data-id="${esc(f.id)}">${f.active?"👁 판매중":"🚫 숨김"}</button>
+    </div>
+    <div class="fruit-row-actions">
+      <button class="btn-ghost" data-action="openEditFruit" data-id="${esc(f.id)}">✏️ 수정</button>
+      <label class="btn-ghost" style="margin:0;">📷 사진 교체<input type="file" accept="image/*" data-imgfor="${esc(f.id)}" style="display:none;" /></label>
+      <button class="btn-ghost danger" data-action="deleteFruit" data-id="${esc(f.id)}">🗑 삭제</button>
+    </div>
+  </div>`).join("")}`;
+}
+
+function renderAvailManager(){
+  const af=STATE.availForm;
+  const sorted=[...STATE.availability].sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
+  return `<div class="admin-card">
+    <div class="section-label">농장주 상주 일정 추가</div>
+    <div style="font-size:12.5px;color:var(--inkSoft);margin-bottom:12px;">여기에 등록한 날짜·시간대 안에서만 주문자가 '농장 방문 수령/픽업'을 예약할 수 있어요.</div>
+    <div class="two-col">
+      <div class="field" style="margin-bottom:10px;"><div class="field-head"><label class="field-label">날짜</label></div><input class="input" type="date" data-bind="availDate" value="${esc(af.date)}" /></div>
+      <div class="field" style="margin-bottom:10px;"><div class="field-head"><label class="field-label">시작</label></div><input class="input" type="time" data-bind="availStart" value="${esc(af.start)}" /></div>
+      <div class="field" style="margin-bottom:10px;"><div class="field-head"><label class="field-label">종료</label></div><input class="input" type="time" data-bind="availEnd" value="${esc(af.end)}" /></div>
+    </div>
+    <button class="btn-primary" data-action="addAvail">＋ 상주 일정 추가</button>
+  </div>
+  ${sorted.length===0?`<div class="empty-note">등록된 상주 일정이 없어요. 추가하면 방문 수령이 가능해져요.</div>`:""}
+  ${sorted.map(a=>`<div class="avail-row"><div class="d">${esc(a.date)}</div><div style="color:var(--inkSoft);">${esc(a.start)} ~ ${esc(a.end)}</div><button class="btn-ghost danger" style="margin-left:auto;padding:6px 10px;min-height:34px;font-size:12px;" data-action="deleteAvail" data-id="${esc(a.id)}">삭제</button></div>`).join("")}`;
+}
+
+function renderNewsManager(){
+  const nf=STATE.newsForm||{title:"",body:"",image:""};
+  const list=STATE.news||[];
+  const dateStr=(iso)=>{ const d=new Date(iso); return isNaN(d)?"":d.toLocaleDateString("ko-KR",{year:"numeric",month:"long",day:"numeric"}); };
+  return `<div class="admin-card">
+    <div class="section-label">농장 소식 올리기</div>
+    <div style="font-size:12.5px;color:var(--inkSoft);margin-bottom:12px;">여기 올린 소식은 첫 화면에 최신 것부터 배너로 보여요(주문자가 눌러서 펼쳐 봄). 사진은 자동 압축돼요.</div>
+    <div class="field"><div class="field-head"><label class="field-label">제목</label></div><input class="input" data-bind="newsTitle" value="${esc(nf.title)}" placeholder="예) 황도 수확 시작했어요!" /></div>
+    <div class="field"><div class="field-head"><label class="field-label">내용</label></div><textarea class="input" data-bind="newsBody" rows="4" placeholder="현재 농장 상황, 출하 일정, 날씨 소식 등을 자유롭게 적어주세요." style="resize:vertical;">${esc(nf.body)}</textarea></div>
+    <div class="field"><div class="field-head"><label class="field-label">사진</label><span class="hint">선택</span></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div class="fruit-thumb-admin" style="width:76px;height:76px;">${nf.image?`<img src="${esc(nf.image)}" alt=""/>`:"🖼"}</div>
+        <label class="btn-ghost" style="margin:0;">${nf.image?"사진 변경":"📷 사진 선택"}<input type="file" accept="image/*" data-imgfor="news" style="display:none;" /></label>
+        ${nf.image?`<button class="btn-ghost danger" style="padding:6px 10px;min-height:34px;font-size:12px;" data-action="clearNewsImage">삭제</button>`:""}
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn-primary" style="flex:1;" data-action="addNews" data-v="on" ${STATE.submitting?"disabled":""}>📢 바로 공개</button>
+      <button class="btn-ghost" style="flex:1;" data-action="addNews" data-v="off" ${STATE.submitting?"disabled":""}>🙈 비공개로 저장</button>
+    </div>
+    <div style="font-size:11.5px;color:var(--inkSoft);margin-top:6px;">비공개로 저장하면 주문자 화면에 안 보여요. 나중에 아래 목록에서 "공개하기"를 누르면 보이게 돼요.</div>
+  </div>
+  ${list.length===0?`<div class="empty-note">아직 올린 소식이 없어요.</div>`:""}
+  ${list.map(n=>{ const on=n.active!==false; return `<div class="admin-card" style="margin-top:10px;${on?"":"opacity:.62;"}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+      <div style="min-width:0;"><div style="font-weight:700;color:var(--forest);font-size:14.5px;">${on?"":`<span class="news-hidden-badge">비공개</span> `}${esc(n.title||"농장 소식")}</div>
+        <div style="font-size:11.5px;color:var(--inkSoft);margin-top:2px;">${dateStr(n.createdAt)}</div></div>
+      <button class="btn-ghost danger" style="padding:6px 10px;min-height:34px;font-size:12px;white-space:nowrap;" data-action="deleteNews" data-id="${esc(n.id)}">삭제</button>
+    </div>
+    ${n.body?`<div style="font-size:13px;line-height:1.7;color:var(--ink);white-space:pre-wrap;margin-top:8px;">${esc(n.body)}</div>`:""}
+    ${n.image?`<img src="${esc(n.image)}" alt="" style="width:100%;max-width:280px;border-radius:8px;margin-top:10px;display:block;" loading="lazy"/>`:""}
+    <button class="${on?"btn-ghost":"btn-forest"}" style="margin-top:10px;width:100%;" data-action="toggleNewsActive" data-id="${esc(n.id)}">${on?"🙈 비공개로 숨기기":"📢 공개하기"}</button>
+  </div>`;}).join("")}`;
+}
+
+function renderAccountManager(){
+  const a=STATE.accountForm||STATE.account;
+  return `<div class="admin-card" style="max-width:460px;">
+    <div class="section-label">가게(농장) 기본 정보</div>
+    <div class="field"><div class="field-head"><label class="field-label">가게/농장 이름</label><span class="hint">첫 화면·문자에 표시</span></div><input class="input" data-bind="businessName" value="${esc(STATE.businessName)}" placeholder="예: 에덴농원" /></div>
+    <div class="field"><div class="field-head"><label class="field-label">농장 주소</label><span class="hint">첫 화면에 표시</span></div><input class="input" data-bind="farmAddress" value="${esc(STATE.farmAddress||CONFIG.FARM_ADDRESS)}" placeholder="농장 주소" /></div>
+    <div class="field"><div class="field-head"><label class="field-label">농장 연락처</label><span class="hint">첫 화면에 표시</span></div><input class="input" type="tel" inputmode="tel" data-bind="farmPhone" value="${esc(STATE.farmPhone)}" placeholder="010-0000-0000" /></div>
+
+    <div class="section-label" style="margin-top:8px;">대문화면 배경사진 <span class="hint" style="font-weight:400;">(최대 3장, 비우면 기본 초록 배경)</span></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+      ${[0,1,2].map(i=>{ const src=(STATE.landingPhotos||[])[i]||""; return `
+      <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+        <div class="fruit-thumb-admin" style="width:76px;height:76px;">${src?`<img src="${esc(src)}" alt=""/>`:"🖼"}</div>
+        <label class="btn-ghost" style="margin:0;padding:6px 10px;min-height:32px;font-size:11.5px;">${src?"변경":"📷 선택"}<input type="file" accept="image/*" data-imgfor="landing${i}" style="display:none;" /></label>
+        ${src?`<button class="btn-ghost danger" style="padding:6px 10px;min-height:30px;font-size:11px;" data-action="clearLandingPhoto" data-idx="${i}">삭제</button>`:""}
+      </div>`;}).join("")}
+    </div>
+
+    <div class="section-label" style="margin-top:8px;">농장주 인사말</div>
+    <div class="field"><div class="field-head"><label class="field-label">첫 화면 인사말</label><span class="hint">비우면 표시 안 함</span></div><textarea class="input" data-bind="greeting" rows="4" placeholder="예: 안녕하세요, 정성껏 키운 과일을 보내드립니다.">${esc(STATE.greeting)}</textarea></div>
+
+    <div class="section-label" style="margin-top:8px;">주문 확인 문자 문구</div>
+    <div class="field"><div class="field-head"><label class="field-label">기본 안내문</label><span class="hint">주문내역 아래에 붙는 인사말</span></div><textarea class="input" data-bind="smsTemplate" rows="4" placeholder="비우면 기본 문구 사용">${esc(STATE.smsTemplate)}</textarea></div>
+    <div class="field"><div class="field-head"><label class="field-label">지연 안내문</label><span class="hint">날씨 등으로 출하 지연 시 보낼 문구</span></div><textarea class="input" data-bind="smsTemplateDelay" rows="4" placeholder="예: 최근 날씨로 수확이 지연되고 있어 조금 늦어질 수 있습니다. 양해 부탁드립니다.">${esc(STATE.smsTemplateDelay)}</textarea></div>
+    <div class="field"><div class="field-head"><label class="field-label">지금 사용할 문구</label></div>
+      <select class="input" data-bind="smsDefault">
+        <option value="normal" ${STATE.smsDefault==="normal"?"selected":""}>기본 안내문</option>
+        <option value="delay" ${STATE.smsDefault==="delay"?"selected":""}>지연 안내문</option>
+      </select>
+      <div class="hint" style="margin-top:4px;">선택한 문구가 '주문자에게 문자'에 자동 적용돼요. (문자 앱에서 최종 수정 가능)</div>
+    </div>
+
+    <div class="section-label" style="margin-top:8px;">새 주문 알림 이메일</div>
+    <div class="field"><div class="field-head"><label class="field-label">알림 받을 이메일</label><span class="hint">주문 들어오면 이 메일로 알림</span></div><input class="input" type="email" inputmode="email" data-bind="notifyEmail" value="${esc(STATE.notifyEmail)}" placeholder="farmer@example.com" /></div>
+
+    <button class="btn-forest" style="margin-bottom:22px;" data-action="saveSettings">위 설정 모두 저장</button>
+
+    <div class="section-label">입금 받으실 계좌</div>
+    <div class="field"><div class="field-head"><label class="field-label">은행</label></div><input class="input" data-bind="acctBank" value="${esc(a.bank)}" placeholder="예: 농협" /></div>
+    <div class="field"><div class="field-head"><label class="field-label">계좌번호</label></div><input class="input" data-bind="acctNumber" value="${esc(a.number)}" placeholder="000-0000-0000-00" /></div>
+    <div class="field"><div class="field-head"><label class="field-label">예금주</label></div><input class="input" data-bind="acctHolder" value="${esc(a.holder)}" placeholder="예금주 성함" /></div>
+    <div class="field"><div class="field-head"><label class="field-label">예금주 연락처</label><span class="hint">선택사항</span></div><input class="input" type="tel" inputmode="tel" data-bind="acctPhone" value="${esc(a.phone)}" placeholder="010-0000-0000" /></div>
+    <button class="btn-primary" data-action="saveAccount">계좌 정보 저장</button>
+  </div>`;
+}
+
+/* ---- 작업 목록 (수령방법 기준) ---- */
+function todayStr(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function ym(dateStr){ return (dateStr||"").slice(0,7); }
+function curYM(){ return todayStr().slice(0,7); }
+// 택배 예정일: 선물 희망일 있으면 그것, 없으면 주문 생성일(YYYY-MM-DD)
+function deliveryDate(o,it){ return it.giftArrivalDate || (o.createdAt? o.createdAt.slice(0,10):""); }
+// 모든 주문의 품목을 수령방법별로 평탄화. 각 원소에 주문정보(o) + 품목(it) + itemId 포함
+function flattenItems(method){
+  const rows=[];
+  STATE.orders.forEach(o=>{
+    if(o.cancelRequested) return; // 취소 요청된 주문은 작업 목록/집계에서 제외
+    (o.items||[]).forEach(it=>{
+      if(it.deliveryMethod!==method) return;
+      rows.push({ o, it, itemId: it.itemId });
+    });
+  });
+  return rows;
+}
+function schedDate(method,o,it){
+  if(method==="delivery") return deliveryDate(o,it);
+  if(method==="pickup") return it.visitDate||"";
+  if(method==="church") return it.churchDate||"";
+  return "";
+}
+
+function renderWorkList(){
+  const sub=STATE.workSub;
+  const label = {delivery:"택배",pickup:"방문",church:"교회"};
+  return `<div class="mini-tabs" style="margin-bottom:16px;">
+    <button class="mini-tab ${sub==="delivery"?"active":""}" data-action="setWorkSub" data-v="delivery">🚚 택배</button>
+    <button class="mini-tab ${sub==="pickup"?"active":""}" data-action="setWorkSub" data-v="pickup">🚗 방문/픽업</button>
+    <button class="mini-tab ${sub==="church"?"active":""}" data-action="setWorkSub" data-v="church">🎁 직접 전달</button>
+  </div>
+  ${sub==="delivery"?renderWorkDelivery():sub==="pickup"?renderWorkDated("pickup"):renderWorkDated("church")}`;
+}
+
+function statBar(cells){
+  return `<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+    ${cells.map(c=>`<div style="flex:1 1 100px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:center;">
+      <div style="font-size:11px;color:var(--inkSoft);margin-bottom:3px;">${c.label}</div>
+      <div style="font-weight:800;color:${c.color||"var(--forest)"};font-size:15px;" class="tabular">${c.n}건</div>
+      <div style="font-size:11px;color:var(--inkSoft);line-height:1.5;">${c.breakdown||"—"}</div>
+    </div>`).join("")}
+  </div>`;
+}
+function sumQ(rows){ return rows.reduce((s,r)=>s+(r.it.qty||0),0); }
+// 과일 종류별 개수 문자열: "황도 3 · 사과 5"
+function breakdownQ(rows){
+  const map={};
+  rows.forEach(r=>{ const n=r.it.fruitName||"?"; map[n]=(map[n]||0)+(r.it.qty||0); });
+  const keys=Object.keys(map);
+  if(!keys.length) return "—";
+  return keys.map(n=>`${esc(n)} ${map[n]}`).join(" · ");
+}
+
+function renderWorkDelivery(){
+  const all=flattenItems("delivery"); // 취소된 주문은 STATE.orders에 이미 없음
+  // 집계
+  const total=all;
+  const month=all.filter(r=>ym(deliveryDate(r.o,r.it))===curYM());
+  const undone=all.filter(r=>!r.it.delivered);
+  // 목록: 미배송만, 예정일 오름차순
+  const list=[...undone].sort((a,b)=>deliveryDate(a.o,a.it).localeCompare(deliveryDate(b.o,b.it)));
+  const bar=statBar([
+    {label:"미배송량",n:undone.length,breakdown:breakdownQ(undone),color:"var(--persimmonDark)"},
+    {label:"금월 주문량",n:month.length,breakdown:breakdownQ(month)},
+    {label:"총 주문량",n:total.length,breakdown:breakdownQ(total)},
+  ]);
+  if(!list.length) return bar+`<div class="empty-note">미배송 택배가 없어요. 🎉</div>`;
+  return bar+list.map(r=>{
+    const it=r.it,o=r.o; const d=deliveryDate(o,it);
+    const recv = it.isGift? `${esc(it.receiverName||"")}${it.receiverPhone?"("+esc(it.receiverPhone)+")":""}` : esc(o.name);
+    return `<div class="order-card">
+      <div class="order-card-top">
+        <div style="min-width:0;">
+          <div style="font-weight:700;color:var(--forest);font-size:15px;">${esc(it.fruitName)} × ${it.qty} ${it.isGift?`<span style="font-size:11px;color:var(--gold);">🎁 선물</span>`:""}</div>
+          <div style="font-size:12.5px;color:var(--inkSoft);margin-top:3px;">받는분: ${recv}</div>
+        </div>
+        <div style="text-align:right;font-size:12px;color:var(--persimmonDark);font-weight:700;">${d||"-"}</div>
+      </div>
+      <div class="meta">주소: ${it.address?esc(it.address):"<span style='color:var(--persimmonDark)'>미입력</span>"}<br/>주문자: ${esc(o.name)} · ☎ ${esc(o.phone)}</div>
+      <button class="btn-forest" style="margin-top:10px;font-size:12.5px;padding:8px 12px;min-height:36px;width:auto;" data-action="markItemDone" data-oid="${esc(o.id)}" data-iid="${esc(it.itemId)}" data-field="delivered">✅ 배송완료</button>
+    </div>`;
+  }).join("");
+}
+
+function renderWorkDated(method){
+  const all=flattenItems(method);
+  const today=todayStr();
+  const total=all;
+  const month=all.filter(r=>ym(schedDate(method,r.o,r.it))===curYM());
+  // 준비필요: 아직 prepared 아니고 날짜 안 지남
+  const needPrep=all.filter(r=>!r.it.prepared && schedDate(method,r.o,r.it)>=today);
+  // 목록: 날짜 안 지난 것만(당일 포함), 날짜 오름차순 (방문은 시간 2차)
+  let list=all.filter(r=>schedDate(method,r.o,r.it)>=today);
+  list.sort((a,b)=>{
+    const da=schedDate(method,a.o,a.it), db=schedDate(method,b.o,b.it);
+    if(da!==db) return da.localeCompare(db);
+    if(method==="pickup") return (a.it.visitTime||"").localeCompare(b.it.visitTime||"");
+    return 0;
+  });
+  const bar=statBar([
+    {label:"준비필요량",n:needPrep.length,breakdown:breakdownQ(needPrep),color:"var(--persimmonDark)"},
+    {label:"금월 주문량",n:month.length,breakdown:breakdownQ(month)},
+    {label:"총 주문량",n:total.length,breakdown:breakdownQ(total)},
+  ]);
+  if(!list.length) return bar+`<div class="empty-note">예정된 ${method==="pickup"?"방문/픽업":"직접 전달"}이 없어요.</div>`;
+  return bar+list.map(r=>{
+    const it=r.it,o=r.o; const d=schedDate(method,o,it);
+    const when = method==="pickup"? `${d} ${esc(it.visitTime||"")}` : d;
+    const contact = method==="pickup"? `방문자 ☎ ${esc(it.visitPhone||o.phone)}` : `주문자 ${esc(o.name)} · ☎ ${esc(o.phone)}`;
+    const place = method==="church" && it.address ? `<div style="font-size:12.5px;color:var(--forest);margin-top:3px;">📍 받으실 곳: ${esc(it.address)}</div>` : "";
+    return `<div class="order-card" style="${it.prepared?"opacity:.6;":""}">
+      <div class="order-card-top">
+        <div style="min-width:0;">
+          <div style="font-weight:700;color:var(--forest);font-size:15px;">${esc(it.fruitName)} × ${it.qty} ${it.isGift?`<span style="font-size:11px;color:var(--gold);">🎁</span>`:""}</div>
+          <div style="font-size:12.5px;color:var(--inkSoft);margin-top:3px;">${contact}</div>
+          ${place}
+        </div>
+        <div style="text-align:right;font-size:12px;color:var(--persimmonDark);font-weight:700;">${esc(when)}</div>
+      </div>
+      <button class="btn-${it.prepared?"ghost":"forest"}" style="margin-top:10px;font-size:12.5px;padding:8px 12px;min-height:36px;width:auto;" data-action="markItemDone" data-oid="${esc(o.id)}" data-iid="${esc(it.itemId)}" data-field="prepared">${it.prepared?"✓ 준비완료됨 (해제)":"📦 준비완료"}</button>
+    </div>`;
+  }).join("");
+}
+
+function renderOrderManager(){
+  const sorted=[...STATE.orders].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  const grand=sorted.reduce((s,o)=>s+(o.items||[]).reduce((ss,it)=>ss+(it.totalAmount??0),0),0);
+  if(!sorted.length) return `<button class="btn-ghost" style="margin-bottom:10px;" data-action="refreshOrders">새로고침</button><div class="empty-note">아직 들어온 주문이 없어요.</div>`;
+  return `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px;flex-wrap:wrap;">
+    <div style="font-size:13px;color:var(--inkSoft);">총 ${sorted.length}건 · <span class="tabular" style="font-weight:700;color:var(--forest);">${won(grand)}</span></div>
+    <button class="btn-ghost" style="padding:7px 12px;min-height:36px;font-size:12.5px;" data-action="refreshOrders">새로고침</button>
+  </div>
+  ${sorted.map(o=>{
+    const items=o.items||[];
+    const oTotal=items.reduce((s,it)=>s+(it.totalAmount??0),0);
+    return `<div class="order-card ${o.cancelRequested?"modified":o.modified?"modified":""}" ${o.cancelRequested?`style="border-color:var(--alert);background:#FBEAE0;"`:""}>
+      <div class="order-card-top">
+        <div style="min-width:0;"><div style="font-weight:700;color:var(--forest);font-size:15px;">${esc(o.name)} ${o.modified?`<span class="modified-badge">수정됨</span>`:""}${o.cancelRequested?`<span class="modified-badge">🚫 주문자 취소 요청</span>`:""}</div>
+          <div style="font-size:12.5px;color:var(--inkSoft);margin-top:2px;">연락처: ${esc(o.phone)}</div>${o.referrer?`<div style="font-size:12.5px;color:var(--wood);margin-top:2px;">🤝 소개: ${esc(o.referrer)}</div>`:""}</div>
+        <div class="tabular" style="font-weight:700;color:var(--persimmonDark);">${won(oTotal)}</div>
+      </div>
+      ${o.cancelRequested?`<div style="margin-top:8px;font-size:12.5px;color:var(--persimmonDark);font-weight:700;">⚠️ 주문자가 취소를 요청했습니다. 확인 후 아래 '취소 확인(삭제)'을 눌러주세요.</div>`:""}
+      ${items.map(it=>{
+        const extra = it.deliveryMethod==="pickup" ? `방문 ${esc(fmtKDate(it.visitDate))} ${esc(it.visitTime)} · ☎ ${esc(it.visitPhone)}`
+          : it.deliveryMethod==="church" ? `직접전달: ${it.address?esc(it.address):"장소 미입력"} · ${esc(fmtKDate(it.churchDate))}`
+          : (it.address?`주소: ${esc(it.address)}`:"주소 미입력")+(it.giftArrivalDate?` · 받으실날 ${esc(fmtKDate(it.giftArrivalDate))}`:"");
+        const gift = it.isGift?` · 🎁 ${esc(it.receiverName)}${it.receiverPhone?"("+esc(it.receiverPhone)+")":""}${it.giftArrivalDate?` 도착희망 ${esc(it.giftArrivalDate)}`:""}`:"";
+        const changed = it.itemModifiedAt && (it.origQty!==undefined);
+        const changeLine = changed ? `<div style="font-size:11.5px;color:var(--alert);margin-top:3px;">
+            변경: 수량 ${it.origQty}→${it.qty} · 금액 ${won(it.origTotalAmount)}→${won(it.totalAmount??0)}${(it.origSched||"")!==(schedDate(it.deliveryMethod,o,it)||"")?` · 일정 ${esc(it.origSched||"-")}→${esc(schedDate(it.deliveryMethod,o,it)||"-")}`:""}<br/>수정: ${new Date(it.itemModifiedAt).toLocaleString("ko-KR")}
+          </div>` : "";
+        return `<div class="order-item-line"><b>${esc(it.fruitName)} × ${it.qty}</b> — ${methodLabel(it.deliveryMethod)} · <span class="tabular">${won(it.totalAmount??0)}</span>${it.delivered?` <span style="color:var(--forest);font-weight:700;">✅발송</span>`:""}${it.prepared?` <span style="color:var(--forest);font-weight:700;">✅준비</span>`:""}
+          <button class="btn-ghost" style="font-size:11px;padding:3px 8px;min-height:26px;margin-left:6px;" data-action="openEditOrderItem" data-oid="${esc(o.id)}" data-iid="${esc(it.itemId)}">✏️ 수정</button>
+          <br/><span style="color:var(--inkSoft);">${extra}${gift}</span>${changeLine}</div>`;
+      }).join("")}
+      <div class="meta">${new Date(o.createdAt).toLocaleString("ko-KR")}${o.modifiedAt?` · <span style="color:var(--alert);">수정: ${new Date(o.modifiedAt).toLocaleString("ko-KR")}</span>`:""}</div>
+      <div class="divider" style="margin:12px 0 6px;"></div>
+      <div class="section-label" style="margin-bottom:4px;">💬 주문자와 주고받기${needsReply(o.messages)?` <span class="modified-badge">답변 필요</span>`:""}</div>
+      ${renderThread(o.messages)}
+      <div class="msg-input-row">
+        <textarea class="input" data-bind="replyDraft" data-id="${esc(o.id)}" rows="1" placeholder="답글 달기 (저장 시 주문자에게 문자 알림)…">${esc(STATE.replyDraft[o.id]||"")}</textarea>
+        <button class="btn-forest" style="white-space:nowrap;width:auto;padding:8px 12px;min-height:36px;" data-action="sendFarmerReply" data-id="${esc(o.id)}" ${STATE.msgSending[o.id]?"disabled":""}>${STATE.msgSending[o.id]?"…":"답글+문자"}</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center;">
+        ${o.smsSent
+          ? `<span style="font-size:12px;font-weight:700;color:var(--forest);background:#E4EDE3;border-radius:999px;padding:7px 12px;">✓ 문자 전송 완료</span>
+             <button class="btn-ghost" style="font-size:11.5px;padding:5px 9px;min-height:30px;" data-action="resendSms" data-id="${esc(o.id)}">다시 보내기</button>`
+          : `<button class="btn-forest" style="font-size:12px;padding:8px 12px;min-height:36px;width:auto;" data-action="smsOrder" data-id="${esc(o.id)}">✉️ 주문자에게 문자</button>`}
+        ${o.modified?`<button class="btn-ghost" style="font-size:12px;padding:6px 10px;color:var(--forest);border-color:var(--forest);" data-action="confirmOrder" data-id="${esc(o.id)}">수정 확인 완료</button>`:""}
+        <button class="btn-ghost danger" style="font-size:12px;padding:6px 10px;${o.cancelRequested?"font-weight:700;border-color:var(--alert);":""}" data-action="deleteOrder" data-id="${esc(o.id)}">${o.cancelRequested?"취소 확인(삭제)":"주문 취소"}</button>
+      </div>
+    </div>`;
+  }).join("")}`;
+}
+
+/* ---------------- Modal (fruit edit) ---------------- */
+function renderModal(){
+  const root=document.getElementById("modal-root");
+  if(STATE.showDoneNotice){
+    root.innerHTML=`<div class="modal-overlay" data-action="closeDoneNotice"><div class="modal" data-stop="1" style="text-align:center;max-width:360px;">
+      <div style="font-size:32px;margin-bottom:8px;">📩</div>
+      <div class="display" style="font-size:17px;color:var(--forest);margin-bottom:10px;">꼭 확인해주세요</div>
+      <div style="font-size:13.5px;color:var(--ink);line-height:1.8;margin-bottom:18px;">주문 완료 후 주문 접수 안내문이 1일 이내 오지 않으면 꼭 농장주에게 문의해주시기 바랍니다.</div>
+      <button class="btn-primary" style="width:100%;" data-action="closeDoneNotice">확인했어요</button>
+    </div></div>`;
+    return;
+  }
+  if(STATE.editOrderItem){ root.innerHTML=renderEditOrderItemModal(); return; }
+  if(!STATE.editFruit){ root.innerHTML=""; return; }
+  const ef=STATE.editFruit;
+  root.innerHTML=`<div class="modal-overlay" data-action="closeEditFruit"><div class="modal" data-stop="1">
+    <div class="display" style="font-size:18px;color:var(--forest);margin-bottom:14px;">과일 수정</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+      <div class="fruit-thumb-admin" style="width:72px;height:72px;">${ef.image?`<img src="${esc(ef.image)}" alt=""/>`:"🍎"}</div>
+      <label class="btn-ghost" style="margin:0;">📷 사진 교체<input type="file" accept="image/*" data-imgfor="edit" style="display:none;" /></label>
+    </div>
+    <div class="field"><div class="field-head"><label class="field-label">과일명</label></div><input class="input" data-bind="editFruitName" value="${esc(ef.name)}" /></div>
+    <div class="field"><div class="field-head"><label class="field-label">단가(원)</label></div><input class="input" type="number" inputmode="numeric" data-bind="editFruitPrice" value="${esc(ef.price)}" /></div>
+    <div class="field"><div class="field-head"><label class="field-label">재고</label><span class="hint">비우면 재고 표시 안 함</span></div><input class="input" type="number" inputmode="numeric" data-bind="editFruitStock" value="${ef.stock??""}" /></div>
+    <div class="field"><div class="field-head"><label class="field-label">판매 시작일</label><span class="hint">비우면 즉시 판매 · 미래면 예정</span></div><input class="input" type="date" data-bind="editFruitSaleStart" value="${esc(ef.saleStartDate||"")}" /></div>
+    <button class="btn-primary" data-action="saveEditFruit">저장</button>
+    <button class="btn-ghost" style="width:100%;margin-top:10px;" data-action="closeEditFruit">취소</button>
+  </div></div>`;
+}
+
+function renderEditOrderItemModal(){
+  const m=STATE.editOrderItem;
+  const activeFruits=STATE.fruits;
+  const price=(fruitById(m.fruitId)||{}).price||0;
+  const amount=price*(parseInt(m.qty)||0);
+  const shipping=m.deliveryMethod==="delivery"?((parseInt(m.qty)||0)>=CONFIG.FREE_SHIPPING_BOX_COUNT?0:CONFIG.SHIPPING_FEE):0;
+  const dates=availableDates();
+  const slots=m.visitDate?timeSlots(m.visitDate):[];
+  return `<div class="modal-overlay" data-action="closeEditOrderItem"><div class="modal" data-stop="1">
+    <div class="display" style="font-size:18px;color:var(--forest);margin-bottom:6px;">품목 수정 (관리자)</div>
+    <div style="font-size:12px;color:var(--inkSoft);margin-bottom:14px;">작황·일정 조정 시 사용. 저장하면 변경 이력이 남고, 주문자에게 문자로 알릴 수 있어요.</div>
+
+    <div class="field"><div class="field-head"><label class="field-label">과일</label></div>
+      <select class="input" data-bind="eoiFruit">${activeFruits.map(f=>`<option value="${esc(f.id)}" ${f.id===m.fruitId?"selected":""}>${esc(f.name)} (${won(f.price)})</option>`).join("")}</select></div>
+
+    <div class="field"><div class="field-head"><label class="field-label">수량</label></div>
+      <input class="input tabular" type="number" inputmode="numeric" min="1" data-bind="eoiQty" value="${esc(m.qty)}" /></div>
+
+    <div class="field"><div class="field-head"><label class="field-label">수령 방법</label></div>
+      <select class="input" data-bind="eoiMethod">
+        <option value="delivery" ${m.deliveryMethod==="delivery"?"selected":""}>택배 배송</option>
+        <option value="pickup" ${m.deliveryMethod==="pickup"?"selected":""}>농장 방문 수령/픽업</option>
+        <option value="church" ${m.deliveryMethod==="church"?"selected":""}>직접 전달/맞춤 배달</option>
+      </select></div>
+
+    ${m.deliveryMethod==="delivery"?`
+      <div class="field"><div class="field-head"><label class="field-label">받으실 날짜</label><span class="hint">선택</span></div><input class="input" type="date" data-bind="eoiGiftArrival" value="${esc(m.giftArrivalDate||"")}" /></div>`:""}
+    ${m.deliveryMethod==="pickup"?`
+      <div class="field"><div class="field-head"><label class="field-label">방문 날짜</label></div>
+        ${dates.length?`<select class="input" data-bind="eoiVisitDate"><option value="">날짜 선택</option>${dates.map(d=>`<option value="${d}" ${m.visitDate===d?"selected":""}>${d}</option>`).join("")}</select>`
+          :`<input class="input" type="date" data-bind="eoiVisitDate" value="${esc(m.visitDate||"")}" />`}</div>
+      <div class="field"><div class="field-head"><label class="field-label">방문 시간</label></div>
+        ${dates.length?`<select class="input" data-bind="eoiVisitTime" ${!m.visitDate?"disabled":""}><option value="">시간</option>${slots.map(s=>`<option value="${s}" ${m.visitTime===s?"selected":""}>${s}</option>`).join("")}</select>`
+          :`<input class="input" type="time" data-bind="eoiVisitTime" value="${esc(m.visitTime||"")}" />`}</div>`:""}
+    ${m.deliveryMethod==="church"?`
+      <div class="field"><div class="field-head"><label class="field-label">받으실 곳</label></div><input class="input" data-bind="eoiAddress" value="${esc(m.address||"")}" placeholder="예: ○○교회 본당 앞" /></div>
+      <div class="field"><div class="field-head"><label class="field-label">수령 날짜</label></div><input class="input" type="date" data-bind="eoiChurchDate" value="${esc(m.churchDate||"")}" /></div>`:""}
+
+    <div class="summary-box" style="margin-bottom:14px;">
+      <div class="summary-row"><span>과일 금액</span><span class="tabular">${won(amount)}</span></div>
+      <div class="summary-row" style="color:var(--inkSoft);"><span>택배비</span><span class="tabular">${m.deliveryMethod==="delivery"?won(shipping):"해당 없음"}</span></div>
+      <div class="summary-row summary-total"><span>합계</span><span class="tabular">${won(amount+shipping)}</span></div>
+    </div>
+
+    <button class="btn-primary" data-action="saveEditOrderItem">저장</button>
+    <button class="btn-ghost" style="width:100%;margin-top:10px;" data-action="closeEditOrderItem">취소</button>
+  </div></div>`;
+}
+
+/* ---------------- Events ---------------- */
+function bindEvents(){
+  document.querySelectorAll("[data-bind]").forEach(el=>el.addEventListener("input", onBind));
+  document.querySelectorAll("button[data-action],div[data-action]").forEach(el=>el.addEventListener("click", onAction));
+  document.querySelectorAll("input[data-imgfor]").forEach(el=>el.addEventListener("change", onImagePicked));
+  document.querySelectorAll("select[data-bind]").forEach(el=>el.addEventListener("change", onBind));
+  const pinEl=document.getElementById("pinInput");
+  if(pinEl) pinEl.addEventListener("keydown", e=>{ if(e.key==="Enter") checkPin(); });
+}
+
+function onBind(e){
+  const key=e.target.getAttribute("data-bind");
+  const val=e.target.type==="checkbox"?e.target.checked:e.target.value;
+  const itemKeys={itemQty:"qty",itemAddress:"address",itemVisitDate:"visitDate",itemVisitTime:"visitTime",itemVisitPhone:"visitPhone",itemChurchDate:"churchDate",itemIsGift:"isGift",itemReceiverName:"receiverName",itemReceiverPhone:"receiverPhone",itemGiftArrival:"giftArrivalDate"};
+  if(itemKeys[key]){
+    const k=itemKeys[key];
+    STATE.item[k] = k==="qty"?Math.max(1,parseInt(val)||1):val;
+    if(["qty","isGift","visitDate","deliveryMethod"].includes(k) || e.target.tagName==="SELECT") render();
+    return;
+  }
+  if(key==="idName"){ STATE.identify.name=val; return; }
+  if(key==="idPhone"){ STATE.identify.phone=val; return; }
+  if(key==="buyerName"){ STATE.buyerForm.name=val; return; }
+  if(key==="buyerPhone"){ STATE.buyerForm.phone=val; return; }
+  if(key==="buyerReferrer"){ STATE.buyerForm.referrer=val; return; }
+  if(key==="requestNote"){ STATE.requestNote=val; return; }
+  if(key==="msgDraft"){ const oid=e.target.getAttribute("data-id"); STATE.msgDraft[oid]=val; return; }
+  if(key==="replyDraft"){ const oid=e.target.getAttribute("data-id"); STATE.replyDraft[oid]=val; return; }
+  if(key==="businessName"){ STATE.businessName=val; return; }
+  if(key==="greeting"){ STATE.greeting=val; return; }
+  if(key==="farmPhone"){ STATE.farmPhone=val; return; }
+  if(key==="farmAddress"){ STATE.farmAddress=val; return; }
+  if(key==="smsTemplate"){ STATE.smsTemplate=val; return; }
+  if(key==="notifyEmail"){ STATE.notifyEmail=val; return; }
+  if(key==="fruitFormName") STATE.fruitForm.name=val;
+  if(key==="fruitFormPrice") STATE.fruitForm.price=val;
+  if(key==="fruitFormStock") STATE.fruitForm.stock=val;
+  if(key==="fruitFormSaleStart") STATE.fruitForm.saleStartDate=val;
+  if(key==="smsTemplateDelay"){ STATE.smsTemplateDelay=val; return; }
+  if(key==="smsDefault"){ STATE.smsDefault=val; return; }
+  if(key==="availDate") STATE.availForm.date=val;
+  if(key==="availStart") STATE.availForm.start=val;
+  if(key==="availEnd") STATE.availForm.end=val;
+  if(key==="newsTitle"){ STATE.newsForm.title=val; return; }
+  if(key==="newsBody"){ STATE.newsForm.body=val; return; }
+  if(key==="editFruitName") STATE.editFruit.name=val;
+  if(key==="editFruitPrice") STATE.editFruit.price=val;
+  if(key==="editFruitStock") STATE.editFruit.stock=val===""?null:val;
+  if(key==="editFruitSaleStart") STATE.editFruit.saleStartDate=val;
+  if(STATE.editOrderItem){
+    const m=STATE.editOrderItem;
+    if(key==="eoiFruit"){ m.fruitId=val; render(); return; }
+    if(key==="eoiQty"){ m.qty=Math.max(1,parseInt(val)||1); render(); return; }
+    if(key==="eoiMethod"){ m.deliveryMethod=val; if(val!=="pickup"){/*keep*/} render(); return; }
+    if(key==="eoiGiftArrival"){ m.giftArrivalDate=val; return; }
+    if(key==="eoiVisitDate"){ m.visitDate=val; m.visitTime=""; render(); return; }
+    if(key==="eoiVisitTime"){ m.visitTime=val; return; }
+    if(key==="eoiChurchDate"){ m.churchDate=val; return; }
+    if(key==="eoiAddress"){ m.address=val; return; }
+  }
+  if(["acctBank","acctNumber","acctHolder","acctPhone"].includes(key)){
+    if(!STATE.accountForm) STATE.accountForm={...STATE.account};
+    const m={acctBank:"bank",acctNumber:"number",acctHolder:"holder",acctPhone:"phone"};
+    STATE.accountForm[m[key]]=val;
+  }
+}
+
+async function onAction(e){
+  // 모달 바깥 클릭으로 닫힘 방지: modal 내부 클릭은 무시
+  if(e.currentTarget.getAttribute("data-stop")) { e.stopPropagation(); return; }
+  const el=e.currentTarget, action=el.getAttribute("data-action"), id=el.getAttribute("data-id"), v=el.getAttribute("data-v");
+
+  if(action==="retryLoad"){ setState({loadError:"",loaded:false}); await loadAll(); return; }
+  if(action==="setView"){ setState({view:v}); loadAll(true); return; }
+  if(action==="startNew"){ setState({buyer:{name:"",phone:"",referrer:""},buyerForm:{name:"",phone:"",referrer:"",err:false},cart:[],item:EMPTY_ITEM(),editingItemId:null,editingOrderId:null,editingCreatedAt:null,orderStep:"build"}); return; }
+  if(action==="toggleNews"){ const id=el.getAttribute("data-id"); setState({openNewsId: id==="close"?null:"open"}); return; }
+  if(action==="startEdit"){ setState({identifyMode:"edit",identify:{name:"",phone:"",error:""},orderStep:"identify"}); return; }
+  if(action==="backToLanding"){ setState({orderStep:"landing",cart:[],item:EMPTY_ITEM(),editingItemId:null,editingOrderId:null,editingCreatedAt:null,myOrders:[],buyer:{name:"",phone:""},buyerForm:{name:"",phone:"",err:false},showDoneNotice:false}); return; }
+  if(action==="identifyNext"){ identifyNext(); return; }
+  if(action==="lookupOrders"){ await lookupOrders(); return; }
+  if(action==="editOrder"){ startEditOrder(id); return; }
+  if(action==="requestCancel"){ await requestCancel(id); return; }
+  if(action==="cancelOrderEdit"){ setState({orderStep:"editList",cart:[],item:EMPTY_ITEM(),editingItemId:null,editingOrderId:null,editingCreatedAt:null}); return; }
+
+  if(action==="pickFruit"){ setItem({fruitId:id}); return; }
+  if(action==="itemQtyMinus"){ setItem({qty:Math.max(1,STATE.item.qty-1)}); return; }
+  if(action==="itemQtyPlus"){ setItem({qty:STATE.item.qty+1}); return; }
+  if(action==="itemDelivery"){ STATE.item.deliveryMethod=v; if(v!=="pickup"){STATE.item.visitDate="";STATE.item.visitTime="";} render(); return; }
+  if(action==="addToCart"){ addToCart(); return; }
+  if(action==="editCartItem"){ editCartItem(id); return; }
+  if(action==="removeCartItem"){ STATE.cart=STATE.cart.filter(c=>c._id!==id); render(); return; }
+  if(action==="cartQtyMinus"||action==="cartQtyPlus"){
+    const d = action==="cartQtyPlus" ? 1 : -1;
+    STATE.cart = STATE.cart.map(c=> c._id===id ? {...c, qty: Math.max(1,(parseInt(c.qty)||1)+d)} : c);
+    // 아래 편집 폼에서 같은 항목을 수정 중이면 그 값도 함께 맞춰줌
+    if(STATE.editingItemId===id){
+      const t=STATE.cart.find(c=>c._id===id);
+      if(t) STATE.item={...STATE.item, qty:t.qty};
+    }
+    render(); return;
+  }
+  if(action==="cancelCartEdit"){ STATE.item=EMPTY_ITEM(); STATE.editingItemId=null; render(); return; }
+  if(action==="copyAccount"){ navigator.clipboard?.writeText(STATE.account.number); STATE.copied=true; render(); setTimeout(()=>{STATE.copied=false;render();},1500); return; }
+  if(action==="submitOrder"){ await submitOrder(); return; }
+
+  if(action==="checkPin"){ checkPin(); return; }
+  if(action==="closeDoneNotice"){ setState({showDoneNotice:false}); return; }
+  if(action==="setAdminTab"){ setState({adminTab:v}); if(v==="orders"||v==="work") loadAll(true); return; }
+  if(action==="setWorkSub"){ setState({workSub:v}); return; }
+  if(action==="markItemDone"){ await markItemDone(el.getAttribute("data-oid"), el.getAttribute("data-iid"), el.getAttribute("data-field")); return; }
+  if(action==="openEditOrderItem"){ openEditOrderItem(el.getAttribute("data-oid"), el.getAttribute("data-iid")); return; }
+  if(action==="closeEditOrderItem"){ STATE.editOrderItem=null; render(); return; }
+  if(action==="saveEditOrderItem"){ await saveEditOrderItem(); return; }
+  if(action==="addFruit"){ await addFruit(); return; }
+  if(action==="clearNewFruitImage"){ STATE.fruitForm.image=""; render(); return; }
+  if(action==="clearLandingPhoto"){ await clearLandingPhoto(parseInt(el.getAttribute("data-idx"),10)); return; }
+  if(action==="toggleFruit"){ await toggleFruit(id); return; }
+  if(action==="deleteFruit"){ await deleteFruit(id); return; }
+  if(action==="openEditFruit"){ const f=fruitById(id); if(f){STATE.editFruit={id:f.id,name:f.name,price:f.price,stock:f.stock,image:f.image||"",saleStartDate:f.saleStartDate||""};render();} return; }
+  if(action==="closeEditFruit"){ STATE.editFruit=null; render(); return; }
+  if(action==="saveEditFruit"){ await saveEditFruit(); return; }
+  if(action==="saveSettings"){ await saveSettings(); return; }
+  if(action==="saveAccount"){ await saveAccount(); return; }
+  if(action==="addAvail"){ await addAvail(); return; }
+  if(action==="deleteAvail"){ await deleteAvail(id); return; }
+  if(action==="addNews"){ await addNews(el.getAttribute("data-v")!=="off"); return; }
+  if(action==="toggleNewsActive"){ await toggleNewsActive(id); return; }
+  if(action==="deleteNews"){ await deleteNews(id); return; }
+  if(action==="clearNewsImage"){ STATE.newsForm.image=""; render(); return; }
+  if(action==="refreshOrders"){ await loadAll(); return; }
+  if(action==="deleteOrder"){ await deleteOrder(id); return; }
+  if(action==="confirmOrder"){ await confirmOrder(id); return; }
+  if(action==="smsOrder"){ smsOrder(id); return; }
+  if(action==="resendSms"){ smsOrder(id, true); return; }
+  if(action==="sendBuyerMsg"){ await sendBuyerMsg(id); return; }
+  if(action==="sendFarmerReply"){ await sendFarmerReply(id); return; }
+}
+
+function checkPin(){
+  const pinEl=document.getElementById("pinInput");
+  const val=pinEl?pinEl.value:STATE.pinInput;
+  if(val===CONFIG.ADMIN_PIN) setState({adminUnlocked:true,pinError:false,pinInput:val});
+  else setState({pinError:true,pinInput:val});
+}
+
+/* ---- image ---- */
+function compressImage(file,maxDim,quality){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>{const img=new Image();img.onload=()=>{let{width,height}=img;if(width>height&&width>maxDim){height=Math.round(height*maxDim/width);width=maxDim;}else if(height>maxDim){width=Math.round(width*maxDim/height);height=maxDim;}const c=document.createElement("canvas");c.width=width;c.height=height;c.getContext("2d").drawImage(img,0,0,width,height);resolve(c.toDataURL("image/jpeg",quality));};img.onerror=reject;img.src=reader.result;};
+    reader.onerror=reject;reader.readAsDataURL(file);
+  });
+}
+async function onImagePicked(e){
+  const target=e.currentTarget.getAttribute("data-imgfor");
+  const file=e.currentTarget.files&&e.currentTarget.files[0];
+  if(!file) return;
+  if(target && target.indexOf("landing")===0){
+    try{
+      const idx=parseInt(target.replace("landing",""),10);
+      const dataUrl=await compressImage(file,500,0.55); // 시트 셀 용량 한도 고려해 더 작게 압축
+      STATE.landingPhotos=[...(STATE.landingPhotos||["","",""])];
+      STATE.landingPhotos[idx]=dataUrl;
+      render();
+      const key="landingPhoto"+(idx+1);
+      await apiPost({action:"setSettings",[key]:dataUrl});
+    }catch(err){ setState({saveError:"사진 처리에 실패했어요. 다른 사진으로 시도해주세요."}); }
+    return;
+  }
+  if(target==="news"){
+    try{
+      const dataUrl=await compressImage(file,700,0.6); // 소식 사진은 조금 크게 허용하되 압축
+      STATE.newsForm.image=dataUrl; render();
+    }catch(err){ setState({saveError:"사진 처리에 실패했어요. 다른 사진으로 시도해주세요."}); }
+    return;
+  }
+  try{
+    const dataUrl=await compressImage(file,600,0.7);
+    if(target==="new"){ STATE.fruitForm.image=dataUrl; render(); }
+    else if(target==="edit"){ STATE.editFruit.image=dataUrl; render(); }
+    else{ const fr=fruitById(target); if(fr)fr.image=dataUrl; render(); await apiPost({action:"updateFruit",id:target,patch:{image:dataUrl}}); }
+  }catch(err){ setState({saveError:"사진 처리에 실패했어요. 다른 사진으로 시도해주세요."}); }
+}
+async function clearLandingPhoto(idx){
+  STATE.landingPhotos=[...(STATE.landingPhotos||["","",""])];
+  const prev=STATE.landingPhotos[idx];
+  STATE.landingPhotos[idx]="";
+  render();
+  try{ const key="landingPhoto"+(idx+1); await apiPost({action:"setSettings",[key]:""}); }
+  catch(err){ STATE.landingPhotos[idx]=prev; setState({saveError:"삭제에 실패했어요."}); }
+}
+
+/* ---- identify / lookup ---- */
+function identifyNext(){
+  const idn=STATE.identify;
+  if(!idn.name.trim()||!digits(idn.phone)){ STATE.identify.error="이름과 연락처를 모두 입력해주세요."; render(); return; }
+  setState({buyer:{name:idn.name.trim(),phone:idn.phone.trim()},cart:[],item:EMPTY_ITEM(),editingItemId:null,editingOrderId:null,editingCreatedAt:null,orderStep:"build",identify:{...idn,error:""}});
+}
+async function lookupOrders(){
+  const idn=STATE.identify;
+  if(!idn.name.trim()||!digits(idn.phone)){ STATE.identify.error="이름과 연락처를 모두 입력해주세요."; render(); return; }
+  await loadAll(true);
+  const mine=STATE.orders.filter(o=>String(o.name).trim()===idn.name.trim() && phoneKey(o.phone)===phoneKey(idn.phone));
+  if(!mine.length){ STATE.identify.error="입력하신 정보로 등록된 주문을 찾지 못했어요. 이름/연락처를 다시 확인해주세요."; render(); return; }
+  setState({myOrders:mine,orderStep:"editList",identify:{...idn,error:""}});
+}
+function startEditOrder(id){
+  const o=STATE.orders.find(x=>x.id===id); if(!o) return;
+  const cart=(o.items||[]).map(it=>({ _id:uid(), fruitId:it.fruitId, qty:it.qty, deliveryMethod:it.deliveryMethod||"delivery", address:it.address||"", visitDate:normDate(it.visitDate||""), visitTime:normTime(it.visitTime||""), visitPhone:it.visitPhone||"", churchDate:normDate(it.churchDate||""), isGift:!!it.isGift, receiverName:it.receiverName||"", receiverPhone:it.receiverPhone||"", giftArrivalDate:normDate(it.giftArrivalDate||"") }));
+  setState({buyer:{name:o.name,phone:o.phone,referrer:o.referrer||""},buyerForm:{name:o.name,phone:o.phone,referrer:o.referrer||"",err:false},cart,item:EMPTY_ITEM(),editingItemId:null,editingOrderId:o.id,editingCreatedAt:o.createdAt,orderStep:"build"});
+}
+
+async function requestCancel(id){
+  if(!confirm("정말 취소하시겠습니까?")) return;
+  const o=STATE.orders.find(x=>x.id===id); if(!o) return;
+  const mine=STATE.myOrders.find(x=>x.id===id);
+  o.cancelRequested=true; if(mine) mine.cancelRequested=true;
+  render(); // 낙관적
+  try{
+    await apiPost({action:"requestCancel", id});
+  }catch(e){
+    o.cancelRequested=false; if(mine) mine.cancelRequested=false;
+    setState({saveError:"취소 요청에 실패했어요. 다시 시도해주세요."});
+  }
+}
+
+/* ---- cart ---- */
+function validateItem(){
+  const it=STATE.item, e={};
+  if(!it.fruitId) e.fruitId="과일을 선택해주세요.";
+  if(it.deliveryMethod==="pickup"){
+    if(!it.visitDate) e.visitDate="방문 날짜를 선택해주세요.";
+    if(!it.visitTime) e.visitTime="방문 시간을 선택해주세요.";
+    if(!digits(it.visitPhone)) e.visitPhone="방문자 연락처를 입력해주세요.";
+  }
+  if(it.deliveryMethod==="church"){
+    if(!it.address.trim()) e.address="받으실 곳을 입력해주세요.";
+    if(!it.churchDate) e.churchDate="수령 날짜를 선택해주세요.";
+  }
+  if(it.isGift && !it.receiverName.trim()) e.receiverName="받는 분 성함을 입력해주세요.";
+  STATE.item.errors=e;
+  return Object.keys(e).length===0;
+}
+function addToCart(){
+  if(!validateItem()){ render(); return; }
+  const it=STATE.item;
+  const entry={ _id:STATE.editingItemId||uid(), fruitId:it.fruitId, qty:it.qty, deliveryMethod:it.deliveryMethod,
+    address:(it.deliveryMethod==="delivery"||it.deliveryMethod==="church")?it.address.trim():"",
+    visitDate:it.deliveryMethod==="pickup"?it.visitDate:"", visitTime:it.deliveryMethod==="pickup"?it.visitTime:"", visitPhone:it.deliveryMethod==="pickup"?it.visitPhone.trim():"",
+    churchDate:it.deliveryMethod==="church"?it.churchDate:"",
+    isGift:it.isGift, receiverName:it.isGift?it.receiverName.trim():"", receiverPhone:it.isGift?it.receiverPhone.trim():"",
+    giftArrivalDate:it.deliveryMethod==="delivery"?it.giftArrivalDate:"" };
+  if(STATE.editingItemId){ STATE.cart=STATE.cart.map(c=>c._id===STATE.editingItemId?entry:c); }
+  else STATE.cart=[...STATE.cart,entry];
+  STATE.item=EMPTY_ITEM(); STATE.editingItemId=null; render();
+}
+function editCartItem(id){
+  const ci=STATE.cart.find(c=>c._id===id); if(!ci) return;
+  STATE.item={...EMPTY_ITEM(),...ci,errors:{}}; STATE.editingItemId=id; render();
+  // 아래 편집 폼이 보이도록 스크롤 (수정 중인 줄 모르고 헤매지 않게)
+  setTimeout(()=>{
+    const el=document.getElementById("itemEditAnchor");
+    if(el && el.scrollIntoView) el.scrollIntoView({behavior:"smooth",block:"start"});
+  },50);
+}
+
+/* ---- submit ---- */
+async function submitOrder(){
+  if(!STATE.cart.length) return;
+  // 새 주문이면 주문자 정보 입력 확인
+  if(!STATE.buyer.name){
+    if(!STATE.buyerForm.name.trim() || !digits(STATE.buyerForm.phone)){
+      STATE.buyerForm.err=true; render(); return;
+    }
+    STATE.buyer={ name:STATE.buyerForm.name.trim(), phone:STATE.buyerForm.phone.trim(), referrer:(STATE.buyerForm.referrer||"").trim() };
+  }
+  STATE.submitting=true; render();
+  const editing=!!STATE.editingOrderId;
+  const items=STATE.cart.map((ci,idx)=>{
+    const f=fruitById(ci.fruitId);
+    const amount=itemAmount(ci), shippingFee=itemShipping(ci);
+    const oid = editing?STATE.editingOrderId:null;
+    return { itemId: ci._id || ((oid||"new")+"-"+idx+"-"+Math.random().toString(36).slice(2,6)),
+      fruitId:ci.fruitId, fruitName:f?f.name:"", qty:ci.qty, unitPrice:f?f.price:0, amount, shippingFee, totalAmount:amount+shippingFee,
+      deliveryMethod:ci.deliveryMethod, address:ci.address, visitDate:ci.visitDate, visitTime:ci.visitTime, visitPhone:ci.visitPhone, churchDate:ci.churchDate,
+      isGift:ci.isGift, receiverName:ci.receiverName, receiverPhone:ci.receiverPhone, giftArrivalDate:ci.giftArrivalDate,
+      delivered:false, prepared:false };
+  });
+  let messages=[];
+  if(editing){
+    const existing=STATE.orders.find(x=>x.id===STATE.editingOrderId);
+    messages=(existing&&Array.isArray(existing.messages))?existing.messages:[];
+  } else {
+    const note=(STATE.requestNote||"").trim();
+    if(note) messages=[{ id:uid(), from:"buyer", text:note, at:new Date().toISOString() }];
+  }
+  const order={ id:editing?STATE.editingOrderId:uid(), name:STATE.buyer.name, phone:STATE.buyer.phone, referrer:(STATE.buyer.referrer||""), messages, items, source:"buyer",
+    createdAt:editing?STATE.editingCreatedAt:new Date().toISOString(), modified:editing, modifiedAt:editing?new Date().toISOString():"" };
+  try{
+    await apiPost({action:editing?"updateOrder":"addOrder", order});
+    STATE._doneTotal=cartTotal();
+    setState({submitting:false,orderStep:"done",doneMode:editing?"edit":"new",cart:[],item:EMPTY_ITEM(),editingOrderId:null,editingCreatedAt:null,requestNote:"",showDoneNotice:true});
+    loadAll(true);
+  }catch(e){ setState({submitting:false,saveError:"주문 저장에 실패했어요. 잠시 후 다시 시도해주세요."}); }
+}
+
+/* ---- admin actions ---- */
+async function addFruit(){
+  const ff=STATE.fruitForm;
+  if(!ff.name.trim()||!ff.price) return;
+  const nf={id:uid(),name:ff.name.trim(),price:parseInt(ff.price)||0,stock:ff.stock===""?null:parseInt(ff.stock)||0,active:true,image:ff.image||"",saleStartDate:ff.saleStartDate||""};
+  try{ await apiPost({action:"addFruit",...nf}); STATE.fruitForm={name:"",price:"",stock:"",image:"",saleStartDate:""}; STATE.fruits=[...STATE.fruits,nf]; render(); }
+  catch(e){ setState({saveError:"저장에 실패했어요."}); }
+}
+async function toggleFruit(id){
+  const fr=fruitById(id); if(!fr) return;
+  try{ await apiPost({action:"updateFruit",id,patch:{active:!fr.active}}); fr.active=!fr.active; render(); }
+  catch(e){ setState({saveError:"저장에 실패했어요."}); }
+}
+async function deleteFruit(id){
+  try{ await apiPost({action:"deleteFruit",id}); STATE.fruits=STATE.fruits.filter(f=>f.id!==id); render(); }
+  catch(e){ setState({saveError:"삭제에 실패했어요."}); }
+}
+async function saveEditFruit(){
+  const ef=STATE.editFruit; if(!ef) return;
+  const patch={name:ef.name.trim(),price:parseInt(ef.price)||0,stock:ef.stock===null||ef.stock===""?null:parseInt(ef.stock)||0,image:ef.image||"",saleStartDate:ef.saleStartDate||""};
+  const fr=fruitById(ef.id); if(fr) Object.assign(fr,patch);
+  STATE.editFruit=null; render();
+  try{ await apiPost({action:"updateFruit",id:ef.id,patch}); }
+  catch(e){ setState({saveError:"저장에 실패했어요."}); }
+}
+async function saveSettings(){
+  const payload={ businessName:STATE.businessName, greeting:STATE.greeting, farmPhone:STATE.farmPhone, farmAddress:STATE.farmAddress, smsTemplate:STATE.smsTemplate, smsTemplateDelay:STATE.smsTemplateDelay, smsDefault:STATE.smsDefault, notifyEmail:STATE.notifyEmail };
+  try{ await apiPost({action:"setSettings", ...payload}); setState({saveError:""}); }
+  catch(e){ setState({saveError:"저장에 실패했어요."}); }
+}
+async function saveAccount(){
+  const a=STATE.accountForm||STATE.account;
+  try{ await apiPost({action:"setAccount",...a}); STATE.account={...a}; STATE.accountForm=null; render(); }
+  catch(e){ setState({saveError:"저장에 실패했어요."}); }
+}
+async function addAvail(){
+  const af=STATE.availForm;
+  if(!af.date||!af.start||!af.end) return;
+  if(af.end<=af.start){ setState({saveError:"종료 시간이 시작 시간보다 늦어야 해요."}); return; }
+  const entry={id:uid(),date:af.date,start:af.start,end:af.end};
+  try{ await apiPost({action:"addAvail",...entry}); STATE.availability=[...STATE.availability,entry]; STATE.availForm={date:"",start:"09:00",end:"18:00"}; render(); }
+  catch(e){ setState({saveError:"저장에 실패했어요."}); }
+}
+async function deleteAvail(id){
+  try{ await apiPost({action:"deleteAvail",id}); STATE.availability=STATE.availability.filter(a=>a.id!==id); render(); }
+  catch(e){ setState({saveError:"삭제에 실패했어요."}); }
+}
+async function addNews(active){
+  const nf=STATE.newsForm||{title:"",body:"",image:""};
+  if(!nf.title.trim() && !nf.body.trim()){ setState({saveError:"제목이나 내용을 입력해주세요."}); return; }
+  const entry={id:uid(),title:nf.title.trim(),body:nf.body.trim(),image:nf.image||"",active:active!==false,createdAt:new Date().toISOString()};
+  STATE.submitting=true; render();
+  try{
+    await apiPost({action:"addNews",...entry});
+    STATE.news=[entry,...(STATE.news||[])];
+    STATE.newsForm={title:"",body:"",image:""};
+    STATE.submitting=false; render();
+  }catch(e){ STATE.submitting=false; setState({saveError:"소식 저장에 실패했어요. 다시 시도해주세요."}); }
+}
+async function toggleNewsActive(id){
+  const n=(STATE.news||[]).find(x=>x.id===id); if(!n) return;
+  const next=!(n.active!==false);
+  const prev=n.active;
+  n.active=next; render(); // 낙관적 업데이트
+  try{ await apiPost({action:"updateNews",id,patch:{active:next}}); }
+  catch(e){ n.active=prev; setState({saveError:"변경에 실패했어요. 다시 시도해주세요."}); }
+}
+async function deleteNews(id){
+  if(!confirm("이 소식을 삭제할까요?")) return;
+  const backup=STATE.news;
+  STATE.news=STATE.news.filter(n=>n.id!==id); render();
+  try{ await apiPost({action:"deleteNews",id}); }
+  catch(e){ STATE.news=backup; setState({saveError:"삭제에 실패했어요."}); }
+}
+async function deleteOrder(id){
+  if(!confirm("DB에서 자료가 삭제됩니다. 정말 취소하시겠습니까?")) return;
+  const backup=STATE.orders;
+  STATE.orders=STATE.orders.filter(o=>o.id!==id); render();
+  try{ await apiPost({action:"deleteOrder",id}); }
+  catch(e){ STATE.orders=backup; setState({saveError:"주문 취소에 실패했어요. 다시 시도해주세요."}); }
+}
+async function confirmOrder(id){
+  const o=STATE.orders.find(x=>x.id===id);
+  if(o) o.modified=false; render(); // 낙관적 업데이트
+  try{ await apiPost({action:"confirmOrder",id}); }
+  catch(e){ if(o) o.modified=true; setState({saveError:"처리에 실패했어요."}); }
+}
+
+async function markItemDone(orderId, itemId, field){
+  const o=STATE.orders.find(x=>x.id===orderId);
+  if(!o) return;
+  const it=(o.items||[]).find(x=>x.itemId===itemId);
+  if(!it) return;
+  const prev=!!it[field];
+  it[field]=!prev; // 낙관적: 화면 먼저 반영
+  render();
+  try{
+    await apiPost({action:"setItemFlag", orderId, itemId, field, value:it[field], items:o.items});
+  }catch(e){
+    it[field]=prev; // 실패 시 롤백
+    setState({saveError:"저장에 실패했어요. 다시 시도해주세요."});
+  }
+}
+
+function openEditOrderItem(orderId, itemId){
+  const o=STATE.orders.find(x=>x.id===orderId);
+  if(!o) return;
+  const it=(o.items||[]).find(x=>x.itemId===itemId);
+  if(!it) return;
+  STATE.editOrderItem={
+    orderId, itemId,
+    fruitId:it.fruitId, qty:it.qty, deliveryMethod:it.deliveryMethod, address:it.address||"",
+    giftArrivalDate:it.giftArrivalDate||"", visitDate:it.visitDate||"", visitTime:it.visitTime||"", churchDate:it.churchDate||"",
+  };
+  render();
+}
+
+async function saveEditOrderItem(){
+  const m=STATE.editOrderItem; if(!m) return;
+  const o=STATE.orders.find(x=>x.id===m.orderId); if(!o) return;
+  const it=(o.items||[]).find(x=>x.itemId===m.itemId); if(!it) return;
+
+  // 최초 주문값 스냅샷 (최초 1회만 고정)
+  if(it.origQty===undefined){
+    it.origQty=it.qty;
+    it.origTotalAmount=it.totalAmount??0;
+    it.origSched=schedDate(it.deliveryMethod,o,it)||"";
+    it.origFruitName=it.fruitName;
+    it.origMethod=it.deliveryMethod;
+  }
+
+  const f=fruitById(m.fruitId);
+  const qty=Math.max(1,parseInt(m.qty)||1);
+  const price=f?f.price:(it.unitPrice||0);
+  const amount=price*qty;
+  const shippingFee=m.deliveryMethod==="delivery"?(qty>=CONFIG.FREE_SHIPPING_BOX_COUNT?0:CONFIG.SHIPPING_FEE):0;
+
+  const backup={...it}; // 롤백용
+  Object.assign(it,{
+    fruitId:m.fruitId, fruitName:f?f.name:it.fruitName, unitPrice:price,
+    qty, amount, shippingFee, totalAmount:amount+shippingFee,
+    deliveryMethod:m.deliveryMethod,
+    address:(m.deliveryMethod==="delivery"||m.deliveryMethod==="church")?(m.address||""):"",
+    giftArrivalDate:m.deliveryMethod==="delivery"?(m.giftArrivalDate||""):"",
+    visitDate:m.deliveryMethod==="pickup"?(m.visitDate||""):"",
+    visitTime:m.deliveryMethod==="pickup"?(m.visitTime||""):"",
+    visitPhone:m.deliveryMethod==="pickup"?(it.visitPhone||o.phone):"",
+    churchDate:m.deliveryMethod==="church"?(m.churchDate||""):"",
+    itemModifiedAt:new Date().toISOString(),
+  });
+  o.modified=true; o.modifiedAt=new Date().toISOString(); o.smsSent=false;
+  STATE.editOrderItem=null;
+  render(); // 낙관적 업데이트
+
+  try{
+    await apiPost({action:"updateOrder", order:{ id:o.id, name:o.name, phone:o.phone, items:o.items, modified:true, modifiedAt:o.modifiedAt, source:"admin" }});
+  }catch(e){
+    Object.assign(it,backup); o.modified=false;
+    setState({saveError:"저장에 실패했어요. 다시 시도해주세요."});
+  }
+}
+
+function buildOrderSms(o){
+  const shop = STATE.businessName || "과수원";
+  const a = STATE.account || {};
+  const lines = [];
+  lines.push(`[${shop} 주문확인]`);
+  lines.push(`${o.name}님`);
+  let total = 0;
+  let anyChanged = false;
+  (o.items||[]).forEach(it=>{
+    total += (it.totalAmount||0);
+    const method = it.deliveryMethod==="pickup" ? `방문수령 ${it.visitDate||""} ${it.visitTime||""}`.trim()
+      : it.deliveryMethod==="church" ? `직접전달 ${it.address||""} ${it.churchDate||""}`.trim()
+      : `택배${it.giftArrivalDate?" "+it.giftArrivalDate+" 도착":""}`;
+    let line = `· ${it.fruitName} ${it.qty}개 (${method}`;
+    if(it.isGift){ line += `/선물 받는분:${it.receiverName||""}`; }
+    line += `) ${won(it.totalAmount||0)}`;
+    lines.push(line);
+    // 관리자가 수정한 품목이면 최초 주문값 병기
+    if(it.itemModifiedAt && it.origQty!==undefined){
+      anyChanged = true;
+      const nowSched = it.deliveryMethod==="pickup"?`${it.visitDate||""} ${it.visitTime||""}`.trim()
+        : it.deliveryMethod==="church"?(it.churchDate||"") : (it.giftArrivalDate||"");
+      let chg = `   (변경: 수량 ${it.origQty}→${it.qty}, 금액 ${won(it.origTotalAmount)}→${won(it.totalAmount||0)}`;
+      if((it.origSched||"")!==(nowSched||"")) chg += `, 일정 ${it.origSched||"-"}→${nowSched||"-"}`;
+      chg += ")";
+      lines.push(chg);
+    }
+  });
+  lines.push(`합계: ${won(total)}`);
+  lines.push("");
+  if(anyChanged) lines.push("※ 작황·일정 사정으로 위와 같이 조정되었습니다. 확인 부탁드립니다.");
+  lines.push("");
+  const useDelay = STATE.smsDefault==="delay";
+  const chosen = useDelay ? STATE.smsTemplateDelay : STATE.smsTemplate;
+  if(chosen && chosen.trim()){
+    lines.push(chosen.trim());
+  }else if(useDelay){
+    lines.push("안녕하세요? 에덴농원지기입니다.");
+    lines.push("최근 날씨 사정으로 과일 수확·출하가 조금 지연되고 있습니다. 최대한 좋은 상태로 보내드리기 위한 것이니 너그러이 양해 부탁드립니다.");
+    lines.push("*연락처: 010 7375 7075");
+    lines.push("*계좌번호: 농협 352 1173 6743 73 입니다.");
+    lines.push("감사합니다.");
+  }else{
+    lines.push("안녕하세요? 에덴농원지기입니다.");
+    lines.push("저희 과일을 주문해 주셔서 진심으로 감사합니다. 최대한 선별하여 보냈지만 혹시나 과일에 문제가 있다면 언제든 연락 주세요.");
+    lines.push("*연락처: 010 7375 7075");
+    lines.push("*계좌번호: 농협 352 1173 6743 73 입니다.");
+    lines.push("오늘도 행복한 하루 되세요!");
+  }
+  return lines.join("\n");
+}
+
+function smsOrder(id, isResend){
+  const o = STATE.orders.find(x=>x.id===id);
+  if(!o) return;
+  const body = buildOrderSms(o);
+  const phone = digits(o.phone);
+  const href = `sms:${phone}?body=${encodeURIComponent(body)}`;
+  // 전송 완료 표시 저장 (다시 보내기는 재저장 불필요)
+  if(!o.smsSent){
+    o.smsSent = true;
+    render();
+    apiPost({action:"markSmsSent", id}).catch(()=>{});
+  }
+  window.location.href = href;
+}
+
+/* ---- 메시지(주문자↔농장주) ---- */
+async function sendBuyerMsg(id){
+  const text=(STATE.msgDraft[id]||"").trim();
+  if(!text) return;
+  const o=STATE.myOrders.find(x=>x.id===id)||STATE.orders.find(x=>x.id===id); if(!o) return;
+  const msg={ id:uid(), from:"buyer", text, at:new Date().toISOString() };
+  const newMsgs=[...(o.messages||[]), msg];
+  // 낙관적 업데이트 (myOrders/orders 양쪽 반영)
+  [STATE.myOrders, STATE.orders].forEach(arr=>{ const t=arr.find(x=>x.id===id); if(t) t.messages=newMsgs; });
+  STATE.msgDraft[id]=""; STATE.msgSending[id]=true; render();
+  try{
+    await apiPost({action:"appendMessage", id, messages:newMsgs});
+    STATE.msgSending[id]=false; render();
+  }catch(e){ STATE.msgSending[id]=false; setState({saveError:"메시지 전송에 실패했어요. 다시 시도해주세요."}); }
+}
+async function sendFarmerReply(id){
+  const text=(STATE.replyDraft[id]||"").trim();
+  if(!text) return;
+  const o=STATE.orders.find(x=>x.id===id); if(!o) return;
+  const msg={ id:uid(), from:"farmer", text, at:new Date().toISOString() };
+  const newMsgs=[...(o.messages||[]), msg];
+  o.messages=newMsgs; STATE.replyDraft[id]=""; STATE.msgSending[id]=true; render();
+  try{
+    await apiPost({action:"appendMessage", id, messages:newMsgs});
+    STATE.msgSending[id]=false; render();
+    // 답글 알림 문자: 농장주 폰 문자앱을 열어 주문자에게 발송
+    const shop = STATE.businessName || "에덴농원";
+    const body = `[${shop}] 남겨주신 문의에 농장주 답글이 달렸어요.\n\n"${text}"\n\n주문 조회 화면에서 확인하실 수 있어요.`;
+    const href = `sms:${digits(o.phone)}?body=${encodeURIComponent(body)}`;
+    window.location.href = href;
+  }catch(e){ STATE.msgSending[id]=false; setState({saveError:"답글 저장에 실패했어요. 다시 시도해주세요."}); }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F2E9">
+<meta name="description" content="교회 카페 주문">
+<title>교회 카페 주문 체험판</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap">
+<link rel="stylesheet" href="./style.css">
+<style>
+/* 상단 전환 띠 — 손님에게는 보이지 않습니다 (?staff 로 열 때만 노출) */
+#topbar{position:sticky;top:0;z-index:60;background:#0E1C2A;color:#CFE0F0;
+  display:flex;align-items:center;gap:10px;padding:7px 10px;font-size:12px;
+  border-bottom:1px solid rgba(255,255,255,.1)}
+#topbar.hide{display:none}
+#topbar .sw{display:flex;gap:4px;background:rgba(255,255,255,.07);padding:3px;border-radius:8px;flex:1;min-width:0}
+#topbar .sw button{flex:1;padding:6px 4px;border-radius:6px;font-size:12px;font-weight:600;color:#9FB6CC;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#topbar .sw button[aria-current="true"]{background:var(--brass);color:#231708}
+#topbar .meta{display:flex;align-items:center;gap:8px;white-space:nowrap}
+#topbar .dot{width:7px;height:7px;border-radius:50%;background:var(--sage);box-shadow:0 0 0 3px rgba(78,107,82,.25)}
+#topbar .dot.off{background:#8B6A2A;box-shadow:0 0 0 3px rgba(139,106,42,.25)}
+#topbar .nm{font-family:var(--mono);color:#7E97AF;font-size:11px}
+.tabs{top:0}
+.topnav{top:0}
+body.staff .tabs,body.staff .topnav{top:37px}
+body.staff #viewAdmin{min-height:calc(100vh - 37px)}
+@media print{
+  #topbar,.bottombar,.scrim,.sheet .x,.sheet .btn{display:none !important}
+  .sheet{position:static;max-height:none;box-shadow:none;background:#fff}
+  #modalRoot{position:static;display:block}
+  #viewCustomer,#viewAdmin,#viewDisplay{display:none !important}
+}
+</style>
+</head>
+<body>
+
+<script>window.DEMO_BANNER={resetPrefixes:["cafe-demo"],sticky:false,hint:(location.search.indexOf("staff")>=0?"봉사자 로그인은 아무 값이나, 화면 잠금 PIN 0000":"봉사자 화면은 주소 끝에 ?staff")};</script>
+<script src="../_shared/banner.js"></script>
+<div id="topbar" class="hide">
+  <div class="sw" role="tablist" aria-label="화면 전환">
+    <button data-mode="customer" role="tab">📱 주문자</button>
+    <button data-mode="admin" role="tab">☕ 봉사자</button>
+    <button data-mode="display" role="tab">🔢 현황판</button>
+  </div>
+  <div class="meta">
+    <span class="dot" id="syncDot" title="연결 상태"></span>
+    <span class="nm" id="shopName"></span>
+  </div>
+</div>
+
+<main>
+  <section id="viewCustomer"></section>
+  <section id="viewAdmin" class="hide"></section>
+  <section id="viewDisplay" class="hide"></section>
+</main>
+<div id="modalRoot" aria-modal="true" role="dialog"></div>
+
+<script>
+/* 손님용 QR은 그냥 주소, 봉사자용 QR은 주소 뒤에 ?staff 를 붙입니다.
+   손님 화면에는 봉사자 탭이 아예 나타나지 않습니다. */
+if(location.search.includes("staff") || location.hash === "#staff"){
+  document.getElementById("topbar").classList.remove("hide");
+  document.body.classList.add("staff");
+}
+</script>
+<script type="module" src="./app.js"></script>
+</body>
+</html>

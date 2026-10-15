@@ -1,0 +1,2319 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#14261C">
+<title>팜슈가 농원(1호점)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+Khmer:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14261C; --ink-2:#3C4A41; --muted:#7C8A80;
+  --leaf:#1F6B47; --leaf-dk:#144F34; --leaf-sf:#E8F1EA;
+  --mango:#EFA02C; --mango-sf:#FDF2DD;
+  --clay:#C25A3C; --clay-sf:#FBEBE6;
+  --paper:#FBF8F1; --card:#FFFFFF; --line:#E4DFD2;
+  --r:14px; --pad:16px;
+  --shadow:0 1px 2px rgba(20,38,28,.05), 0 6px 20px rgba(20,38,28,.06);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html,body{margin:0; padding:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:'Noto Sans KR',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:15px; line-height:1.62; letter-spacing:-.01em;
+  -webkit-text-size-adjust:100%;
+}
+/* 크메르어: 세로 공간이 더 필요하고 단어 사이 공백이 없다 */
+body.lang-km{ font-family:'Noto Sans Khmer','Noto Sans KR',sans-serif; font-size:16px; line-height:1.95; letter-spacing:0 }
+body.lang-km .btn,body.lang-km .chip,body.lang-km .badge{ line-height:1.6; height:auto; min-height:48px }
+body.lang-km h1,body.lang-km h2,body.lang-km h3{ line-height:1.7 }
+.km-safe{ word-break:normal; overflow-wrap:break-word }
+body.lang-en{ letter-spacing:0 }
+
+#app{max-width:520px; margin:0 auto; min-height:100vh; background:var(--paper); position:relative}
+.wrap{padding:0 var(--pad) 120px}
+h1,h2,h3{margin:0; font-weight:700}
+.display{font-family:'Gowun Batang','Noto Sans KR',serif; letter-spacing:-.02em}
+body.lang-km .display{font-family:'Noto Sans Khmer',serif}
+button,input,select,textarea{font-family:inherit; font-size:16px; color:inherit}
+input,select,textarea{
+  width:100%; padding:13px 14px; border:1.5px solid var(--line); border-radius:11px;
+  background:var(--card); outline:none; -webkit-appearance:none; appearance:none;
+}
+select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%237C8A80' stroke-width='2' fill='none' stroke-linecap='round'/></svg>"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px}
+input:focus,select:focus,textarea:focus{border-color:var(--leaf); box-shadow:0 0 0 3px var(--leaf-sf)}
+textarea{min-height:88px; resize:vertical; line-height:1.6}
+label.f{display:block; margin:14px 0 6px; font-size:13px; font-weight:500; color:var(--ink-2)}
+label.f .req{color:var(--clay); margin-left:3px}
+.hint{font-size:12px; color:var(--muted); margin-top:5px; line-height:1.5}
+
+/* ---------- 헤더 ---------- */
+.top{
+  position:sticky; top:0; z-index:40; background:var(--leaf-dk); color:#fff;
+  display:flex; align-items:center; gap:8px; padding:10px 14px;
+  padding-top:calc(10px + env(safe-area-inset-top));
+}
+.top .back{
+  background:rgba(255,255,255,.14); border:0; color:#fff; width:36px; height:36px;
+  border-radius:10px; font-size:19px; cursor:pointer; display:none; flex:0 0 auto;
+}
+.top .ttl{flex:1; font-size:15px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.langs{display:flex; gap:3px; background:rgba(255,255,255,.13); border-radius:9px; padding:3px; flex:0 0 auto}
+.langs button{
+  background:none; border:0; color:rgba(255,255,255,.72); font-size:11.5px; font-weight:700;
+  padding:5px 8px; border-radius:6px; cursor:pointer; white-space:nowrap;
+}
+.langs button.on{background:#fff; color:var(--leaf-dk)}
+
+/* ---------- 히어로 ---------- */
+.hero{position:relative; min-height:250px; display:flex; flex-direction:column; justify-content:flex-end;
+  padding:26px 20px 22px; background:var(--leaf-dk); overflow:hidden}
+.hero .slide{position:absolute; inset:0; background-size:cover; background-position:center;
+  opacity:0; transition:opacity 1.6s ease, transform 8s linear; transform:scale(1)}
+.hero .slide.on{opacity:1; transform:scale(1.07)}
+.hero .veil{position:absolute; inset:0; background:linear-gradient(180deg,rgba(20,38,28,.15) 0%,rgba(20,38,28,.55) 55%,rgba(20,38,28,.85) 100%)}
+.hero .in{position:relative; z-index:2; color:#fff}
+.hero h1{font-size:27px; line-height:1.28; text-shadow:0 2px 14px rgba(0,0,0,.35)}
+.hero .sub{margin-top:7px; font-size:13.5px; color:rgba(255,255,255,.86); text-shadow:0 1px 8px rgba(0,0,0,.3)}
+.hero .eyebrow{font-size:11px; font-weight:700; letter-spacing:.16em; color:var(--mango); margin-bottom:9px}
+
+/* ---------- 카드/버튼 ---------- */
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--r); padding:15px; margin-top:12px; box-shadow:var(--shadow)}
+.card.flat{box-shadow:none}
+.sec{margin-top:26px}
+.sec-h{display:flex; align-items:baseline; gap:8px; margin-bottom:11px}
+.sec-h h2{font-size:17px}
+.sec-h .n{font-size:12px; color:var(--muted); font-weight:500}
+
+.btn{
+  display:flex; align-items:center; justify-content:center; gap:8px; width:100%;
+  min-height:52px; padding:14px 16px; border:0; border-radius:12px;
+  background:var(--leaf); color:#fff; font-size:16px; font-weight:700; cursor:pointer;
+  transition:transform .06s ease, background .15s ease;
+}
+.btn:active{transform:scale(.985)}
+.btn:disabled{background:#C4CDC7; cursor:default}
+.btn.alt{background:var(--card); color:var(--ink); border:1.5px solid var(--line); box-shadow:var(--shadow)}
+.btn.mango{background:var(--mango); color:#3A2A08}
+.btn.danger{background:var(--clay-sf); color:var(--clay); border:1.5px solid #EFCFC4}
+.btn.sm{min-height:40px; padding:8px 13px; font-size:13.5px; border-radius:10px; width:auto}
+.btn.ghost{background:none; border:1.5px solid var(--line); color:var(--ink-2)}
+.btn:focus-visible{outline:3px solid var(--mango); outline-offset:2px}
+.row{display:flex; gap:8px}
+.row>*{flex:1}
+
+.badge{display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700;
+  padding:3px 8px; border-radius:99px; background:var(--leaf-sf); color:var(--leaf-dk); white-space:nowrap}
+.badge.mango{background:var(--mango-sf); color:#8A5B08}
+.badge.clay{background:var(--clay-sf); color:var(--clay)}
+.badge.gray{background:#EEF0EC; color:var(--muted)}
+
+/* ---------- 상품 ---------- */
+.prod{display:flex; gap:12px; align-items:center; padding:11px 0; border-bottom:1px solid var(--line)}
+.prod:last-child{border-bottom:0}
+.prod .th{width:62px; height:62px; border-radius:11px; background:var(--leaf-sf) center/cover; flex:0 0 auto;
+  display:flex; align-items:center; justify-content:center; font-size:23px}
+.prod .nm{font-weight:700; font-size:15px}
+.prod .pr{color:var(--leaf); font-weight:700; margin-top:2px}
+.prod .st{font-size:12px; color:var(--muted)}
+.prod.soon{opacity:.62}
+.prod.dim{opacity:.45}
+.riel{font-size:11.5px; color:var(--muted); font-weight:400}
+
+/* ---------- 수량 스테퍼 ---------- */
+.step{display:flex; align-items:center; gap:0; border:1.5px solid var(--line); border-radius:11px; overflow:hidden; background:var(--card)}
+.step button{width:46px; height:46px; border:0; background:none; font-size:21px; font-weight:700; color:var(--leaf); cursor:pointer}
+.step button:active{background:var(--leaf-sf)}
+.step button:disabled{color:#C4CDC7}
+.step .v{min-width:52px; text-align:center; font-weight:700; font-size:16px}
+
+/* ---------- 장바구니 ---------- */
+.ci{border:1px solid var(--line); border-radius:12px; padding:13px; margin-top:10px; background:var(--card)}
+.ci.editing{border-color:var(--mango); border-width:2px; box-shadow:0 0 0 3px var(--mango-sf)}
+.ci .top-r{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+.ci .meta{font-size:12.5px; color:var(--muted); margin-top:5px; line-height:1.6}
+.sum{border-top:2px solid var(--ink); margin-top:16px; padding-top:12px}
+.sum .l{display:flex; justify-content:space-between; padding:4px 0; font-size:14px; color:var(--ink-2)}
+.sum .l.tot{font-size:19px; font-weight:700; color:var(--ink); padding-top:9px; margin-top:6px; border-top:1px dashed var(--line)}
+
+/* ---------- 하단 고정바 ---------- */
+.dock{position:fixed; left:0; right:0; bottom:0; z-index:35; background:rgba(251,248,241,.96);
+  backdrop-filter:blur(10px); border-top:1px solid var(--line); padding:11px var(--pad);
+  padding-bottom:calc(11px + env(safe-area-inset-bottom))}
+.dock .in{max-width:520px; margin:0 auto}
+
+/* ---------- 소식 ---------- */
+.news{background:var(--mango-sf); border:1px solid #F2DFB6; border-radius:var(--r); padding:13px 15px; margin-top:14px}
+.news .hd{display:flex; align-items:center; gap:7px; font-weight:700; font-size:14px; color:#7A4F06}
+.news li{list-style:none; padding:7px 0; border-top:1px dashed #EBD5A8; font-size:14px; cursor:pointer;
+  display:flex; align-items:center; gap:6px}
+.news ul{margin:6px 0 0; padding:0}
+.news .body{padding:9px 0 3px; font-size:14px; color:#5C4310; white-space:pre-wrap; line-height:1.7}
+.news img{width:100%; border-radius:10px; margin-top:9px}
+
+/* ---------- 메시지 스레드 ---------- */
+.thread{margin-top:10px; display:flex; flex-direction:column; gap:8px}
+.msg{max-width:82%; padding:10px 13px; border-radius:14px; font-size:14px; white-space:pre-wrap; line-height:1.6}
+.msg.buyer{align-self:flex-end; background:var(--leaf); color:#fff; border-bottom-right-radius:4px}
+.msg.farm{align-self:flex-start; background:#EEF0EC; color:var(--ink); border-bottom-left-radius:4px}
+.msg .t{display:block; font-size:10.5px; opacity:.7; margin-top:4px}
+
+/* ---------- 탭 ---------- */
+.tabs{display:flex; gap:5px; overflow-x:auto; padding:11px 0 3px; -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:0 0 auto; padding:9px 14px; border-radius:99px; border:1.5px solid var(--line);
+  background:var(--card); font-size:13.5px; font-weight:500; cursor:pointer; white-space:nowrap}
+.tabs button.on{background:var(--ink); color:#fff; border-color:var(--ink); font-weight:700}
+.subtabs button.on{background:var(--leaf); border-color:var(--leaf)}
+
+/* 탭이 화면보다 길 때 좌우로 넘겨보는 화살표.
+   PC에서는 터치 스와이프가 없어 뒤쪽 탭(⑥ 가게 설정)이 잘려 보이지 않던 문제를 해결한다. */
+.tabsWrap{position:relative}
+.tabsWrap .tabNav{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:5;
+  width:32px; height:32px; border-radius:50%; border:1.5px solid var(--line);
+  background:var(--card); color:var(--ink); font-size:17px; line-height:1; cursor:pointer;
+  display:none; align-items:center; justify-content:center; padding:0;
+  box-shadow:0 2px 8px rgba(20,38,28,.16);
+}
+.tabsWrap .tabNav.show{display:flex}
+.tabsWrap .tabNav:active{background:var(--leaf-sf)}
+.tabsWrap .tabNav.prev{left:-4px}
+.tabsWrap .tabNav.next{right:-4px}
+/* 화살표 뒤로 탭이 비쳐 잘린 느낌을 주도록 가장자리 페이드 */
+.tabsWrap .tabFade{position:absolute; top:0; bottom:0; width:46px; pointer-events:none; z-index:4; display:none}
+.tabsWrap .tabFade.show{display:block}
+.tabsWrap .tabFade.left{left:0; background:linear-gradient(90deg,var(--paper) 30%,rgba(251,248,241,0))}
+.tabsWrap .tabFade.right{right:0; background:linear-gradient(270deg,var(--paper) 30%,rgba(251,248,241,0))}
+
+/* ---------- 상태 ---------- */
+.state{text-align:center; padding:44px 20px; color:var(--muted); font-size:14px}
+.state .em{font-size:32px; display:block; margin-bottom:11px; opacity:.5}
+.spin{width:22px; height:22px; border:2.5px solid var(--line); border-top-color:var(--leaf);
+  border-radius:50%; animation:sp .7s linear infinite; margin:0 auto 12px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.qr{width:100%; max-width:300px; margin:0 auto; display:block; border-radius:12px; border:1px solid var(--line); background:#fff}
+
+/* ---------- 모달 ---------- */
+.modal{position:fixed; inset:0; z-index:60; background:rgba(20,38,28,.5); display:flex;
+  align-items:flex-end; justify-content:center; padding:0}
+.modal .box{background:var(--paper); width:100%; max-width:520px; border-radius:20px 20px 0 0;
+  padding:22px 18px calc(22px + env(safe-area-inset-bottom)); max-height:88vh; overflow-y:auto;
+  animation:up .22s ease}
+@keyframes up{from{transform:translateY(30px); opacity:.5}to{transform:none; opacity:1}}
+.modal h3{font-size:18px; margin-bottom:10px}
+
+.toast{position:fixed; left:50%; bottom:96px; transform:translateX(-50%); z-index:70;
+  background:var(--ink); color:#fff; padding:11px 18px; border-radius:99px; font-size:13.5px;
+  font-weight:500; box-shadow:0 8px 26px rgba(0,0,0,.22); max-width:88%; text-align:center}
+.toast.bad{background:var(--clay)}
+
+/* ---------- 최초 사용 안내(온보딩) ----------
+   같이 설명해줄 사람 없이 현지인이 혼자 처음 써도 흐름을 알 수 있게.
+   최초 1회, 언어 무관하게 표시됨. */
+.ob-mask{position:fixed; inset:0; z-index:80; background:rgba(20,38,28,.94);
+  display:flex; align-items:center; justify-content:center; padding:24px}
+.ob-card{background:#fff; border-radius:20px; padding:30px 24px 24px; max-width:360px; width:100%; text-align:center}
+.ob-ic{font-size:46px; margin-bottom:14px}
+.ob-t{font-size:19px; font-weight:800; margin-bottom:9px}
+.ob-d{font-size:14.5px; color:var(--ink-2); line-height:1.7; margin-bottom:22px}
+.ob-dots{display:flex; justify-content:center; gap:6px; margin-bottom:20px}
+.ob-dots .dot{width:7px; height:7px; border-radius:50%; background:var(--line); transition:.2s}
+.ob-dots .dot.on{background:var(--leaf); width:20px; border-radius:4px}
+body.lang-km .ob-t{line-height:1.7}
+body.lang-km .ob-d{font-size:15.5px; line-height:1.95}
+
+.divider{height:1px; background:var(--line); margin:15px 0}
+.mini{font-size:12.5px; color:var(--muted)}
+.mono{font-variant-numeric:tabular-nums}
+a{color:var(--leaf); text-decoration:none; font-weight:500}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s !important; transition-duration:.001s !important}
+  .hero .slide.on{transform:none}
+}
+</style>
+</head>
+<body class="lang-km">
+<div id="app">
+  <div class="top">
+    <button class="back" id="backBtn" aria-label="뒤로">‹</button>
+    <div class="ttl" id="topTitle">팜슈가 농원(1호점)</div>
+    <div class="langs">
+      <button data-lang="ko">한국어</button>
+      <button data-lang="km" class="on">ខ្មែរ</button>
+      <button data-lang="en">EN</button>
+    </div>
+  </div>
+  <div id="view"></div>
+</div>
+<div id="dock"></div>
+<div id="modal"></div>
+<div id="toast"></div>
+<div id="onboard"></div>
+<script>window.DEMO_BANNER={resetKeys:["palmsugar-demo-v1","onboarded_v1"],hint:"관리 화면 번호 0000 · 한국어·크메르어·영어 전환 가능"};</script>
+<script src="../_shared/banner.js"></script>
+<script src="mock.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════
+   ① 백엔드 주소 — Apps Script 배포 URL을 여기에 붙여넣으세요
+   ═══════════════════════════════════════════════════════ */
+const APPS_SCRIPT_URL = 'demo';
+
+
+/* ═══════════ ② 다국어 문구 ═══════════
+   한국어가 기본. 번역이 비면 자동으로 한국어로 폴백된다.
+   🔒 landing.newOrder / landing.newOrderDesc 는 절대 변경 금지 */
+const I18N = {
+  ko: {
+    newOrder:'새 주문', newOrderDesc:'새로 주문하시는 분은 여기를 눌러주세요',
+    lookup:'주문 변경 / 조회', lookupDesc:'이미 주문하신 분은 여기를 눌러주세요',
+    onSale:'지금 판매 중', soon:'곧 판매 예정', fromDate:'{d}부터',
+    farmInfo:'농장 안내', news:'농장 소식', more:'자세히 보기',
+    stock:'재고', soldout:'품절', unitEa:'개',
+    pick:'선택', add:'장바구니에 담기', cart:'장바구니', cartEmpty:'담긴 상품이 없습니다',
+    qty:'수량', method:'수령 방법', total:'합계', itemTotal:'상품 금액', deliveryFee:'배달비',
+    free:'무료', remove:'빼기', editOpt:'수령방법 · 선물 수정', editingHere:'아래에서 수정 중',
+    mDelivery:'시내 배달', mPickup:'농장 방문 수령', mChurch:'지정 장소 전달',
+    mDeliveryD:'프놈펜 시내 오토바이 배달', mPickupD:'농장에 직접 오셔서 받아가기', mChurchD:'교회·사무실 등 약속한 곳에서 전달',
+    house:'집 번호', street:'거리 번호', sangkat:'Sangkat (동)', khan:'Khan (구)',
+    area:'지역', mapLink:'구글맵 위치 링크', mapHint:'구글맵에서 위치를 길게 눌러 공유 → 링크 복사 후 붙여넣기. 배달 기사가 이것만 보고 찾아갑니다.',
+    landmark:'찾아오는 길 메모', landmarkPh:'예: ABC 편의점 옆 골목 두 번째 집',
+    wantDate:'받으실 날짜', visitDate:'방문 날짜', visitTime:'방문 시간',
+    handPlace:'받으실 곳', handDate:'수령 날짜',
+    gift:'선물로 보냅니다', giftName:'받으시는 분 성함', giftPhone:'받으시는 분 연락처',
+    visitOnly:'농장주가 계신 날에만 방문하실 수 있습니다', noSlot:'상주 일정이 아직 없습니다. 농장주에게 문의해주세요.',
+    yourInfo:'주문하시는 분', name:'성함', phone:'연락처',
+    phoneHint:'캄보디아 번호 예: 012 345 678 · 한국 번호도 괜찮습니다',
+    kakao:'카카오톡 ID', kakaoHint:'적어주시면 연락드리기 편합니다 (선택)',
+    referrer:'소개해주신 분', referrerPh:'예: 김철수님', referrerHint:'선택 사항입니다',
+    ask:'농장주께 요청 / 문의', askPh:'배달 시간, 포장 요청 등 편하게 적어주세요',
+    submit:'주문 완료하기', submitting:'주문을 보내는 중…',
+    doneTitle:'주문이 접수되었습니다', doneDesc:'아래 QR로 결제해주시면 확인 후 연락드리겠습니다.',
+    payTitle:'결제 안내', scanHint:'은행 앱(ABA · Wing · ACLEDA · Bakong 등)으로 스캔해주세요',
+    payAmount:'보내실 금액', bank:'은행', acctNo:'계좌번호', holder:'예금주',
+    noticeTitle:'꼭 확인해주세요', noticeBody:'주문 완료 후 주문 접수 안내가 1일 이내 오지 않으면 꼭 농장주에게 문의해주시기 바랍니다. 연락처를 잘못 적으셨을 수 있습니다.',
+    gotIt:'확인했습니다', backHome:'처음으로',
+    lookupTitle:'주문 조회', lookupDesc2:'주문하실 때 적으신 성함과 연락처를 입력해주세요',
+    search:'조회하기', noOrder:'주문 내역을 찾지 못했습니다. 성함과 연락처를 다시 확인해주세요.',
+    orderedAt:'주문일', editOrder:'주문 수정', cancelOrder:'주문 취소',
+    cancelConfirm:'정말 취소하시겠습니까? 농장주 확인 후 처리됩니다.',
+    cancelRequested:'취소 요청됨', cancelDone:'취소 요청이 전달되었습니다',
+    modified:'수정됨', talk:'농장주와 대화', msgPh:'메시지를 적어주세요', send:'보내기',
+    noMsg:'아직 주고받은 메시지가 없습니다', msgSent:'메시지를 보냈습니다',
+    save:'저장', cancel:'취소', close:'닫기', confirm:'확인', del:'삭제', edit:'수정',
+    loading:'불러오는 중…', retry:'다시 시도', failTitle:'연결이 원활하지 않습니다',
+    failBody:'인터넷 상태를 확인하고 다시 시도해주세요.',
+    saved:'저장되었습니다', required:'필수 항목을 채워주세요',
+    added:'장바구니에 담았습니다', orderDone:'주문이 완료되었습니다',
+    ob1t:'① 품목 고르기', ob1d:'원하시는 과일·채소를 장바구니에 담아요',
+    ob2t:'② 받는 방법 선택', ob2d:'배달 · 방문 · 전달 중 편한 방법을 골라요',
+    ob3t:'③ QR로 결제', ob3d:'주문 후 뜨는 QR을 은행 앱으로 찍어 송금하면 끝이에요',
+    obNext:'다음', obStart:'시작하기', obSkip:'건너뛰기', howToUse:'사용법 다시 보기',
+
+    /* ── 관리자 화면 ── */
+    aFarmManage:'농장 관리', aPinTitle:'관리자 PIN을 입력하세요', aEnter:'들어가기',
+    aPinNeeded:'PIN이 필요합니다', aReenter:'다시 입력',
+    aTabOrders:'① 주문 확인', aTabWork:'② 작업 목록', aTabProducts:'③ 상품 관리',
+    aTabAvail:'④ 상주 일정', aTabNews:'⑤ 농장 소식', aTabSettings:'⑥ 가게 설정',
+    aRefresh:'🔄 새로고침', aLogout:'나가기',
+    aNoOrders:'아직 주문이 없습니다', aKakao:'카톡', aReferredBy:'소개',
+    aBadgeCancel:'🚫 취소 요청', aBadgeModified:'수정됨', aBadgeNeedReply:'답변 필요',
+    aMapText:'지도', aChangedTag:'변경',
+    aSmsSentBadge:'✓ 문자 전송 완료', aSmsResend:'다시 보내기', aSmsSend:'✉️ 주문자에게 문자',
+    aEditItemsBtn:'✏️ 품목 수정', aClearModified:'수정 확인 완료', aReplyBtn:'💬 답글',
+    aCancelConfirmDelete:'취소 확인(삭제)', aDeleteOrder:'주문 삭제',
+    aOrderDeleteTitle:'주문 삭제', aOrderDeleteWarn:'DB에서 자료가 완전히 삭제됩니다.',
+    aOrderDeleteConfirm:'{name} 님의 주문을 정말 삭제하시겠습니까?',
+    aGiveUp:'그만두기', aDeleteDo:'삭제합니다', aDeletedToast:'삭제되었습니다',
+    aChatWith:'💬 {name} 님과의 대화', aNoMessages:'아직 메시지가 없습니다',
+    aReplyPh:'답글을 적어주세요', aReplySend:'답글 보내기',
+    aReplyHint:'답글을 보낸 뒤 주문자에게 문자로 알려주시면 확인이 빠릅니다.',
+    aReplySaved:'답글을 저장했습니다', aModifiedCleared:'수정 확인 처리했습니다',
+    aFarmer:'농장주', aBuyer:'주문자',
+    aEditItemsTitle:'✏️ 품목 수정',
+    aEditItemsHint:'수정하면 주문자에게 알림이 발송되고 문자 전송 표시가 해제됩니다.',
+    aProduct:'상품', aAmount:'금액', aDeliveryDateLabel:'배달 예정일',
+    aSaveNotify:'저장하고 알림 보내기', aSavedNotified:'수정하고 알림을 보냈습니다',
+    aSubDelivery:'🛵 배달', aSubPickup:'🚜 방문', aSubChurch:'🤝 전달',
+    aUndelivered:'미배송', aNeedPrep:'준비 필요', aCountUnit:'{n}건',
+    aThisMonth:'이번 달', aTotalOrders:'총 주문량', aNoWorkLeft:'남은 작업이 없습니다',
+    aNewProductBtn:'＋ 새 상품 추가', aNoProducts:'등록된 상품이 없습니다',
+    aOnSaleToHidden:'판매중 → 숨김', aHiddenToOnSale:'숨김 → 판매중', aEditIcon:'✏️ 수정',
+    aProductEditTitle:'상품 수정', aProductNewTitle:'새 상품',
+    aNameKoLabel:'상품명 (한국어)', aNameKmLabel:'크메르어', aNameEnLabel:'영어',
+    aPriceUsdLabel:'가격 (USD)', aStockLabel:'재고',
+    aUnitKoLabel:'단위(한)', aUnitKmLabel:'단위(크)', aUnitEnLabel:'단위(영)',
+    aSaleStartLabel:'판매 시작일',
+    aSaleStartHint:'비우거나 오늘 이전이면 바로 판매. 미래면 첫 화면 "곧 판매 예정"에 표시되고 날짜가 되면 자동 전환됩니다.',
+    aPhotoLabel:'사진', aCompressing:'사진을 줄이는 중…', aPhotoFail:'사진을 불러오지 못했습니다',
+    aNameRequired:'상품명을 입력해주세요',
+    aProductDeleteTitle:'상품 삭제', aProductDeleteConfirm:'{name} 을(를) 삭제하시겠습니까?',
+    aProductDeleteHint:'이미 들어온 주문 내역은 그대로 남습니다.',
+    aAvailAddTitle:'상주 일정 추가',
+    aAvailHint:'여기 등록한 날짜에만 주문자가 농장 방문을 예약할 수 있습니다.',
+    aDateLabel:'날짜', aStartLabel:'시작', aEndLabel:'종료', aAddBtn:'＋ 추가',
+    aPickDate:'날짜를 선택해주세요', aAddedToast:'추가되었습니다',
+    aNoAvail:'등록된 상주 일정이 없습니다',
+    aNewsWriteBtn:'＋ 새 소식 쓰기', aNoNews:'등록된 소식이 없습니다',
+    aPublicBadge:'공개', aPrivateBadge:'비공개',
+    aMakePrivate:'🙈 비공개로', aMakePublic:'📢 공개하기',
+    aNewsEditTitle:'소식 수정', aNewsNewTitle:'새 소식',
+    aTitleLabel:'제목', aContentLabel:'내용', aPhotoOptional:'사진 (선택)',
+    aPrivateSaveBtn:'🙈 비공개 저장', aPublicSaveBtn:'📢 바로 공개',
+    aTitleRequired:'제목을 입력해주세요',
+    aSettingsHero:'🖼️ 대문화면 배경사진',
+    aSettingsHeroHint:'최대 3장. 7초마다 부드럽게 바뀝니다. 비우면 초록 배경이 나옵니다.',
+    aClearBtn:'비우기',
+    aSettingsBasic:'🏡 기본 정보', aFarmNameLabel:'농장 이름', aFarmAddrLabel:'농장 주소',
+    aFarmMapLabel:'농장 구글맵 링크', aFarmPhoneLabel:'농장 연락처',
+    aGreetingLabel:'농장주 인사말', aGreetingHint:'첫 화면에 표시됩니다. 비우면 안 나옵니다.',
+    aSettingsMoney:'💵 통화 · 배달비', aExchangeLabel:'환율 (1 USD = ? 리엘)',
+    aShowRielLabel:'가격 옆에 리엘 금액도 함께 보여주기',
+    aDeliveryFeeLabel:'배달비 (USD)', aFreeThresholdLabel:'무료 기준 (USD)',
+    aFeeHint:'상품 금액이 무료 기준 이상이면 배달비를 받지 않습니다. 0으로 두면 항상 배달비를 받습니다.',
+    aSettingsPay:'💳 결제 (KHQR)',
+    aPayHint:'은행 앱에서 내 QR을 캡처해 올려주세요. 올린 뒤 실제로 스캔되는지 꼭 확인하세요.',
+    aAcctLabel:'계좌번호 (QR 스캔이 안 될 때 대비)', aSavePay:'결제 정보 저장',
+    aSettingsNotify:'🔔 알림', aNotifyEmailLabel:'알림 이메일',
+    aNotifyEmailHint:'새 주문·수정·취소요청이 이 주소로 옵니다. 하루 100통까지 무료. 비우면 안 보냅니다.',
+    aTgTokenLabel:'텔레그램 봇 토큰', aTgChatIdLabel:'텔레그램 chat_id',
+    aTgHint:'① 텔레그램에서 @BotFather → /newbot → 토큰 복사 ② 만든 봇에게 /start ③ 브라우저에서 api.telegram.org/bot&lt;토큰&gt;/getUpdates 접속 → chat.id 복사.<br>⚠️ 텔레그램이 막힐 수 있으니 이메일도 꼭 함께 설정해두세요.',
+    aSettingsSms:'✉️ 주문 확인 문자 문구', aSmsDefaultLabel:'기본 안내문',
+    aSmsDefaultPh:'예: 입금 확인 후 순서대로 발송해드립니다.', aSmsDelayLabel:'지연 안내문',
+    aSmsDelayPh:'예: 우기로 수확이 늦어져 2~3일 지연될 수 있습니다.',
+    aSmsWhichLabel:'지금 사용할 문구', aSmsBasicOpt:'기본 안내문', aSmsDelayOpt:'지연 안내문',
+    aSettingsPin:'🔐 관리자 PIN', aPinHint:'바꾼 뒤에는 저장하고 다시 로그인해야 합니다.',
+    aSaveSettingsBtn:'설정 저장', aPhotoUploaded:'사진을 올렸습니다',
+    aPhotoSaveFail:'사진 저장에 실패했습니다', aQrProcessing:'QR을 처리하는 중…',
+    aQrUploadedHint:'저장 버튼을 눌러 마무리하세요', aAcctSaved:'결제 정보를 저장했습니다',
+    aSettingsSaved:'설정을 저장했습니다', aScheduled:'판매 시작', aSoonTag:'(예정)',
+    aSetLangHint:'이 관리 화면의 언어를 바꾸려면 위쪽 언어 버튼을 눌러주세요.'
+  },
+  km: {
+    newOrder:'កម្ម៉ង់ថ្មី', newOrderDesc:'សម្រាប់អ្នកកម្ម៉ង់ជាលើកដំបូង សូមចុចទីនេះ',
+    lookup:'ពិនិត្យ / កែកម្ម៉ង់', lookupDesc:'សម្រាប់អ្នកដែលបានកម្ម៉ង់រួច សូមចុចទីនេះ',
+    onSale:'កំពុងលក់', soon:'នឹងលក់ឆាប់ៗ', fromDate:'ចាប់ពី {d}',
+    farmInfo:'ព័ត៌មានកសិដ្ឋាន', news:'ដំណឹងកសិដ្ឋាន', more:'មើលបន្ថែម',
+    stock:'ស្តុក', soldout:'អស់ស្តុក', unitEa:'ដុំ',
+    pick:'ជ្រើសរើស', add:'បន្ថែមទៅកន្ត្រក', cart:'កន្ត្រក', cartEmpty:'មិនទាន់មានទំនិញទេ',
+    qty:'បរិមាណ', method:'របៀបទទួល', total:'សរុប', itemTotal:'តម្លៃទំនិញ', deliveryFee:'ថ្លៃដឹកជញ្ជូន',
+    free:'ឥតគិតថ្លៃ', remove:'ដកចេញ', editOpt:'កែរបៀបទទួល · អំណោយ', editingHere:'កំពុងកែខាងក្រោម',
+    mDelivery:'ដឹកជញ្ជូនក្នុងទីក្រុង', mPickup:'មកយកនៅកសិដ្ឋាន', mChurch:'ប្រគល់តាមកន្លែងណាត់',
+    mDeliveryD:'ដឹកជញ្ជូនដោយម៉ូតូក្នុងភ្នំពេញ', mPickupD:'អញ្ជើញមកយកនៅកសិដ្ឋានផ្ទាល់', mChurchD:'ប្រគល់នៅព្រះវិហារ ការិយាល័យ ជាដើម',
+    house:'លេខផ្ទះ', street:'លេខផ្លូវ', sangkat:'សង្កាត់', khan:'ខណ្ឌ',
+    area:'តំបន់', mapLink:'តំណ Google Maps', mapHint:'ចុចលើទីតាំងក្នុង Google Maps ឲ្យយូរ → ចែករំលែក → ចម្លងតំណមកដាក់ទីនេះ។',
+    landmark:'កំណត់សម្គាល់ផ្លូវ', landmarkPh:'ឧ. ផ្ទះទី២ ក្នុងច្រកក្បែរហាង ABC',
+    wantDate:'ថ្ងៃចង់ទទួល', visitDate:'ថ្ងៃមកដល់', visitTime:'ម៉ោងមកដល់',
+    handPlace:'កន្លែងទទួល', handDate:'ថ្ងៃទទួល',
+    gift:'ផ្ញើជាអំណោយ', giftName:'ឈ្មោះអ្នកទទួល', giftPhone:'លេខទូរស័ព្ទអ្នកទទួល',
+    visitOnly:'អាចមកបានតែថ្ងៃដែលម្ចាស់កសិដ្ឋាននៅប៉ុណ្ណោះ', noSlot:'មិនទាន់មានកាលវិភាគទេ។ សូមទាក់ទងម្ចាស់កសិដ្ឋាន។',
+    yourInfo:'ព័ត៌មានអ្នកកម្ម៉ង់', name:'ឈ្មោះ', phone:'លេខទូរស័ព្ទ',
+    phoneHint:'ឧ. 012 345 678', kakao:'KakaoTalk ID', kakaoHint:'ជាជម្រើស',
+    referrer:'អ្នកណែនាំ', referrerPh:'ឧ. លោក សុខា', referrerHint:'ជាជម្រើស',
+    ask:'សំណើ / សំណួរ', askPh:'សូមសរសេរតាមសេចក្ដីត្រូវការ',
+    submit:'បញ្ជាក់ការកម្ម៉ង់', submitting:'កំពុងផ្ញើ…',
+    doneTitle:'បានទទួលការកម្ម៉ង់ហើយ', doneDesc:'សូមទូទាត់តាម QR ខាងក្រោម យើងនឹងទាក់ទងទៅវិញ។',
+    payTitle:'ព័ត៌មានទូទាត់', scanHint:'ស្កេនដោយកម្មវិធីធនាគារ (ABA · Wing · ACLEDA · Bakong)',
+    payAmount:'ចំនួនត្រូវផ្ញើ', bank:'ធនាគារ', acctNo:'លេខគណនី', holder:'ឈ្មោះគណនី',
+    noticeTitle:'សូមកត់សម្គាល់', noticeBody:'ប្រសិនបើមិនទទួលបានការឆ្លើយតបក្នុងរយៈពេល ១ ថ្ងៃ សូមទាក់ទងម្ចាស់កសិដ្ឋាន។',
+    gotIt:'យល់ព្រម', backHome:'ត្រឡប់ទៅដើម',
+    lookupTitle:'ពិនិត្យការកម្ម៉ង់', lookupDesc2:'សូមបញ្ចូលឈ្មោះ និងលេខទូរស័ព្ទដែលបានប្រើពេលកម្ម៉ង់',
+    search:'ស្វែងរក', noOrder:'រកមិនឃើញការកម្ម៉ង់ទេ។ សូមពិនិត្យឡើងវិញ។',
+    orderedAt:'ថ្ងៃកម្ម៉ង់', editOrder:'កែការកម្ម៉ង់', cancelOrder:'បោះបង់ការកម្ម៉ង់',
+    cancelConfirm:'តើអ្នកប្រាកដទេ?', cancelRequested:'បានស្នើបោះបង់', cancelDone:'បានផ្ញើសំណើបោះបង់',
+    modified:'បានកែ', talk:'សន្ទនាជាមួយម្ចាស់កសិដ្ឋាន', msgPh:'សរសេរសារ', send:'ផ្ញើ',
+    noMsg:'មិនទាន់មានសារទេ', msgSent:'បានផ្ញើសារ',
+    save:'រក្សាទុក', cancel:'បោះបង់', close:'បិទ', confirm:'យល់ព្រម', del:'លុប', edit:'កែ',
+    loading:'កំពុងផ្ទុក…', retry:'ព្យាយាមម្ដងទៀត', failTitle:'ការតភ្ជាប់មានបញ្ហា',
+    failBody:'សូមពិនិត្យអ៊ីនធឺណិត រួចព្យាយាមម្ដងទៀត។',
+    saved:'បានរក្សាទុក', required:'សូមបំពេញព័ត៌មានចាំបាច់',
+    added:'បានបន្ថែមទៅកន្ត្រក', orderDone:'ការកម្ម៉ង់បានបញ្ចប់',
+    ob1t:'① ជ្រើសរើសទំនិញ', ob1d:'ដាក់ផ្លែឈើ ឬបន្លែដែលអ្នកចង់បានទៅក្នុងកន្ត្រក',
+    ob2t:'② ជ្រើសរើសរបៀបទទួល', ob2d:'ជ្រើសរើសដឹកជញ្ជូន · មកយកនៅកសិដ្ឋាន · ឬប្រគល់តាមកន្លែងណាត់',
+    ob3t:'③ ទូទាត់ដោយ QR', ob3d:'បន្ទាប់ពីកម្ម៉ង់រួច ស្កេន QR ដោយកម្មវិធីធនាគាររបស់អ្នក រួចផ្ញើលុយ',
+    obNext:'បន្ទាប់', obStart:'ចាប់ផ្ដើម', obSkip:'រំលង', howToUse:'មើលវិធីប្រើម្ដងទៀត',
+
+    /* ── ទំព័រគ្រប់គ្រង ── */
+    aFarmManage:'គ្រប់គ្រងកសិដ្ឋាន', aPinTitle:'សូមបញ្ចូលលេខសម្ងាត់អ្នកគ្រប់គ្រង', aEnter:'ចូល',
+    aPinNeeded:'ត្រូវការលេខសម្ងាត់', aReenter:'បញ្ចូលម្ដងទៀត',
+    aTabOrders:'① ការកម្ម៉ង់', aTabWork:'② បញ្ជីការងារ', aTabProducts:'③ គ្រប់គ្រងទំនិញ',
+    aTabAvail:'④ កាលវិភាគ', aTabNews:'⑤ ដំណឹងកសិដ្ឋាន', aTabSettings:'⑥ ការកំណត់',
+    aRefresh:'🔄 ផ្ទុកឡើងវិញ', aLogout:'ចាកចេញ',
+    aNoOrders:'មិនទាន់មានការកម្ម៉ង់ទេ', aKakao:'KakaoTalk', aReferredBy:'អ្នកណែនាំ',
+    aBadgeCancel:'🚫 ស្នើបោះបង់', aBadgeModified:'បានកែ', aBadgeNeedReply:'ត្រូវឆ្លើយតប',
+    aMapText:'ផែនទី', aChangedTag:'បានផ្លាស់ប្ដូរ',
+    aSmsSentBadge:'✓ បានផ្ញើសារហើយ', aSmsResend:'ផ្ញើម្ដងទៀត', aSmsSend:'✉️ ផ្ញើសារទៅអតិថិជន',
+    aEditItemsBtn:'✏️ កែទំនិញ', aClearModified:'បានពិនិត្យការកែ', aReplyBtn:'💬 ឆ្លើយតប',
+    aCancelConfirmDelete:'បញ្ជាក់បោះបង់ (លុប)', aDeleteOrder:'លុបការកម្ម៉ង់',
+    aOrderDeleteTitle:'លុបការកម្ម៉ង់', aOrderDeleteWarn:'ទិន្នន័យនឹងត្រូវលុបចេញទាំងស្រុងពីមូលដ្ឋានទិន្នន័យ។',
+    aOrderDeleteConfirm:'តើអ្នកពិតជាចង់លុបការកម្ម៉ង់របស់ {name} មែនទេ?',
+    aGiveUp:'បោះបង់', aDeleteDo:'លុប', aDeletedToast:'បានលុបហើយ',
+    aChatWith:'💬 សន្ទនាជាមួយ {name}', aNoMessages:'មិនទាន់មានសារទេ',
+    aReplyPh:'សរសេរចម្លើយឆ្លើយតប', aReplySend:'ផ្ញើចម្លើយ',
+    aReplyHint:'បន្ទាប់ពីផ្ញើចម្លើយ សូមប្រាប់អតិថិជនតាមសារ SMS ដើម្បីឱ្យឃើញលឿន។',
+    aReplySaved:'បានរក្សាទុកចម្លើយ', aModifiedCleared:'បានពិនិត្យការកែហើយ',
+    aFarmer:'ម្ចាស់កសិដ្ឋាន', aBuyer:'អតិថិជន',
+    aEditItemsTitle:'✏️ កែទំនិញ',
+    aEditItemsHint:'ពេលកែ អតិថិជននឹងទទួលបានការជូនដំណឹង ហើយសញ្ញាបានផ្ញើសារនឹងត្រូវលុបចេញ។',
+    aProduct:'ទំនិញ', aAmount:'ចំនួនទឹកប្រាក់', aDeliveryDateLabel:'ថ្ងៃដឹកគ្រោងទុក',
+    aSaveNotify:'រក្សាទុក និងផ្ញើការជូនដំណឹង', aSavedNotified:'បានកែ និងផ្ញើការជូនដំណឹងហើយ',
+    aSubDelivery:'🛵 ដឹកជញ្ជូន', aSubPickup:'🚜 មកយក', aSubChurch:'🤝 ប្រគល់',
+    aUndelivered:'មិនទាន់ដឹក', aNeedPrep:'ត្រូវរៀបចំ', aCountUnit:'{n} កម្ម៉ង់',
+    aThisMonth:'ខែនេះ', aTotalOrders:'ការកម្ម៉ង់សរុប', aNoWorkLeft:'មិនមានការងារនៅសល់ទេ',
+    aNewProductBtn:'＋ បន្ថែមទំនិញថ្មី', aNoProducts:'មិនទាន់មានទំនិញទេ',
+    aOnSaleToHidden:'កំពុងលក់ → លាក់', aHiddenToOnSale:'លាក់ → កំពុងលក់', aEditIcon:'✏️ កែ',
+    aProductEditTitle:'កែទំនិញ', aProductNewTitle:'ទំនិញថ្មី',
+    aNameKoLabel:'ឈ្មោះទំនិញ (កូរ៉េ)', aNameKmLabel:'ខ្មែរ', aNameEnLabel:'អង់គ្លេស',
+    aPriceUsdLabel:'តម្លៃ (USD)', aStockLabel:'ស្តុក',
+    aUnitKoLabel:'ឯកតា(កូរ៉េ)', aUnitKmLabel:'ឯកតា(ខ្មែរ)', aUnitEnLabel:'ឯកតា(អង់គ្លេស)',
+    aSaleStartLabel:'ថ្ងៃចាប់ផ្ដើមលក់',
+    aSaleStartHint:'ទុកទទេ ឬថ្ងៃកន្លងទៅ = លក់ភ្លាម។ ថ្ងៃអនាគត = បង្ហាញ "នឹងលក់ឆាប់ៗ" នៅទំព័រដើម រហូតដល់ថ្ងៃនោះ។',
+    aPhotoLabel:'រូបភាព', aCompressing:'កំពុងបង្រួមរូបភាព…', aPhotoFail:'ផ្ទុករូបភាពមិនបាន',
+    aNameRequired:'សូមបញ្ចូលឈ្មោះទំនិញ',
+    aProductDeleteTitle:'លុបទំនិញ', aProductDeleteConfirm:'តើអ្នកចង់លុប {name} មែនទេ?',
+    aProductDeleteHint:'ការកម្ម៉ង់ដែលមានស្រាប់នឹងនៅដដែល មិនប៉ះពាល់ទេ។',
+    aAvailAddTitle:'បន្ថែមកាលវិភាគនៅកសិដ្ឋាន',
+    aAvailHint:'អតិថិជនអាចកក់ការមកទស្សនាកសិដ្ឋានបានតែថ្ងៃដែលអ្នកបានចុះក្នុងនេះប៉ុណ្ណោះ។',
+    aDateLabel:'ថ្ងៃ', aStartLabel:'ម៉ោងចាប់ផ្ដើម', aEndLabel:'ម៉ោងបញ្ចប់', aAddBtn:'＋ បន្ថែម',
+    aPickDate:'សូមជ្រើសរើសថ្ងៃ', aAddedToast:'បានបន្ថែមហើយ',
+    aNoAvail:'មិនទាន់មានកាលវិភាគទេ',
+    aNewsWriteBtn:'＋ សរសេរដំណឹងថ្មី', aNoNews:'មិនទាន់មានដំណឹងទេ',
+    aPublicBadge:'សាធារណៈ', aPrivateBadge:'ឯកជន',
+    aMakePrivate:'🙈 ធ្វើជាឯកជន', aMakePublic:'📢 ផ្សព្វផ្សាយ',
+    aNewsEditTitle:'កែដំណឹង', aNewsNewTitle:'ដំណឹងថ្មី',
+    aTitleLabel:'ចំណងជើង', aContentLabel:'មាតិកា', aPhotoOptional:'រូបភាព (ជម្រើស)',
+    aPrivateSaveBtn:'🙈 រក្សាទុកជាឯកជន', aPublicSaveBtn:'📢 ផ្សព្វផ្សាយភ្លាម',
+    aTitleRequired:'សូមបញ្ចូលចំណងជើង',
+    aSettingsHero:'🖼️ រូបភាពផ្ទាំងខាងលើទំព័រដើម',
+    aSettingsHeroHint:'ដាក់បានរហូតដល់ ៣សន្លឹក ប្ដូររៀងរាល់ ៧វិនាទី។ ទុកទទេ = ផ្ទៃខ្នៀវពណ៌បៃតង។',
+    aClearBtn:'ដកចេញ',
+    aSettingsBasic:'🏡 ព័ត៌មានមូលដ្ឋាន', aFarmNameLabel:'ឈ្មោះកសិដ្ឋាន', aFarmAddrLabel:'អាសយដ្ឋានកសិដ្ឋាន',
+    aFarmMapLabel:'តំណ Google Maps របស់កសិដ្ឋាន', aFarmPhoneLabel:'លេខទូរស័ព្ទកសិដ្ឋាន',
+    aGreetingLabel:'សារស្វាគមន៍ពីម្ចាស់កសិដ្ឋាន', aGreetingHint:'បង្ហាញនៅទំព័រដើម។ ទុកទទេ = មិនបង្ហាញ។',
+    aSettingsMoney:'💵 រូបិយប័ណ្ណ · ថ្លៃដឹកជញ្ជូន', aExchangeLabel:'អត្រាប្ដូរប្រាក់ (1 USD = ? រៀល)',
+    aShowRielLabel:'បង្ហាញតម្លៃជារៀលនៅជាប់នឹងតម្លៃដុល្លារ',
+    aDeliveryFeeLabel:'ថ្លៃដឹកជញ្ជូន (USD)', aFreeThresholdLabel:'កម្រិតឥតគិតថ្លៃ (USD)',
+    aFeeHint:'បើសរុបទំនិញលើសកម្រិតនេះ នឹងឥតគិតថ្លៃដឹកជញ្ជូន។ ដាក់ 0 = គិតថ្លៃដឹកជញ្ជូនរាល់ពេល។',
+    aSettingsPay:'💳 ទូទាត់ (KHQR)',
+    aPayHint:'សូមថតយក QR ផ្ទាល់ខ្លួនពីកម្មវិធីធនាគាររបស់អ្នក ហើយសាកល្បងស្កេនផ្ទាល់ខ្លួនម្ដងទៀត។',
+    aAcctLabel:'លេខគណនី (ករណី QR ស្កេនមិនចេញ)', aSavePay:'រក្សាទុកព័ត៌មានទូទាត់',
+    aSettingsNotify:'🔔 ការជូនដំណឹង', aNotifyEmailLabel:'អ៊ីមែលទទួលការជូនដំណឹង',
+    aNotifyEmailHint:'ការកម្ម៉ង់ថ្មី · កែប្រែ · សំណើបោះបង់ នឹងផ្ញើមកអ៊ីមែលនេះ។ ឥតគិតថ្លៃរហូតដល់ ១០០សារក្នុងមួយថ្ងៃ។ ទុកទទេ = មិនផ្ញើ។',
+    aTgTokenLabel:'Telegram Bot Token', aTgChatIdLabel:'Telegram chat_id',
+    aTgHint:'① Telegram ស្វែងរក @BotFather → /newbot → ចម្លង Token ② ផ្ញើ /start ទៅបូតដែលបានបង្កើត ③ បើកក្នុងកម្មវិធីរុករក api.telegram.org/bot&lt;Token&gt;/getUpdates → ចម្លង chat.id។<br>⚠️ Telegram អាចត្រូវបានទប់ស្កាត់ ដូច្នេះសូមកំណត់អ៊ីមែលទុកជាមួយផងដែរ។',
+    aSettingsSms:'✉️ អត្ថបទសារបញ្ជាក់ការកម្ម៉ង់', aSmsDefaultLabel:'អត្ថបទស្ដង់ដារ',
+    aSmsDefaultPh:'ឧ. បន្ទាប់ពីបញ្ជាក់ការទូទាត់ នឹងផ្ញើតាមលំដាប់។', aSmsDelayLabel:'អត្ថបទពេលយឺត',
+    aSmsDelayPh:'ឧ. ដោយសាររដូវវស្សា ការប្រមូលផលយឺតបន្តិច អាចយឺត ២-៣ថ្ងៃ។',
+    aSmsWhichLabel:'អត្ថបទកំពុងប្រើ', aSmsBasicOpt:'អត្ថបទស្ដង់ដារ', aSmsDelayOpt:'អត្ថបទពេលយឺត',
+    aSettingsPin:'🔐 លេខសម្ងាត់អ្នកគ្រប់គ្រង', aPinHint:'បន្ទាប់ពីប្ដូរ ត្រូវរក្សាទុក ហើយចូលម្ដងទៀត។',
+    aSaveSettingsBtn:'រក្សាទុកការកំណត់', aPhotoUploaded:'បានបញ្ចូលរូបភាពហើយ',
+    aPhotoSaveFail:'រក្សាទុករូបភាពមិនបាន', aQrProcessing:'កំពុងដំណើរការ QR…',
+    aQrUploadedHint:'ចុចប៊ូតុងរក្សាទុកដើម្បីបញ្ចប់', aAcctSaved:'បានរក្សាទុកព័ត៌មានទូទាត់',
+    aSettingsSaved:'បានរក្សាទុកការកំណត់', aScheduled:'ចាប់ផ្ដើមលក់', aSoonTag:'(នឹងមកដល់)',
+    aSetLangHint:'ដើម្បីប្ដូរភាសាទំព័រគ្រប់គ្រងនេះ សូមចុចប៊ូតុងភាសានៅខាងលើ។'
+  },
+  en: {
+    newOrder:'New Order', newOrderDesc:'Ordering for the first time? Tap here',
+    lookup:'Check / Change Order', lookupDesc:'Already ordered? Tap here',
+    onSale:'Available now', soon:'Coming soon', fromDate:'From {d}',
+    farmInfo:'Farm info', news:'Farm news', more:'Read more',
+    stock:'In stock', soldout:'Sold out', unitEa:'ea',
+    pick:'Select', add:'Add to cart', cart:'Cart', cartEmpty:'Your cart is empty',
+    qty:'Quantity', method:'How to receive', total:'Total', itemTotal:'Items', deliveryFee:'Delivery',
+    free:'Free', remove:'Remove', editOpt:'Edit delivery · gift', editingHere:'Editing below',
+    mDelivery:'City delivery', mPickup:'Pick up at farm', mChurch:'Hand-off at agreed place',
+    mDeliveryD:'Moto delivery within Phnom Penh', mPickupD:'Come to the farm to collect', mChurchD:'At church, office, or an agreed spot',
+    house:'House No.', street:'Street No.', sangkat:'Sangkat', khan:'Khan',
+    area:'Area', mapLink:'Google Maps link', mapHint:'Long-press your location in Google Maps → Share → copy the link. The driver navigates by this.',
+    landmark:'Directions note', landmarkPh:'e.g. Second house in the lane next to ABC mart',
+    wantDate:'Preferred date', visitDate:'Visit date', visitTime:'Visit time',
+    handPlace:'Hand-off place', handDate:'Hand-off date',
+    gift:'Send as a gift', giftName:'Recipient name', giftPhone:'Recipient phone',
+    visitOnly:'Visits are only possible on days the farmer is on site', noSlot:'No dates published yet. Please contact the farmer.',
+    yourInfo:'Your details', name:'Name', phone:'Phone',
+    phoneHint:'e.g. 012 345 678 — Korean numbers also fine', kakao:'KakaoTalk ID', kakaoHint:'Optional, makes it easier to reach you',
+    referrer:'Referred by', referrerPh:'e.g. Mr. Kim', referrerHint:'Optional',
+    ask:'Request or question', askPh:'Delivery time, packaging requests, anything at all',
+    submit:'Place order', submitting:'Sending your order…',
+    doneTitle:'Order received', doneDesc:'Pay with the QR below and we will confirm shortly.',
+    payTitle:'Payment', scanHint:'Scan with any bank app (ABA · Wing · ACLEDA · Bakong)',
+    payAmount:'Amount to send', bank:'Bank', acctNo:'Account no.', holder:'Account name',
+    noticeTitle:'Please note', noticeBody:'If you do not hear back within one day, please contact the farmer — your phone number may have been mistyped.',
+    gotIt:'Got it', backHome:'Back to start',
+    lookupTitle:'Find your order', lookupDesc2:'Enter the name and phone you used when ordering',
+    search:'Search', noOrder:'No order found. Please check the name and phone number.',
+    orderedAt:'Ordered', editOrder:'Edit order', cancelOrder:'Cancel order',
+    cancelConfirm:'Cancel this order? The farmer will confirm.', cancelRequested:'Cancellation requested',
+    cancelDone:'Your cancellation request was sent',
+    modified:'Edited', talk:'Message the farmer', msgPh:'Write a message', send:'Send',
+    noMsg:'No messages yet', msgSent:'Message sent',
+    save:'Save', cancel:'Cancel', close:'Close', confirm:'OK', del:'Delete', edit:'Edit',
+    loading:'Loading…', retry:'Try again', failTitle:'Connection is not going through',
+    failBody:'Check your internet and try again.',
+    saved:'Saved', required:'Please fill in the required fields',
+    added:'Added to cart', orderDone:'Order complete',
+    ob1t:'① Choose items', ob1d:'Add the fruits and vegetables you want to your cart',
+    ob2t:'② Choose how to receive', ob2d:'Pick delivery, farm pickup, or a meet-up hand-off',
+    ob3t:'③ Pay with QR', ob3d:'After ordering, scan the QR with your banking app and send the amount',
+    obNext:'Next', obStart:'Get started', obSkip:'Skip', howToUse:'How to use this app',
+
+    /* ── Admin screens ── */
+    aFarmManage:'Farm Admin', aPinTitle:'Enter the admin PIN', aEnter:'Enter',
+    aPinNeeded:'PIN required', aReenter:'Re-enter',
+    aTabOrders:'① Orders', aTabWork:'② Task List', aTabProducts:'③ Products',
+    aTabAvail:'④ Availability', aTabNews:'⑤ Farm News', aTabSettings:'⑥ Settings',
+    aRefresh:'🔄 Refresh', aLogout:'Log out',
+    aNoOrders:'No orders yet', aKakao:'KakaoTalk', aReferredBy:'Referred by',
+    aBadgeCancel:'🚫 Cancellation requested', aBadgeModified:'Edited', aBadgeNeedReply:'Needs reply',
+    aMapText:'Map', aChangedTag:'Changed',
+    aSmsSentBadge:'✓ Text sent', aSmsResend:'Resend', aSmsSend:'✉️ Text the buyer',
+    aEditItemsBtn:'✏️ Edit items', aClearModified:'Mark as reviewed', aReplyBtn:'💬 Reply',
+    aCancelConfirmDelete:'Confirm cancel (delete)', aDeleteOrder:'Delete order',
+    aOrderDeleteTitle:'Delete order', aOrderDeleteWarn:'This will permanently remove the record from the database.',
+    aOrderDeleteConfirm:'Delete this order from {name}?',
+    aGiveUp:'Cancel', aDeleteDo:'Delete', aDeletedToast:'Deleted',
+    aChatWith:'💬 Conversation with {name}', aNoMessages:'No messages yet',
+    aReplyPh:'Write a reply', aReplySend:'Send reply',
+    aReplyHint:'After replying, texting the buyer helps them see it faster.',
+    aReplySaved:'Reply saved', aModifiedCleared:'Marked as reviewed',
+    aFarmer:'Farmer', aBuyer:'Buyer',
+    aEditItemsTitle:'✏️ Edit items',
+    aEditItemsHint:'Editing notifies the buyer and clears the "text sent" mark.',
+    aProduct:'Product', aAmount:'Amount', aDeliveryDateLabel:'Delivery date',
+    aSaveNotify:'Save and notify', aSavedNotified:'Saved and notified the buyer',
+    aSubDelivery:'🛵 Delivery', aSubPickup:'🚜 Pickup', aSubChurch:'🤝 Hand-off',
+    aUndelivered:'Undelivered', aNeedPrep:'Needs prep', aCountUnit:'{n} orders',
+    aThisMonth:'This month', aTotalOrders:'Total orders', aNoWorkLeft:'Nothing left to do',
+    aNewProductBtn:'＋ Add new product', aNoProducts:'No products yet',
+    aOnSaleToHidden:'On sale → Hide', aHiddenToOnSale:'Hidden → On sale', aEditIcon:'✏️ Edit',
+    aProductEditTitle:'Edit product', aProductNewTitle:'New product',
+    aNameKoLabel:'Name (Korean)', aNameKmLabel:'Khmer', aNameEnLabel:'English',
+    aPriceUsdLabel:'Price (USD)', aStockLabel:'Stock',
+    aUnitKoLabel:'Unit (Korean)', aUnitKmLabel:'Unit (Khmer)', aUnitEnLabel:'Unit (English)',
+    aSaleStartLabel:'Sale start date',
+    aSaleStartHint:'Leave blank or use a past date to sell immediately. A future date shows as "Coming soon" until then.',
+    aPhotoLabel:'Photo', aCompressing:'Compressing photo…', aPhotoFail:'Could not load the photo',
+    aNameRequired:'Please enter a product name',
+    aProductDeleteTitle:'Delete product', aProductDeleteConfirm:'Delete {name}?',
+    aProductDeleteHint:'Existing orders that include this product are not affected.',
+    aAvailAddTitle:'Add availability',
+    aAvailHint:'Farm pickup can only be booked on dates you add here.',
+    aDateLabel:'Date', aStartLabel:'Start', aEndLabel:'End', aAddBtn:'＋ Add',
+    aPickDate:'Please choose a date', aAddedToast:'Added',
+    aNoAvail:'No availability set yet',
+    aNewsWriteBtn:'＋ Write news', aNoNews:'No news posted yet',
+    aPublicBadge:'Public', aPrivateBadge:'Private',
+    aMakePrivate:'🙈 Make private', aMakePublic:'📢 Publish',
+    aNewsEditTitle:'Edit news', aNewsNewTitle:'New news post',
+    aTitleLabel:'Title', aContentLabel:'Body', aPhotoOptional:'Photo (optional)',
+    aPrivateSaveBtn:'🙈 Save privately', aPublicSaveBtn:'📢 Publish now',
+    aTitleRequired:'Please enter a title',
+    aSettingsHero:'🖼️ Landing background photos',
+    aSettingsHeroHint:'Up to 3 photos, fading every 7 seconds. Leave blank for the default green background.',
+    aClearBtn:'Clear',
+    aSettingsBasic:'🏡 Basic info', aFarmNameLabel:'Farm name', aFarmAddrLabel:'Farm address',
+    aFarmMapLabel:'Farm Google Maps link', aFarmPhoneLabel:'Farm phone',
+    aGreetingLabel:'Farmer greeting message', aGreetingHint:'Shown on the home screen. Leave blank to hide it.',
+    aSettingsMoney:'💵 Currency · delivery fee', aExchangeLabel:'Exchange rate (1 USD = ? KHR)',
+    aShowRielLabel:'Also show the KHR amount next to prices',
+    aDeliveryFeeLabel:'Delivery fee (USD)', aFreeThresholdLabel:'Free-delivery threshold (USD)',
+    aFeeHint:'Delivery is free once the item total reaches this amount. Set to 0 to always charge delivery.',
+    aSettingsPay:'💳 Payment (KHQR)',
+    aPayHint:'Upload a screenshot of your QR from your banking app, then test-scan it yourself to confirm it works.',
+    aAcctLabel:'Account number (fallback if the QR fails to scan)', aSavePay:'Save payment info',
+    aSettingsNotify:'🔔 Notifications', aNotifyEmailLabel:'Notification email',
+    aNotifyEmailHint:'New orders, edits, and cancellation requests go to this address — free up to 100/day. Leave blank to disable.',
+    aTgTokenLabel:'Telegram bot token', aTgChatIdLabel:'Telegram chat_id',
+    aTgHint:'① In Telegram, message @BotFather → /newbot → copy the token ② send /start to your new bot ③ open api.telegram.org/bot&lt;token&gt;/getUpdates in a browser and copy chat.id.<br>⚠️ Telegram access can be blocked in some regions, so keep email notifications on as a backup.',
+    aSettingsSms:'✉️ Order-confirmation text templates', aSmsDefaultLabel:'Standard message',
+    aSmsDefaultPh:'e.g. We will ship in order once payment is confirmed.', aSmsDelayLabel:'Delay notice',
+    aSmsDelayPh:'e.g. Rainy-season harvest delays may push this back 2–3 days.',
+    aSmsWhichLabel:'Currently active template', aSmsBasicOpt:'Standard message', aSmsDelayOpt:'Delay notice',
+    aSettingsPin:'🔐 Admin PIN', aPinHint:'After changing it, save and log in again.',
+    aSaveSettingsBtn:'Save settings', aPhotoUploaded:'Photo uploaded',
+    aPhotoSaveFail:'Could not save the photo', aQrProcessing:'Processing QR…',
+    aQrUploadedHint:'Tap Save to finish', aAcctSaved:'Payment info saved',
+    aSettingsSaved:'Settings saved', aScheduled:'Sale starts', aSoonTag:'(upcoming)',
+    aSetLangHint:'Use the language buttons above to change this admin screen language.'
+  }
+};
+
+/* ═══════════ ③ 상태 ═══════════ */
+const S = {
+  lang: localStorage.getItem('lang') || 'ko',
+  view: 'landing',
+  loaded: false, failed: false,
+  products: [], settings: {}, account: {}, availability: [], news: [],
+  cart: [], editIdx: -1, draft: null,
+  order: null,                       // 방금 완료한 주문
+  lookup: { name:'', phone:'', orders:[], open:null, editing:null },
+  admin: { pin: sessionStorage.getItem('pin') || '', on:false, tab:'orders', sub:'delivery',
+           orders:[], news:[], products:[], availability:[] },
+  newsOpen: null, heroIdx: 0
+};
+
+window.S = S;   // 디버깅/점검용 노출
+
+/* ═══════════ ④ 유틸 ═══════════ */
+const $  = s => document.querySelector(s);
+const T  = k => (I18N[S.lang] && I18N[S.lang][k]) || I18N.ko[k] || k;
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const n   = v => { const x = parseInt(String(v==null?'':v).replace(/[^0-9-]/g,''),10); return isNaN(x)?0:x; };
+
+/** 센트 정수 → "$12.50" (부동소수 오차 방지를 위해 계산은 항상 센트로) */
+const money = c => '$' + (n(c)/100).toFixed(2);
+const riel  = c => {
+  if (String(S.settings.showRiel||'Y') !== 'Y') return '';
+  const r = n(S.settings.exchangeRate) || 4100;
+  return '≈ ' + Math.round(n(c)/100*r).toLocaleString() + '៛';
+};
+const dollarsToCents = v => Math.round(parseFloat(String(v).replace(/[^0-9.]/g,'')||0) * 100);
+const centsToDollars = c => (n(c)/100).toFixed(2);
+
+const pname = p => S.lang==='km' ? (p.nameKm||p.name) : S.lang==='en' ? (p.nameEn||p.name) : p.name;
+const punit = p => (S.lang==='km' ? (p.unitKm||p.unit) : S.lang==='en' ? (p.unitEn||p.unit) : p.unit) || T('unitEa');
+const mlabel = m => m==='delivery'?T('mDelivery'):m==='pickup'?T('mPickup'):m==='church'?T('mChurch'):m;
+
+const WD_KO = ['일','월','화','수','목','금','토'];
+function fmtDate(iso){
+  if(!iso) return '';
+  const p = String(iso).split('-'); if(p.length<3) return iso;
+  const d = new Date(+p[0], +p[1]-1, +p[2]);
+  if(isNaN(d)) return iso;
+  if(S.lang==='ko') return `${p[0]}.${+p[1]}.${+p[2]}(${WD_KO[d.getDay()]})`;
+  return `${String(+p[2]).padStart(2,'0')}/${String(+p[1]).padStart(2,'0')}/${p[0]}`;
+}
+function todayISO(){
+  const d = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Phnom_Penh'}));
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function isOnSale(p){
+  if(String(p.active)!=='Y') return false;
+  const s = String(p.saleStartDate||'').trim();
+  return !s || s <= todayISO();
+}
+function isSoon(p){
+  if(String(p.active)!=='Y') return false;
+  const s = String(p.saleStartDate||'').trim();
+  return !!s && s > todayISO();
+}
+function schedText(it){
+  if(it.method==='delivery') return fmtDate(it.deliveryDate) || '—';
+  if(it.method==='pickup')   return (fmtDate(it.visitDate)+' '+(it.visitTime||'')).trim();
+  if(it.method==='church')   return (fmtDate(it.handDate)+' · '+(it.handPlace||'')).trim();
+  return '';
+}
+function addrText(it){
+  return [it.addrHouse&&('#'+it.addrHouse), it.addrStreet&&('St. '+it.addrStreet),
+          it.addrSangkat, it.addrKhan].filter(Boolean).join(', ');
+}
+function itemsTotal(cart){ return cart.reduce((s,i)=>s+n(i.amountCents),0); }
+function deliveryFee(cart){
+  if(!cart.some(i=>i.method==='delivery')) return 0;
+  const th = n(S.settings.freeDeliveryThresholdCents);
+  if(th>0 && itemsTotal(cart)>=th) return 0;
+  return n(S.settings.deliveryFeeCents);
+}
+function grandTotal(cart){ return itemsTotal(cart)+deliveryFee(cart); }
+
+/* ═══════════ ⑤ 통신 ═══════════ */
+async function api(action, payload={}, ms=20000){ return MOCK_API(action, payload); }
+
+/* ═══════════ ⑥ 토스트 · 모달 ═══════════ */
+let toastTimer = null;
+function toast(msg, bad){
+  clearTimeout(toastTimer);
+  $('#toast').innerHTML = `<div class="toast ${bad?'bad':''} km-safe">${esc(msg)}</div>`;
+  toastTimer = setTimeout(()=>{ $('#toast').innerHTML=''; }, 2600);
+}
+function modal(html){
+  $('#modal').innerHTML = `<div class="modal"><div class="box">${html}</div></div>`;
+  $('#modal .modal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeModal(); });
+}
+function closeModal(){ $('#modal').innerHTML=''; }
+window.closeModal = closeModal;
+
+function go(view){
+  S.view = view;
+  closeModal();
+  window.scrollTo(0,0);
+  render();
+}
+window.go = go;
+
+
+/* ═══════════ ⑦ 렌더 진입점 ═══════════ */
+function render(){
+  document.body.className = 'lang-'+S.lang;
+  document.documentElement.lang = S.lang;
+  const back = $('#backBtn');
+  back.style.display = (S.view==='landing') ? 'none' : 'block';
+  $('#topTitle').textContent = S.settings.businessName || '팜슈가 농원(1호점)';
+
+  const v = $('#view'); const d = $('#dock');
+  d.innerHTML = '';
+
+  if(!S.loaded && !S.failed){ v.innerHTML = stateLoading(); return; }
+  if(S.failed && !S.loaded){ v.innerHTML = stateFail(); return; }
+
+  switch(S.view){
+    case 'landing': v.innerHTML = viewLanding(); startHero(); break;
+    case 'shop':    v.innerHTML = viewShop(); break;
+    case 'cart':    v.innerHTML = viewCart(); dockCart(); break;
+    case 'done':    v.innerHTML = viewDone(); break;
+    case 'lookup':  v.innerHTML = viewLookup(); break;
+    case 'admin':   v.innerHTML = viewAdmin(); initTabScroll(); break;
+  }
+}
+function stateLoading(){
+  return `<div class="state"><div class="spin"></div>${esc(T('loading'))}</div>`;
+}
+function stateFail(){
+  return `<div class="state"><span class="em">📡</span>
+    <div style="font-weight:700;color:var(--ink);font-size:15px">${esc(T('failTitle'))}</div>
+    <div style="margin:8px 0 18px" class="km-safe">${esc(T('failBody'))}</div>
+    <button class="btn" style="max-width:220px;margin:0 auto" onclick="loadPublic(true)">${esc(T('retry'))}</button></div>`;
+}
+
+/* ═══════════ ⑧ 랜딩 ═══════════ */
+let heroTimer = null;
+function heroPhotos(){
+  return [S.settings.landingPhoto1, S.settings.landingPhoto2, S.settings.landingPhoto3].filter(x=>x&&x.length>50);
+}
+function startHero(){
+  clearInterval(heroTimer);
+  const ph = heroPhotos(); if(ph.length<2) return;
+  heroTimer = setInterval(()=>{
+    const slides = document.querySelectorAll('.hero .slide');
+    if(!slides.length){ clearInterval(heroTimer); return; }
+    slides[S.heroIdx % slides.length].classList.remove('on');
+    S.heroIdx = (S.heroIdx+1) % slides.length;
+    slides[S.heroIdx].classList.add('on');
+  }, 7000);
+}
+function viewLanding(){
+  const ph = heroPhotos();
+  const onSale = S.products.filter(isOnSale);
+  const soon   = S.products.filter(isSoon);
+  const news   = S.news;
+
+  return `
+  <div class="hero">
+    ${ph.map((p,i)=>`<div class="slide ${i===0?'on':''}" style="background-image:url('${p}')"></div>`).join('')}
+    <div class="veil"></div>
+    <div class="in">
+      <div class="eyebrow">PHNOM PENH</div>
+      <h1 class="display km-safe">${esc(S.settings.businessName||'팜슈가 농원(1호점)')}</h1>
+      ${S.settings.greeting?`<div class="sub km-safe">${esc(S.settings.greeting)}</div>`:''}
+    </div>
+  </div>
+  <div class="wrap">
+    ${news.length?newsBanner(news):''}
+
+    <div style="margin-top:16px">
+      <button class="btn mango" onclick="startOrder()">🧺 ${esc(T('newOrder'))}</button>
+      <div class="mini km-safe" style="text-align:center;margin:7px 0 16px">${esc(T('newOrderDesc'))}</div>
+      <button class="btn alt" onclick="go('lookup')">🔎 ${esc(T('lookup'))}</button>
+      <div class="mini km-safe" style="text-align:center;margin-top:7px">${esc(T('lookupDesc'))}</div>
+      <div style="text-align:center;margin-top:14px">
+        <button class="btn sm ghost" onclick="showOnboard()">❓ ${esc(T('howToUse'))}</button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><h2 class="display">🥬 ${esc(T('onSale'))}</h2><span class="n">${onSale.length}</span></div>
+      <div class="card flat">
+        ${onSale.length ? onSale.map(p=>prodRow(p,false)).join('')
+          : `<div class="state" style="padding:22px 0">${esc(T('cartEmpty'))}</div>`}
+      </div>
+    </div>
+
+    ${soon.length?`<div class="sec">
+      <div class="sec-h"><h2 class="display">🌱 ${esc(T('soon'))}</h2><span class="n">${soon.length}</span></div>
+      <div class="card flat">${soon.map(p=>prodRow(p,true)).join('')}</div>
+    </div>`:''}
+
+    <div class="sec">
+      <div class="sec-h"><h2 class="display">📍 ${esc(T('farmInfo'))}</h2></div>
+      <div class="card">
+        <div style="font-weight:700">${esc(S.settings.businessName||'')}</div>
+        ${S.settings.farmAddress?`<div class="mini km-safe" style="margin-top:5px">${esc(S.settings.farmAddress)}</div>`:''}
+        ${S.settings.farmMapLink?`<div style="margin-top:6px"><a href="${esc(S.settings.farmMapLink)}" target="_blank" rel="noopener">🗺️ Google Maps</a></div>`:''}
+        ${S.settings.farmPhone?`<div style="margin-top:9px"><a href="tel:${esc(S.settings.farmPhone)}">📞 ${esc(S.settings.farmPhone)}</a></div>`:''}
+      </div>
+      <div style="text-align:center;margin-top:22px">
+        <button class="btn sm ghost" onclick="askPin()">${esc(T('aFarmManage'))}</button>
+      </div>
+    </div>
+  </div>`;
+}
+function newsBanner(news){
+  const open = S.newsOpen;
+  return `<div class="news">
+    <div class="hd">📢 ${esc(T('news'))}</div>
+    <ul>${news.map((x,i)=>`
+      <li onclick="S.newsOpen=(S.newsOpen===${i}?null:${i});render()">
+        <span style="flex:1" class="km-safe">${esc(x.title)}</span>
+        ${i===0?`<span class="badge mango">NEW</span>`:''}
+        <span style="color:#B98A2E">${open===i?'▴':'▾'}</span>
+      </li>
+      ${open===i?`<div class="body km-safe">${esc(x.body)}
+        ${x.image&&x.image.length>50?`<img src="${x.image}" loading="lazy" alt="">`:''}
+        <div class="mini" style="margin-top:8px">${esc(x.createdAt||'')}</div></div>`:''}
+    `).join('')}</ul>
+  </div>`;
+}
+function prodRow(p, soon){
+  const out = n(p.stock)<=0 && !soon;
+  return `<div class="prod ${soon?'soon':''} ${out?'dim':''}">
+    <div class="th" style="${p.image&&p.image.length>50?`background-image:url('${p.image}')`:''}">${p.image&&p.image.length>50?'':'🌿'}</div>
+    <div style="flex:1;min-width:0">
+      <div class="nm km-safe">${esc(pname(p))}</div>
+      <div class="pr">${money(p.priceCents)} <span style="font-weight:400;color:var(--muted);font-size:13px">/ 1${esc(punit(p))}</span></div>
+      <div class="st">${riel(p.priceCents)}</div>
+    </div>
+    <div style="text-align:right;flex:0 0 auto">
+      ${soon ? `<span class="badge mango">${esc(T('fromDate').replace('{d}',fmtDate(p.saleStartDate)))}</span>`
+        : out ? `<span class="badge gray">${esc(T('soldout'))}</span>`
+        : `<span class="badge">${esc(T('stock'))} ${n(p.stock)}</span>`}
+    </div>
+  </div>`;
+}
+function startOrder(){ S.draft=null; S.editIdx=-1; go('shop'); }
+window.startOrder = startOrder;
+
+/* ═══════════ ⑨ 상품 선택 ═══════════ */
+function viewShop(){
+  const list = S.products.filter(isOnSale);
+  if(S.draft) return viewDraft();
+  return `<div class="wrap">
+    <div class="sec" style="margin-top:18px">
+      <div class="sec-h"><h2 class="display">🧺 ${esc(T('pick'))}</h2><span class="n">${list.length}</span></div>
+      <div class="card flat">
+        ${list.length ? list.map(p=>`
+          <div class="prod ${n(p.stock)<=0?'dim':''}" ${n(p.stock)>0?`onclick="openDraft('${p.id}')" style="cursor:pointer"`:''}>
+            <div class="th" style="${p.image&&p.image.length>50?`background-image:url('${p.image}')`:''}">${p.image&&p.image.length>50?'':'🌿'}</div>
+            <div style="flex:1;min-width:0">
+              <div class="nm km-safe">${esc(pname(p))}</div>
+              <div class="pr">${money(p.priceCents)} <span style="font-weight:400;color:var(--muted);font-size:13px">/ 1${esc(punit(p))}</span></div>
+              <div class="st">${riel(p.priceCents)} · ${esc(T('stock'))} ${n(p.stock)}</div>
+            </div>
+            ${n(p.stock)>0?`<span class="badge">＋</span>`:`<span class="badge gray">${esc(T('soldout'))}</span>`}
+          </div>`).join('')
+          : `<div class="state">${esc(T('cartEmpty'))}</div>`}
+      </div>
+    </div>
+    ${S.cart.length?`<button class="btn" style="margin-top:18px" onclick="go('cart')">
+      ${esc(T('cart'))} · ${S.cart.length} · ${money(grandTotal(S.cart))}</button>`:''}
+  </div>`;
+}
+
+function openDraft(pid, idx){
+  const p = S.products.find(x=>x.id===pid);
+  if(!p) return;
+  if(idx!==undefined && idx>=0){
+    S.draft = Object.assign({}, S.cart[idx]); S.editIdx = idx;
+  } else {
+    S.draft = { productId:p.id, productName:p.name, qty:1, unit:p.unit||'개',
+      unitPriceCents:n(p.priceCents), amountCents:n(p.priceCents), method:'delivery',
+      addrHouse:'', addrStreet:'', addrSangkat:'', addrKhan:'', mapLink:'', landmark:'',
+      deliveryDate:'', visitDate:'', visitTime:'', handPlace:'', handDate:'',
+      gift:'', giftName:'', giftPhone:'' };
+    S.editIdx = -1;
+  }
+  go('shop');
+}
+window.openDraft = openDraft;
+
+function draftQty(delta){
+  const p = S.products.find(x=>x.id===S.draft.productId);
+  const max = p? n(p.stock) : 99;
+  let q = n(S.draft.qty)+delta;
+  if(q<1) q=1; if(q>max) q=max;
+  S.draft.qty = q;
+  S.draft.amountCents = q * n(S.draft.unitPriceCents);
+  render();
+}
+window.draftQty = draftQty;
+
+function draftSet(k, v){
+  S.draft[k] = v;
+  if(k==='method') render();
+}
+window.draftSet = draftSet;
+
+const AREAS = ['뚤꼭 Toul Kork','BKK1','BKK2 · BKK3','쩜까몬 Chamkarmon','7 Makara','센속 Sen Sok','쯔로이짱와 Chroy Changvar','다운타운 Daun Penh','기타 Other'];
+
+function viewDraft(){
+  const d = S.draft;
+  const p = S.products.find(x=>x.id===d.productId) || {};
+  const slots = S.availability.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date)))
+                 .filter(s=>String(s.date)>=todayISO());
+  const times = [];
+  slots.forEach(s=>{
+    let [h,m] = String(s.start||'08:00').split(':').map(Number);
+    const [eh,em] = String(s.end||'17:00').split(':').map(Number);
+    while(h*60+m <= eh*60+em){
+      const t = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+      if(times.indexOf(t)<0) times.push(t);
+      m+=30; if(m>=60){m-=60;h++;}
+    }
+  });
+  times.sort();
+
+  return `<div class="wrap">
+    <div class="card" style="margin-top:18px;display:flex;gap:12px;align-items:center">
+      <div class="th prod" style="width:56px;height:56px;border-radius:11px;padding:0;border:0;${p.image&&p.image.length>50?`background:url('${p.image}') center/cover`:'background:var(--leaf-sf)'};display:flex;align-items:center;justify-content:center">${p.image&&p.image.length>50?'':'🌿'}</div>
+      <div style="flex:1">
+        <div style="font-weight:700" class="km-safe">${esc(pname(p))}</div>
+        <div style="color:var(--leaf);font-weight:700">${money(d.unitPriceCents)} / 1${esc(punit(p))}</div>
+      </div>
+    </div>
+
+    <label class="f">${esc(T('qty'))}</label>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="step">
+        <button onclick="draftQty(-1)" ${n(d.qty)<=1?'disabled':''}>−</button>
+        <span class="v mono">${n(d.qty)}</span>
+        <button onclick="draftQty(1)" ${n(d.qty)>=n(p.stock)?'disabled':''}>＋</button>
+      </div>
+      <div style="flex:1;text-align:right">
+        <div style="font-size:19px;font-weight:700">${money(d.amountCents)}</div>
+        <div class="riel">${riel(d.amountCents)}</div>
+      </div>
+    </div>
+
+    <label class="f">${esc(T('method'))}</label>
+    ${['delivery','pickup','church'].map(m=>`
+      <div class="card" style="margin-top:8px;padding:13px;cursor:pointer;${d.method===m?'border-color:var(--leaf);border-width:2px;background:var(--leaf-sf)':''}"
+           onclick="draftSet('method','${m}')">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="font-size:18px">${m==='delivery'?'🛵':m==='pickup'?'🚜':'🤝'}</span>
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:14.5px" class="km-safe">${esc(mlabel(m))}</div>
+            <div class="mini km-safe">${esc(T(m==='delivery'?'mDeliveryD':m==='pickup'?'mPickupD':'mChurchD'))}</div>
+          </div>
+          <span style="color:${d.method===m?'var(--leaf)':'var(--line)'};font-size:17px">${d.method===m?'●':'○'}</span>
+        </div>
+      </div>`).join('')}
+
+    ${d.method==='delivery'?`
+      <div class="divider"></div>
+      <label class="f">${esc(T('area'))}</label>
+      <select onchange="draftSet('addrKhan',this.value)">
+        <option value="">—</option>
+        ${AREAS.map(a=>`<option ${d.addrKhan===a?'selected':''}>${esc(a)}</option>`).join('')}
+      </select>
+      <div class="row" style="margin-top:10px">
+        <div><label class="f" style="margin-top:0">${esc(T('house'))}</label>
+          <input value="${esc(d.addrHouse)}" oninput="draftSet('addrHouse',this.value)" placeholder="12B"></div>
+        <div><label class="f" style="margin-top:0">${esc(T('street'))}</label>
+          <input value="${esc(d.addrStreet)}" oninput="draftSet('addrStreet',this.value)" placeholder="271"></div>
+      </div>
+      <label class="f">${esc(T('sangkat'))}</label>
+      <input value="${esc(d.addrSangkat)}" oninput="draftSet('addrSangkat',this.value)" placeholder="Boeung Keng Kang">
+      <label class="f">${esc(T('mapLink'))}</label>
+      <input value="${esc(d.mapLink)}" oninput="draftSet('mapLink',this.value)" placeholder="https://maps.app.goo.gl/…" inputmode="url">
+      <div class="hint km-safe">${esc(T('mapHint'))}</div>
+      <label class="f">${esc(T('landmark'))}</label>
+      <input value="${esc(d.landmark)}" oninput="draftSet('landmark',this.value)" placeholder="${esc(T('landmarkPh'))}">
+      <label class="f">${esc(T('wantDate'))}</label>
+      <input type="date" min="${todayISO()}" value="${esc(d.deliveryDate)}" onchange="draftSet('deliveryDate',this.value)">
+    `:''}
+
+    ${d.method==='pickup'?`
+      <div class="divider"></div>
+      <div class="badge mango km-safe" style="margin-bottom:10px">⚠️ ${esc(T('visitOnly'))}</div>
+      ${slots.length?`
+        <label class="f">${esc(T('visitDate'))}</label>
+        <select onchange="draftSet('visitDate',this.value)">
+          <option value="">—</option>
+          ${slots.map(s=>`<option value="${esc(s.date)}" ${d.visitDate===s.date?'selected':''}>${esc(fmtDate(s.date))} (${esc(s.start)}–${esc(s.end)})</option>`).join('')}
+        </select>
+        <label class="f">${esc(T('visitTime'))}</label>
+        <select onchange="draftSet('visitTime',this.value)">
+          <option value="">—</option>
+          ${times.map(t=>`<option ${d.visitTime===t?'selected':''}>${t}</option>`).join('')}
+        </select>
+      `:`<div class="card" style="background:var(--clay-sf);border-color:#EFCFC4">
+          <div class="km-safe" style="color:var(--clay);font-size:13.5px">${esc(T('noSlot'))}</div>
+          ${S.settings.farmPhone?`<a href="tel:${esc(S.settings.farmPhone)}" style="display:block;margin-top:8px">📞 ${esc(S.settings.farmPhone)}</a>`:''}
+        </div>`}
+    `:''}
+
+    ${d.method==='church'?`
+      <div class="divider"></div>
+      <label class="f">${esc(T('handPlace'))}<span class="req">*</span></label>
+      <input value="${esc(d.handPlace)}" oninput="draftSet('handPlace',this.value)" placeholder="프놈펜 한인교회 / 사무실 …">
+      <label class="f">${esc(T('handDate'))}<span class="req">*</span></label>
+      <input type="date" min="${todayISO()}" value="${esc(d.handDate)}" onchange="draftSet('handDate',this.value)">
+    `:''}
+
+    <div class="divider"></div>
+    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:6px 0">
+      <input type="checkbox" style="width:22px;height:22px;flex:0 0 auto;accent-color:var(--leaf)"
+        ${d.gift==='Y'?'checked':''} onchange="draftSet('gift',this.checked?'Y':'');render()">
+      <span style="font-weight:500">🎁 ${esc(T('gift'))}</span>
+    </label>
+    ${d.gift==='Y'?`
+      <label class="f">${esc(T('giftName'))}<span class="req">*</span></label>
+      <input value="${esc(d.giftName)}" oninput="draftSet('giftName',this.value)">
+      <label class="f">${esc(T('giftPhone'))}</label>
+      <input type="tel" inputmode="tel" value="${esc(d.giftPhone)}" oninput="draftSet('giftPhone',this.value)">
+    `:''}
+
+    <div class="row" style="margin-top:22px">
+      <button class="btn ghost" onclick="S.draft=null;S.editIdx=-1;render()">${esc(T('cancel'))}</button>
+      <button class="btn" style="flex:2" onclick="addToCart()">${esc(S.editIdx>=0?T('save'):T('add'))}</button>
+    </div>
+  </div>`;
+}
+
+function addToCart(){
+  const d = S.draft;
+  if(d.method==='church' && (!d.handPlace.trim() || !d.handDate)){ toast(T('required'), true); return; }
+  if(d.method==='pickup' && !d.visitDate){ toast(T('required'), true); return; }
+  if(d.gift==='Y' && !d.giftName.trim()){ toast(T('required'), true); return; }
+  const p = S.products.find(x=>x.id===d.productId);
+  d.productName = p ? p.name : d.productName;
+  d.unit = p ? (p.unit||'개') : d.unit;
+  if(S.editIdx>=0) S.cart[S.editIdx] = d; else S.cart.push(d);
+  S.draft = null; S.editIdx = -1;
+  toast(T('added'));
+  go('cart');
+}
+window.addToCart = addToCart;
+
+/* ═══════════ ⑩ 장바구니 ═══════════ */
+const B = { name:'', phone:'', kakaoId:'', referrer:'', firstMessage:'' };
+
+function viewCart(){
+  if(!S.cart.length) return `<div class="wrap"><div class="state"><span class="em">🧺</span>${esc(T('cartEmpty'))}
+    <div style="margin-top:18px"><button class="btn" onclick="go('shop')">${esc(T('pick'))}</button></div></div></div>`;
+  const fee = deliveryFee(S.cart);
+  return `<div class="wrap">
+    <div class="sec" style="margin-top:18px">
+      <div class="sec-h"><h2 class="display">🧺 ${esc(T('cart'))}</h2><span class="n">${S.cart.length}</span></div>
+      ${S.cart.map((it,i)=>cartItem(it,i)).join('')}
+      <button class="btn ghost sm" style="width:100%;margin-top:12px" onclick="go('shop')">＋ ${esc(T('pick'))}</button>
+
+      <div class="sum">
+        <div class="l"><span>${esc(T('itemTotal'))}</span><span class="mono">${money(itemsTotal(S.cart))}</span></div>
+        <div class="l"><span>${esc(T('deliveryFee'))}</span><span class="mono">${fee?money(fee):esc(T('free'))}</span></div>
+        <div class="l tot"><span>${esc(T('total'))}</span>
+          <span style="text-align:right"><span class="mono">${money(grandTotal(S.cart))}</span>
+          <div class="riel">${riel(grandTotal(S.cart))}</div></span></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><h2 class="display">✍️ ${esc(T('yourInfo'))}</h2></div>
+      <label class="f">${esc(T('name'))}<span class="req">*</span></label>
+      <input id="bName" value="${esc(B.name)}" oninput="B.name=this.value">
+      <label class="f">${esc(T('phone'))}<span class="req">*</span></label>
+      <input id="bPhone" type="tel" inputmode="tel" value="${esc(B.phone)}" oninput="B.phone=this.value">
+      <div class="hint km-safe">${esc(T('phoneHint'))}</div>
+      ${S.lang==='ko'?`<label class="f">${esc(T('kakao'))}</label>
+      <input id="bKakao" value="${esc(B.kakaoId)}" oninput="B.kakaoId=this.value">
+      <div class="hint km-safe">${esc(T('kakaoHint'))}</div>`:''}
+      <label class="f">${esc(T('referrer'))}</label>
+      <input id="bRef" value="${esc(B.referrer)}" oninput="B.referrer=this.value" placeholder="${esc(T('referrerPh'))}">
+      <div class="hint">${esc(T('referrerHint'))}</div>
+      <label class="f">${esc(T('ask'))}</label>
+      <textarea id="bMsg" oninput="B.firstMessage=this.value" placeholder="${esc(T('askPh'))}">${esc(B.firstMessage)}</textarea>
+    </div>
+  </div>`;
+}
+function cartItem(it,i){
+  const p = S.products.find(x=>x.id===it.productId) || {};
+  const editing = S.editIdx===i;
+  return `<div class="ci ${editing?'editing':''}">
+    <div class="top-r">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700" class="km-safe">${esc(pname(p)||it.productName)}
+          ${it.gift==='Y'?`<span class="badge mango">🎁</span>`:''}
+          ${editing?`<span class="badge mango">${esc(T('editingHere'))}</span>`:''}</div>
+        <div class="meta km-safe">${esc(mlabel(it.method))} · ${esc(schedText(it))}
+          ${it.method==='delivery'&&addrText(it)?`<br>${esc(addrText(it))}`:''}
+          ${it.gift==='Y'?`<br>🎁 ${esc(it.giftName)}`:''}</div>
+      </div>
+      <div style="text-align:right;flex:0 0 auto">
+        <div style="font-weight:700" class="mono">${money(it.amountCents)}</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:11px">
+      <div class="step">
+        <button onclick="cartQty(${i},-1)" ${n(it.qty)<=1?'disabled':''}>−</button>
+        <span class="v mono">${n(it.qty)}</span>
+        <button onclick="cartQty(${i},1)" ${n(it.qty)>=n(p.stock)?'disabled':''}>＋</button>
+      </div>
+      <button class="btn sm ghost" style="flex:1" onclick="openDraft('${it.productId}',${i})">${esc(T('editOpt'))}</button>
+      <button class="btn sm danger" onclick="cartDel(${i})">${esc(T('remove'))}</button>
+    </div>
+  </div>`;
+}
+function cartQty(i,delta){
+  const it = S.cart[i];
+  const p = S.products.find(x=>x.id===it.productId);
+  const max = p? n(p.stock):99;
+  let q = n(it.qty)+delta; if(q<1)q=1; if(q>max)q=max;
+  it.qty = q; it.amountCents = q*n(it.unitPriceCents);
+  render();
+}
+function cartDel(i){ S.cart.splice(i,1); if(S.editIdx===i)S.editIdx=-1; render(); }
+window.cartQty=cartQty; window.cartDel=cartDel;
+
+function dockCart(){
+  if(!S.cart.length) return;
+  $('#dock').innerHTML = `<div class="dock"><div class="in">
+    <button class="btn" id="submitBtn" onclick="submitOrder()">
+      ${esc(T('submit'))} · ${money(grandTotal(S.cart))}</button>
+  </div></div>`;
+}
+
+async function submitOrder(){
+  if(!B.name.trim() || !B.phone.trim()){ toast(T('required'), true); ($('#bName')||{}).focus&&$('#bName').focus(); return; }
+  const btn = $('#submitBtn'); if(btn){ btn.disabled=true; btn.textContent=T('submitting'); }
+  const payload = {
+    name:B.name.trim(), phone:B.phone.trim(), kakaoId:B.kakaoId.trim(),
+    referrer:B.referrer.trim(), firstMessage:B.firstMessage.trim(),
+    items:S.cart, feeCents:deliveryFee(S.cart)
+  };
+  try{
+    await api('saveOrder', payload, 30000);
+    S.order = { items:S.cart.slice(), fee:deliveryFee(S.cart), total:grandTotal(S.cart), name:B.name.trim() };
+    S.cart = []; B.name=''; B.phone=''; B.kakaoId=''; B.referrer=''; B.firstMessage='';
+    go('done');
+    setTimeout(noticePopup, 400);
+  }catch(e){
+    toast(e.name==='AbortError' ? T('failTitle') : e.message, true);
+    if(btn){ btn.disabled=false; btn.textContent=T('submit')+' · '+money(grandTotal(S.cart)); }
+  }
+}
+window.submitOrder = submitOrder;
+
+function noticePopup(){
+  modal(`<h3 class="display">⚠️ ${esc(T('noticeTitle'))}</h3>
+    <div class="km-safe" style="color:var(--ink-2);line-height:1.75">${esc(T('noticeBody'))}</div>
+    <button class="btn" style="margin-top:18px" onclick="closeModal()">${esc(T('gotIt'))}</button>`);
+}
+window.noticePopup = noticePopup;
+
+/* ═══════════ ⑪ 주문 완료 ═══════════ */
+function viewDone(){
+  const o = S.order || {items:[],total:0,fee:0};
+  const a = S.account;
+  const qr = a.khqrImage && a.khqrImage.length>50 ? a.khqrImage : '';
+  return `<div class="wrap">
+    <div style="text-align:center;padding:30px 0 6px">
+      <div style="font-size:44px">✅</div>
+      <h2 class="display" style="font-size:21px;margin-top:9px">${esc(T('doneTitle'))}</h2>
+      <div class="mini km-safe" style="margin-top:7px">${esc(T('doneDesc'))}</div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div style="font-weight:700;margin-bottom:9px">💳 ${esc(T('payTitle'))}</div>
+      ${qr?`<img class="qr" src="${qr}" alt="KHQR">
+        <div class="mini km-safe" style="text-align:center;margin-top:9px">${esc(T('scanHint'))}</div>`:''}
+      <div class="sum" style="margin-top:14px">
+        <div class="l"><span>${esc(T('itemTotal'))}</span><span class="mono">${money(o.total-o.fee)}</span></div>
+        <div class="l"><span>${esc(T('deliveryFee'))}</span><span class="mono">${o.fee?money(o.fee):esc(T('free'))}</span></div>
+        <div class="l tot"><span>${esc(T('payAmount'))}</span>
+          <span style="text-align:right"><span class="mono">${money(o.total)}</span>
+          <div class="riel">${riel(o.total)}</div></span></div>
+      </div>
+      ${(a.bank||a.number)?`<div class="divider"></div>
+        <div class="mini" style="line-height:1.9">
+          ${a.bank?`${esc(T('bank'))} · <b>${esc(a.bank)}</b><br>`:''}
+          ${a.number?`${esc(T('acctNo'))} · <b class="mono">${esc(a.number)}</b><br>`:''}
+          ${a.holder?`${esc(T('holder'))} · <b>${esc(a.holder)}</b>`:''}
+        </div>`:''}
+    </div>
+
+    <div class="card">
+      ${o.items.map(it=>{
+        const p = S.products.find(x=>x.id===it.productId)||{};
+        return `<div class="prod"><div style="flex:1">
+          <div style="font-weight:500" class="km-safe">${esc(pname(p)||it.productName)} × ${n(it.qty)}</div>
+          <div class="mini">${esc(mlabel(it.method))} · ${esc(schedText(it))}</div>
+        </div><div class="mono">${money(it.amountCents)}</div></div>`;}).join('')}
+    </div>
+
+    <button class="btn alt" style="margin-top:20px" onclick="go('landing')">${esc(T('backHome'))}</button>
+    ${S.settings.farmPhone?`<div style="text-align:center;margin-top:14px">
+      <a href="tel:${esc(S.settings.farmPhone)}">📞 ${esc(S.settings.farmPhone)}</a></div>`:''}
+  </div>`;
+}
+
+
+/* ═══════════ ⑫ 주문 조회 · 변경 ═══════════ */
+const L = { name:'', phone:'', searched:false, busy:false };
+
+function viewLookup(){
+  const o = S.lookup.open;
+  if(o) return viewOrderDetail(o);
+
+  return `<div class="wrap">
+    <div class="sec" style="margin-top:20px">
+      <div class="sec-h"><h2 class="display">🔎 ${esc(T('lookupTitle'))}</h2></div>
+      <div class="mini km-safe" style="margin-bottom:6px">${esc(T('lookupDesc2'))}</div>
+      <label class="f">${esc(T('name'))}</label>
+      <input id="lName" value="${esc(L.name)}" oninput="L.name=this.value">
+      <label class="f">${esc(T('phone'))}</label>
+      <input id="lPhone" type="tel" inputmode="tel" value="${esc(L.phone)}" oninput="L.phone=this.value">
+      <div class="hint km-safe">${esc(T('phoneHint'))}</div>
+      <button class="btn" style="margin-top:18px" onclick="doLookup()" ${L.busy?'disabled':''}>
+        ${L.busy?esc(T('loading')):esc(T('search'))}</button>
+    </div>
+
+    ${L.searched ? (S.lookup.orders.length
+      ? `<div class="sec">${S.lookup.orders.map(orderCard).join('')}</div>`
+      : `<div class="state"><span class="em">🔍</span><span class="km-safe">${esc(T('noOrder'))}</span></div>`)
+      : ''}
+  </div>`;
+}
+
+async function doLookup(){
+  if(!L.name.trim() || !L.phone.trim()){ toast(T('required'), true); return; }
+  L.busy = true; render();
+  try{
+    const r = await api('lookup', { name:L.name.trim(), phone:L.phone.trim() });
+    S.lookup.orders = (r.orders||[]).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+    L.searched = true;
+  }catch(e){ toast(e.name==='AbortError'?T('failTitle'):e.message, true); }
+  L.busy = false; render();
+}
+window.doLookup = doLookup;
+
+function parseItems(o){ try{ return JSON.parse(o.itemsJson||'[]'); }catch(e){ return []; } }
+function parseMsgs(o){ try{ return JSON.parse(o.messagesJson||'[]'); }catch(e){ return []; } }
+function orderTotal(o){
+  const it = parseItems(o);
+  let sum = it.reduce((s,x)=>s+n(x.amountCents),0);
+  if(it.some(x=>x.method==='delivery')){
+    const th = n(S.settings.freeDeliveryThresholdCents);
+    if(!(th>0 && sum>=th)) sum += n(S.settings.deliveryFeeCents);
+  }
+  return sum;
+}
+
+function orderCard(o){
+  const items = parseItems(o);
+  const cancelled = String(o.cancelRequested)==='Y';
+  return `<div class="card" style="${cancelled?'border-color:#EFCFC4;background:var(--clay-sf)':''}">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+      <div>
+        <div class="mini">${esc(T('orderedAt'))} ${esc(String(o.createdAt).slice(0,16))}</div>
+        <div style="font-weight:700;margin-top:3px">${money(orderTotal(o))}</div>
+      </div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end">
+        ${cancelled?`<span class="badge clay">🚫 ${esc(T('cancelRequested'))}</span>`:''}
+        ${String(o.modified)==='Y'?`<span class="badge mango">${esc(T('modified'))}</span>`:''}
+      </div>
+    </div>
+    <div class="divider" style="margin:11px 0"></div>
+    ${items.map(it=>{
+      const p = S.products.find(x=>x.id===it.productId)||{};
+      return `<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:14px">
+        <span class="km-safe">${esc(pname(p)||it.productName)} × ${n(it.qty)}
+          <span class="mini"> · ${esc(mlabel(it.method))} ${esc(schedText(it))}</span></span>
+        <span class="mono">${money(it.amountCents)}</span></div>`;}).join('')}
+    <button class="btn sm ghost" style="width:100%;margin-top:12px" onclick="openOrder('${o.id}')">${esc(T('more'))}</button>
+  </div>`;
+}
+function openOrder(id){
+  S.lookup.open = S.lookup.orders.find(x=>x.id===id) || null;
+  window.scrollTo(0,0); render();
+}
+window.openOrder = openOrder;
+
+function viewOrderDetail(o){
+  const items = parseItems(o);
+  const msgs = parseMsgs(o);
+  const cancelled = String(o.cancelRequested)==='Y';
+  return `<div class="wrap">
+    <button class="btn sm ghost" style="margin-top:16px" onclick="S.lookup.open=null;render()">‹ ${esc(T('close'))}</button>
+
+    <div class="card" style="margin-top:12px">
+      <div class="mini">${esc(T('orderedAt'))} ${esc(String(o.createdAt).slice(0,16))}</div>
+      <div style="font-weight:700;font-size:19px;margin-top:4px">${money(orderTotal(o))}</div>
+      ${cancelled?`<div class="badge clay" style="margin-top:8px">🚫 ${esc(T('cancelRequested'))}</div>`:''}
+      <div class="divider"></div>
+      ${items.map(it=>{
+        const p = S.products.find(x=>x.id===it.productId)||{};
+        return `<div style="padding:9px 0;border-bottom:1px solid var(--line)">
+          <div style="display:flex;justify-content:space-between;font-weight:500">
+            <span class="km-safe">${esc(pname(p)||it.productName)} × ${n(it.qty)}${it.gift==='Y'?' 🎁':''}</span>
+            <span class="mono">${money(it.amountCents)}</span></div>
+          <div class="mini km-safe" style="margin-top:3px">${esc(mlabel(it.method))} · ${esc(schedText(it))}
+            ${it.method==='delivery'&&addrText(it)?`<br>${esc(addrText(it))}`:''}</div>
+        </div>`;}).join('')}
+    </div>
+
+    ${!cancelled?`<div class="row" style="margin-top:14px">
+      <button class="btn alt" onclick="editOrder('${o.id}')">✏️ ${esc(T('editOrder'))}</button>
+      <button class="btn danger" onclick="askCancel('${o.id}')">${esc(T('cancelOrder'))}</button>
+    </div>`:''}
+
+    <div class="sec">
+      <div class="sec-h"><h2 class="display">💬 ${esc(T('talk'))}</h2></div>
+      <div class="card">
+        ${msgs.length?`<div class="thread">${msgs.map(m=>`
+          <div class="msg ${m.from==='buyer'?'buyer':'farm'} km-safe">${esc(m.text)}
+            <span class="t">${esc(String(m.at||'').slice(5,16))}</span></div>`).join('')}</div>`
+          : `<div class="state" style="padding:18px 0">${esc(T('noMsg'))}</div>`}
+        <div style="margin-top:12px">
+          <textarea id="msgBox" placeholder="${esc(T('msgPh'))}" style="min-height:70px"></textarea>
+          <button class="btn sm" style="width:100%;margin-top:8px" onclick="sendMsg('${o.id}')">${esc(T('send'))}</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function editOrder(id){
+  const o = S.lookup.orders.find(x=>x.id===id); if(!o) return;
+  S.cart = parseItems(o);
+  B.name = o.name; B.phone = o.phone; B.kakaoId = o.kakaoId||''; B.referrer = o.referrer||'';
+  S.lookup.editing = id;
+  S.lookup.open = null;
+  go('cart');
+  setTimeout(()=>{
+    $('#dock').innerHTML = `<div class="dock"><div class="in">
+      <button class="btn mango" id="submitBtn" onclick="saveEditedOrder('${id}')">
+        ${esc(T('save'))} · ${money(grandTotal(S.cart))}</button></div></div>`;
+  },0);
+}
+window.editOrder = editOrder;
+
+async function saveEditedOrder(id){
+  const btn = $('#submitBtn'); if(btn){ btn.disabled=true; btn.textContent=T('submitting'); }
+  try{
+    await api('updateOrder', { id, phone:B.phone.trim(), name:B.name.trim(),
+                               kakaoId:B.kakaoId.trim(), items:S.cart }, 30000);
+    S.cart=[]; S.lookup.editing=null;
+    toast(T('saved'));
+    await doLookup();
+    go('lookup');
+  }catch(e){
+    toast(e.name==='AbortError'?T('failTitle'):e.message, true);
+    if(btn){ btn.disabled=false; btn.textContent=T('save'); }
+  }
+}
+window.saveEditedOrder = saveEditedOrder;
+
+function askCancel(id){
+  modal(`<h3 class="display">${esc(T('cancelOrder'))}</h3>
+    <div class="km-safe" style="color:var(--ink-2)">${esc(T('cancelConfirm'))}</div>
+    <div class="row" style="margin-top:18px">
+      <button class="btn ghost" onclick="closeModal()">${esc(T('close'))}</button>
+      <button class="btn danger" onclick="doCancel('${id}')">${esc(T('confirm'))}</button>
+    </div>`);
+}
+window.askCancel = askCancel;
+
+async function doCancel(id){
+  closeModal();
+  try{
+    await api('cancelRequest', { id, phone:L.phone.trim() }, 30000);
+    toast(T('cancelDone'));
+    S.lookup.open=null;
+    await doLookup();
+  }catch(e){ toast(e.message, true); }
+}
+window.doCancel = doCancel;
+
+async function sendMsg(id){
+  const box = $('#msgBox'); const text = (box?box.value:'').trim();
+  if(!text) return;
+  try{
+    await api('addMessage', { id, from:'buyer', phone:L.phone.trim(), text }, 30000);
+    if(box) box.value='';
+    toast(T('msgSent'));
+    await doLookup();
+    S.lookup.open = S.lookup.orders.find(x=>x.id===id)||null;
+    render();
+  }catch(e){ toast(e.message, true); }
+}
+window.sendMsg = sendMsg;
+
+
+/* ═══════════ ⑬ 관리자 (한국어 전용) ═══════════ */
+
+function askPin(){
+  modal(`<h3 class="display">${esc(T('aFarmManage'))}</h3>
+    <div class="mini" style="margin-bottom:10px">${esc(T('aPinTitle'))}</div>
+    <input id="pinIn" type="tel" inputmode="numeric" maxlength="8" style="text-align:center;font-size:24px;letter-spacing:.4em">
+    <button class="btn" style="margin-top:16px" onclick="tryPin()">${esc(T('aEnter'))}</button>`);
+  setTimeout(()=>{ const el=$('#pinIn'); if(el){ el.focus();
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter') tryPin(); }); } },80);
+}
+window.askPin = askPin;
+
+async function tryPin(){
+  const pin = ($('#pinIn')||{}).value || '';
+  try{
+    await api('adminLogin', { pin });
+    S.admin.pin = pin; S.admin.on = true;
+    sessionStorage.setItem('pin', pin);
+    closeModal();
+    await loadAdmin();
+    go('admin');
+  }catch(e){ toast(e.message, true); }
+}
+window.tryPin = tryPin;
+
+async function loadAdmin(){
+  try{
+    const r = await api('adminAll', { pin:S.admin.pin }, 25000);
+    S.admin.orders = (r.orders||[]).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));
+    S.admin.news = r.news||[];
+    S.products = r.products||[];
+    S.availability = r.availability||[];
+    S.settings = r.settings||{};
+    S.account = r.account||{};
+    return true;
+  }catch(e){ toast(e.message, true); return false; }
+}
+window.loadAdmin = loadAdmin;
+
+function AT(){ return [['orders',T('aTabOrders')],['work',T('aTabWork')],['products',T('aTabProducts')],
+            ['avail',T('aTabAvail')],['news',T('aTabNews')],['settings',T('aTabSettings')]]; }
+
+/* ---------- 관리자 탭 좌우 넘기기 ----------
+   PC에는 터치 스와이프가 없어 화면 밖으로 밀려난 탭(⑥ 가게 설정)을 누를 방법이 없었다.
+   넘칠 때만 좌우 화살표를 띄우고, 스크롤 위치에 따라 자동으로 숨긴다. */
+function updateTabNav(){
+  const box = $('#adminTabs'); if(!box) return;
+  const prev = $('#tabPrev'), next = $('#tabNext');
+  const fadeL = $('#tabFadeL'), fadeR = $('#tabFadeR');
+  const overflow = box.scrollWidth - box.clientWidth;
+  if(overflow <= 4){                              // 넘치지 않으면 전부 숨김
+    [prev,next,fadeL,fadeR].forEach(el=>el&&el.classList.remove('show'));
+    return;
+  }
+  const atStart = box.scrollLeft <= 2;
+  const atEnd   = box.scrollLeft >= overflow - 2;
+  prev  && prev.classList.toggle('show', !atStart);
+  fadeL && fadeL.classList.toggle('show', !atStart);
+  next  && next.classList.toggle('show', !atEnd);
+  fadeR && fadeR.classList.toggle('show', !atEnd);
+}
+function scrollTabs(dir){
+  const box = $('#adminTabs'); if(!box) return;
+  box.scrollBy({ left: dir * Math.max(140, box.clientWidth * 0.6), behavior:'smooth' });
+  setTimeout(updateTabNav, 320);
+}
+window.scrollTabs = scrollTabs;
+
+function initTabScroll(){
+  const box = $('#adminTabs'); if(!box) return;
+  box.addEventListener('scroll', updateTabNav, {passive:true});
+  // 선택된 탭이 화면 밖이면 보이도록 끌어온다
+  const on = box.querySelector('button.on');
+  if(on && on.scrollIntoView) on.scrollIntoView({block:'nearest', inline:'center'});
+  updateTabNav();
+  setTimeout(updateTabNav, 60);   // 웹폰트 로딩 후 폭이 바뀌는 경우 대비
+}
+window.addEventListener('resize', updateTabNav);
+
+function viewAdmin(){
+  if(!S.admin.on) return `<div class="state"><span class="em">🔒</span>${esc(T('aPinNeeded'))}
+    <div style="margin-top:16px"><button class="btn" style="max-width:200px;margin:0 auto" onclick="askPin()">${esc(T('aReenter'))}</button></div></div>`;
+  return `<div class="wrap">
+    <div class="tabsWrap">
+      <div class="tabFade left" id="tabFadeL"></div>
+      <div class="tabFade right" id="tabFadeR"></div>
+      <button class="tabNav prev" id="tabPrev" aria-label="이전 탭" onclick="scrollTabs(-1)">‹</button>
+      <button class="tabNav next" id="tabNext" aria-label="다음 탭" onclick="scrollTabs(1)">›</button>
+      <div class="tabs" id="adminTabs">${AT().map(([k,l])=>
+        `<button class="${S.admin.tab===k?'on':''}" onclick="S.admin.tab='${k}';window.scrollTo(0,0);render()">${l}</button>`).join('')}</div>
+    </div>
+    <div id="adminBody">${
+      S.admin.tab==='orders'?tabOrders():
+      S.admin.tab==='work'?tabWork():
+      S.admin.tab==='products'?tabProducts():
+      S.admin.tab==='avail'?tabAvail():
+      S.admin.tab==='news'?tabNews():tabSettings()}</div>
+    <div class="mini" style="text-align:center;margin-top:10px">${esc(T('aSetLangHint'))}</div>
+    <div style="text-align:center;margin-top:14px">
+      <button class="btn sm ghost" onclick="loadAdmin().then(render)">${esc(T('aRefresh'))}</button>
+      <button class="btn sm ghost" onclick="S.admin.on=false;sessionStorage.removeItem('pin');go('landing')">${esc(T('aLogout'))}</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- ① 주문 확인 ---------- */
+function tabOrders(){
+  const list = S.admin.orders;
+  if(!list.length) return `<div class="state"><span class="em">📭</span>${esc(T('aNoOrders'))}</div>`;
+  return list.map(o=>{
+    const items = parseItems(o), msgs = parseMsgs(o);
+    const cancelled = String(o.cancelRequested)==='Y';
+    const needReply = msgs.length && msgs[msgs.length-1].from==='buyer';
+    return `<div class="card" style="${cancelled?'border:2px solid var(--clay);background:var(--clay-sf)':''}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700;font-size:16px">${esc(o.name)}</div>
+          <div class="mini"><a href="tel:${esc(o.phone)}">${esc(o.phone)}</a>
+            ${o.kakaoId?` · ${esc(T('aKakao'))} <b>${esc(o.kakaoId)}</b>`:''}</div>
+          <div class="mini">${esc(String(o.createdAt).slice(0,16))}
+            ${o.referrer?` · ${esc(T('aReferredBy'))}: <b>${esc(o.referrer)}</b>`:''}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-weight:700" class="mono">${money(orderTotal(o))}</div>
+          <div style="display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;margin-top:4px">
+            ${cancelled?`<span class="badge clay">${esc(T('aBadgeCancel'))}</span>`:''}
+            ${String(o.modified)==='Y'?`<span class="badge mango">${esc(T('aBadgeModified'))}</span>`:''}
+            ${needReply?`<span class="badge clay">${esc(T('aBadgeNeedReply'))}</span>`:''}
+          </div>
+        </div>
+      </div>
+      <div class="divider" style="margin:11px 0"></div>
+      ${items.map(it=>{
+        const p = S.products.find(x=>x.id===it.productId)||{};
+        const chg = it.itemModifiedAt;
+        return `<div style="padding:7px 0;border-bottom:1px dashed var(--line)">
+          <div style="display:flex;justify-content:space-between;font-size:14px">
+            <span>${esc(p.name||it.productName)} × <b>${n(it.qty)}</b>${esc(it.unit||'개')}${it.gift==='Y'?' 🎁':''}</span>
+            <span class="mono">${money(it.amountCents)}</span></div>
+          <div class="mini">${esc(mlabel(it.method))} · ${esc(schedText(it))}
+            ${it.method==='delivery'&&addrText(it)?`<br>📍 ${esc(addrText(it))}`:''}
+            ${it.mapLink?` <a href="${esc(it.mapLink)}" target="_blank" rel="noopener">${esc(T('aMapText'))}</a>`:''}
+            ${it.landmark?`<br>📝 ${esc(it.landmark)}`:''}
+            ${it.gift==='Y'?`<br>🎁 ${esc(it.giftName)} ${esc(it.giftPhone||'')}`:''}</div>
+          ${chg?`<div class="mini" style="color:var(--mango);margin-top:3px">
+            ${esc(T('aChangedTag'))} ${esc(it.origQty)}→${n(it.qty)} · ${money(it.origAmountCents)}→${money(it.amountCents)} · ${esc(String(chg).slice(5,16))}</div>`:''}
+        </div>`;}).join('')}
+
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">
+        ${String(o.smsSent)==='Y'
+          ? `<span class="badge">${esc(T('aSmsSentBadge'))}</span>
+             <button class="btn sm ghost" onclick="sendSMS('${o.id}',true)">${esc(T('aSmsResend'))}</button>`
+          : `<button class="btn sm" onclick="sendSMS('${o.id}')">${esc(T('aSmsSend'))}</button>`}
+        <button class="btn sm ghost" onclick="editItems('${o.id}')">${esc(T('aEditItemsBtn'))}</button>
+        ${String(o.modified)==='Y'?`<button class="btn sm ghost" onclick="clearMod('${o.id}')">${esc(T('aClearModified'))}</button>`:''}
+        <button class="btn sm ghost" onclick="replyBox('${o.id}')">${esc(T('aReplyBtn'))} ${msgs.length?`(${msgs.length})`:''}</button>
+        <button class="btn sm danger" onclick="askDelete('${o.id}','${esc(o.name)}')">${cancelled?esc(T('aCancelConfirmDelete')):esc(T('aDeleteOrder'))}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function smsBody(o){
+  const items = parseItems(o);
+  const st = S.settings;
+  const tmpl = (st.smsDefault==='delay' ? st.smsTemplateDelay : st.smsTemplate) || '';
+  let s = `[${st.businessName||'농원'}] ${o.name}님 주문이 접수되었습니다.\n\n`;
+  items.forEach((it,i)=>{
+    const p = S.products.find(x=>x.id===it.productId)||{};
+    s += `${i+1}. ${p.name||it.productName} ${n(it.qty)}${it.unit||'개'} - ${money(it.amountCents)}\n`;
+    s += `   ${mlabel(it.method)} / ${schedText(it)}\n`;
+  });
+  s += `\n합계 ${money(orderTotal(o))}\n`;
+  if(tmpl) s += `\n${tmpl}`;
+  return s;
+}
+function sendSMS(id, again){
+  const o = S.admin.orders.find(x=>x.id===id); if(!o) return;
+  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const sep = iOS ? '&' : '?';
+  const href = `sms:${String(o.phone).replace(/[^0-9+]/g,'')}${sep}body=${encodeURIComponent(smsBody(o))}`;
+  window.location.href = href;
+  setTimeout(async()=>{
+    try{ await api('setOrderFlag',{pin:S.admin.pin,id,smsSent:true});
+      o.smsSent='Y'; render(); }catch(e){}
+  }, 900);
+}
+window.sendSMS = sendSMS;
+
+async function clearMod(id){
+  try{ await api('setOrderFlag',{pin:S.admin.pin,id,clearModified:true});
+    const o=S.admin.orders.find(x=>x.id===id); if(o) o.modified=''; render(); toast(T('aModifiedCleared'));
+  }catch(e){ toast(e.message,true); }
+}
+window.clearMod = clearMod;
+
+function askDelete(id,name){
+  modal(`<h3 class="display">${esc(T('aOrderDeleteTitle'))}</h3>
+    <div style="color:var(--clay);font-weight:500">${esc(T('aOrderDeleteWarn'))}<br>${esc(T('aOrderDeleteConfirm').replace('{name}',name))}</div>
+    <div class="row" style="margin-top:18px">
+      <button class="btn ghost" onclick="closeModal()">${esc(T('aGiveUp'))}</button>
+      <button class="btn danger" onclick="doDelete('${id}')">${esc(T('aDeleteDo'))}</button></div>`);
+}
+window.askDelete = askDelete;
+async function doDelete(id){
+  closeModal();
+  try{ await api('deleteOrder',{pin:S.admin.pin,id});
+    S.admin.orders = S.admin.orders.filter(x=>x.id!==id); render(); toast(T('aDeletedToast'));
+  }catch(e){ toast(e.message,true); }
+}
+window.doDelete = doDelete;
+
+function replyBox(id){
+  const o = S.admin.orders.find(x=>x.id===id); if(!o) return;
+  const msgs = parseMsgs(o);
+  modal(`<h3 class="display">${T('aChatWith').replace('{name}',esc(o.name))}</h3>
+    ${msgs.length?`<div class="thread" style="max-height:44vh;overflow-y:auto">${msgs.map(m=>`
+      <div class="msg ${m.from==='farm'?'buyer':'farm'}">${esc(m.text)}
+        <span class="t">${m.from==='farm'?esc(T('aFarmer')):esc(T('aBuyer'))} · ${esc(String(m.at||'').slice(5,16))}</span></div>`).join('')}</div>`
+      :`<div class="state" style="padding:16px 0">${esc(T('aNoMessages'))}</div>`}
+    <textarea id="replyIn" placeholder="${esc(T('aReplyPh'))}" style="margin-top:12px"></textarea>
+    <div class="row" style="margin-top:10px">
+      <button class="btn ghost" onclick="closeModal()">${esc(T('close'))}</button>
+      <button class="btn" style="flex:2" onclick="doReply('${id}')">${esc(T('aReplySend'))}</button></div>
+    <div class="hint">${esc(T('aReplyHint'))}</div>`);
+}
+window.replyBox = replyBox;
+async function doReply(id){
+  const t = ($('#replyIn')||{}).value||'';
+  if(!t.trim()) return;
+  try{
+    await api('addMessage',{pin:S.admin.pin,id,from:'farm',text:t.trim()});
+    closeModal(); await loadAdmin(); render(); toast(T('aReplySaved'));
+    const o = S.admin.orders.find(x=>x.id===id);
+    if(o){
+      const iOS=/iPad|iPhone|iPod/.test(navigator.userAgent);
+      const body=`[${S.settings.businessName||'농원'}] ${o.name}님, 문의하신 내용에 답변을 남겼습니다.\n\n${t.trim()}`;
+      window.location.href=`sms:${String(o.phone).replace(/[^0-9+]/g,'')}${iOS?'&':'?'}body=${encodeURIComponent(body)}`;
+    }
+  }catch(e){ toast(e.message,true); }
+}
+window.doReply = doReply;
+
+/* ---------- 관리자 품목 수정 ---------- */
+let EDIT = null;
+function editItems(id){
+  const o = S.admin.orders.find(x=>x.id===id); if(!o) return;
+  EDIT = { id, items: JSON.parse(JSON.stringify(parseItems(o))) };
+  renderEdit();
+}
+window.editItems = editItems;
+function renderEdit(){
+  modal(`<h3 class="display">${esc(T('aEditItemsTitle'))}</h3>
+    <div class="mini" style="margin-bottom:8px">${esc(T('aEditItemsHint'))}</div>
+    ${EDIT.items.map((it,i)=>`
+      <div class="card" style="margin-top:10px">
+        <label class="f" style="margin-top:0">${esc(T('aProduct'))}</label>
+        <select onchange="editSet(${i},'productId',this.value)">
+          ${S.products.map(p=>`<option value="${p.id}" ${it.productId===p.id?'selected':''}>${esc(p.name)} (${money(p.priceCents)})</option>`).join('')}
+        </select>
+        <div class="row" style="margin-top:10px;align-items:flex-end">
+          <div><label class="f" style="margin-top:0">${esc(T('qty'))}</label>
+            <input type="number" min="1" value="${n(it.qty)}" onchange="editSet(${i},'qty',this.value)"></div>
+          <div><label class="f" style="margin-top:0">${esc(T('aAmount'))}</label>
+            <input value="${money(it.amountCents)}" disabled style="background:#F3F1EA"></div>
+        </div>
+        <label class="f">${esc(T('method'))}</label>
+        <select onchange="editSet(${i},'method',this.value)">
+          <option value="delivery" ${it.method==='delivery'?'selected':''}>${esc(T('mDelivery'))}</option>
+          <option value="pickup" ${it.method==='pickup'?'selected':''}>${esc(T('mPickup'))}</option>
+          <option value="church" ${it.method==='church'?'selected':''}>${esc(T('mChurch'))}</option>
+        </select>
+        ${it.method==='delivery'?`<label class="f">${esc(T('aDeliveryDateLabel'))}</label>
+          <input type="date" value="${esc(it.deliveryDate||'')}" onchange="editSet(${i},'deliveryDate',this.value)">`:''}
+        ${it.method==='pickup'?`<div class="row"><div><label class="f">${esc(T('visitDate'))}</label>
+          <input type="date" value="${esc(it.visitDate||'')}" onchange="editSet(${i},'visitDate',this.value)"></div>
+          <div><label class="f">${esc(T('visitTime'))}</label>
+          <input type="time" value="${esc(it.visitTime||'')}" onchange="editSet(${i},'visitTime',this.value)"></div></div>`:''}
+        ${it.method==='church'?`<label class="f">${esc(T('handPlace'))}</label>
+          <input value="${esc(it.handPlace||'')}" onchange="editSet(${i},'handPlace',this.value)">
+          <label class="f">${esc(T('handDate'))}</label>
+          <input type="date" value="${esc(it.handDate||'')}" onchange="editSet(${i},'handDate',this.value)">`:''}
+      </div>`).join('')}
+    <div class="row" style="margin-top:16px">
+      <button class="btn ghost" onclick="EDIT=null;closeModal()">${esc(T('cancel'))}</button>
+      <button class="btn" style="flex:2" onclick="saveEdit()">${esc(T('aSaveNotify'))}</button></div>`);
+}
+function editSet(i,k,v){
+  const it = EDIT.items[i];
+  it[k] = v;
+  if(k==='productId'){
+    const p = S.products.find(x=>x.id===v);
+    if(p){ it.productName=p.name; it.unit=p.unit||'개'; it.unitPriceCents=n(p.priceCents); }
+  }
+  it.qty = Math.max(1, n(it.qty));
+  it.amountCents = n(it.qty)*n(it.unitPriceCents);
+  renderEdit();
+}
+window.editSet = editSet;
+async function saveEdit(){
+  try{
+    await api('adminPatchOrder',{pin:S.admin.pin,id:EDIT.id,items:EDIT.items},30000);
+    EDIT=null; closeModal(); await loadAdmin(); render(); toast(T('aSavedNotified'));
+  }catch(e){ toast(e.message,true); }
+}
+window.saveEdit = saveEdit;
+
+/* ---------- ② 작업 목록 ---------- */
+function SUB(){ return [['delivery',T('aSubDelivery')],['pickup',T('aSubPickup')],['church',T('aSubChurch')]]; }
+function tabWork(){
+  const sub = S.admin.sub;
+  const rows = [];
+  S.admin.orders.forEach(o=>{
+    if(String(o.cancelRequested)==='Y') return;
+    parseItems(o).forEach(it=>{ if(it.method===sub) rows.push({o,it}); });
+  });
+  const dateOf = r => r.it.method==='delivery' ? (r.it.deliveryDate||String(r.o.createdAt).slice(0,10))
+                    : r.it.method==='pickup' ? (r.it.visitDate||'') : (r.it.handDate||'');
+  rows.sort((a,b)=>{
+    const c = String(dateOf(a)).localeCompare(String(dateOf(b)));
+    return c!==0?c:String(a.it.visitTime||'').localeCompare(String(b.it.visitTime||''));
+  });
+  const doneKey = sub==='delivery' ? 'delivered' : 'prepared';
+  const today = todayISO();
+  const visible = rows.filter(r=>{
+    if(sub==='delivery') return String(r.it.delivered)!=='Y';
+    return String(dateOf(r)) >= today || !dateOf(r);
+  });
+  const pending = rows.filter(r=>String(r.it[doneKey])!=='Y');
+  const thisMonth = rows.filter(r=>String(dateOf(r)).slice(0,7)===today.slice(0,7));
+
+  const tally = arr => {
+    const m = {};
+    arr.forEach(r=>{
+      const p = S.products.find(x=>x.id===r.it.productId)||{};
+      const nm = p.name||r.it.productName;
+      m[nm] = (m[nm]||0)+n(r.it.qty);
+    });
+    return Object.keys(m).map(k=>`${k} ${m[k]}`).join(' · ');
+  };
+
+  return `<div class="tabs subtabs">${SUB().map(([k,l])=>
+    `<button class="${sub===k?'on':''}" onclick="S.admin.sub='${k}';render()">${l}</button>`).join('')}</div>
+
+  <div class="card" style="background:var(--leaf-sf);border-color:#CFE0D5">
+    <div style="font-size:13.5px;line-height:1.9">
+      <div><b>${sub==='delivery'?esc(T('aUndelivered')):esc(T('aNeedPrep'))} ${T('aCountUnit').replace('{n}',pending.length)}</b>${tally(pending)?` · ${esc(tally(pending))}`:''}</div>
+      <div class="mini">${esc(T('aThisMonth'))} ${T('aCountUnit').replace('{n}',thisMonth.length)}${tally(thisMonth)?` · ${esc(tally(thisMonth))}`:''}</div>
+      <div class="mini">${esc(T('aTotalOrders'))} ${T('aCountUnit').replace('{n}',rows.length)}${tally(rows)?` · ${esc(tally(rows))}`:''}</div>
+    </div>
+  </div>
+
+  ${visible.length?visible.map(r=>{
+    const p = S.products.find(x=>x.id===r.it.productId)||{};
+    const done = String(r.it[doneKey])==='Y';
+    return `<div class="card" style="${done?'opacity:.55':''}">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <input type="checkbox" style="width:24px;height:24px;flex:0 0 auto;margin-top:2px;accent-color:var(--leaf)"
+          ${done?'checked':''} onchange="flagItem('${r.o.id}','${r.it.itemId}','${doneKey}',this.checked)">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700">${esc(p.name||r.it.productName)} × ${n(r.it.qty)}${esc(r.it.unit||'개')}
+            ${r.it.gift==='Y'?'<span class="badge mango">🎁</span>':''}</div>
+          <div class="mini" style="margin-top:3px">
+            📅 ${esc(fmtDate(dateOf(r)))} ${esc(r.it.visitTime||'')}<br>
+            👤 ${esc(r.it.gift==='Y'?r.it.giftName:r.o.name)} ·
+            <a href="tel:${esc(r.it.gift==='Y'&&r.it.giftPhone?r.it.giftPhone:r.o.phone)}">${esc(r.it.gift==='Y'&&r.it.giftPhone?r.it.giftPhone:r.o.phone)}</a>
+            ${sub==='delivery'&&addrText(r.it)?`<br>📍 ${esc(addrText(r.it))}`:''}
+            ${sub==='delivery'&&r.it.mapLink?` <a href="${esc(r.it.mapLink)}" target="_blank" rel="noopener">${esc(T('aMapText'))}</a>`:''}
+            ${sub==='delivery'&&r.it.landmark?`<br>📝 ${esc(r.it.landmark)}`:''}
+            ${sub==='church'&&r.it.handPlace?`<br>📍 ${esc(r.it.handPlace)}`:''}
+          </div>
+        </div>
+      </div>
+    </div>`;}).join('')
+  :`<div class="state"><span class="em">✅</span>${esc(T('aNoWorkLeft'))}</div>`}`;
+}
+async function flagItem(id,itemId,key,val){
+  const payload = {pin:S.admin.pin,id,itemId}; payload[key]=val;
+  const o = S.admin.orders.find(x=>x.id===id);
+  if(o){ const items=parseItems(o);
+    items.forEach(i=>{ if(i.itemId===itemId) i[key]=val?'Y':''; });
+    o.itemsJson=JSON.stringify(items); render(); }
+  try{ await api('setItemFlag',payload); }
+  catch(e){ toast(e.message,true); await loadAdmin(); render(); }
+}
+window.flagItem = flagItem;
+
+/* ---------- 이미지 압축 ---------- */
+function compress(file, maxW, quality){
+  return new Promise((res,rej)=>{
+    const fr = new FileReader();
+    fr.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxW/img.width);
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width*scale); c.height = Math.round(img.height*scale);
+        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+        res(c.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = rej; img.src = fr.result;
+    };
+    fr.onerror = rej; fr.readAsDataURL(file);
+  });
+}
+
+/* ---------- ③ 상품 관리 ---------- */
+let PROD = null;
+function tabProducts(){
+  return `<button class="btn" style="margin-top:12px" onclick="editProd()">${esc(T('aNewProductBtn'))}</button>
+  ${S.products.length?S.products.map(p=>`
+    <div class="card" style="${String(p.active)!=='Y'?'opacity:.55':''}">
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="width:58px;height:58px;border-radius:11px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:22px;${p.image&&p.image.length>50?`background:url('${p.image}') center/cover`:'background:var(--leaf-sf)'}">${p.image&&p.image.length>50?'':'🌿'}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700">${esc(p.name)}</div>
+          <div class="mini">${esc(p.nameEn||'')}${p.nameKm?` · ${esc(p.nameKm)}`:''}</div>
+          <div style="color:var(--leaf);font-weight:700;font-size:14px">${money(p.priceCents)} / 1${esc(p.unit||'개')} · ${esc(T('aStockLabel'))} ${n(p.stock)}</div>
+          ${p.saleStartDate?`<div class="mini">${esc(T('aScheduled'))} ${esc(fmtDate(p.saleStartDate))}${isSoon(p)?' '+esc(T('aSoonTag')):''}</div>`:''}
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:11px">
+        <button class="btn sm ghost" style="flex:1" onclick="toggleProd('${p.id}')">${String(p.active)==='Y'?esc(T('aOnSaleToHidden')):esc(T('aHiddenToOnSale'))}</button>
+        <button class="btn sm ghost" onclick="editProd('${p.id}')">${esc(T('aEditIcon'))}</button>
+        <button class="btn sm danger" onclick="delProd('${p.id}','${esc(p.name)}')">${esc(T('del'))}</button>
+      </div>
+    </div>`).join('')
+  :`<div class="state"><span class="em">🌿</span>${esc(T('aNoProducts'))}</div>`}`;
+}
+function editProd(id){
+  const p = id ? S.products.find(x=>x.id===id) : null;
+  PROD = p ? Object.assign({},p) : {id:'',name:'',nameKm:'',nameEn:'',priceCents:0,unit:'개',unitKm:'ដុំ',unitEn:'ea',stock:0,active:'Y',image:'',saleStartDate:''};
+  renderProd();
+}
+window.editProd = editProd;
+function renderProd(){
+  modal(`<h3 class="display">${PROD.id?esc(T('aProductEditTitle')):esc(T('aProductNewTitle'))}</h3>
+    <label class="f">${esc(T('aNameKoLabel'))}<span class="req">*</span></label>
+    <input value="${esc(PROD.name)}" oninput="PROD.name=this.value" placeholder="공심채">
+    <div class="row"><div><label class="f">${esc(T('aNameKmLabel'))}</label>
+      <input value="${esc(PROD.nameKm)}" oninput="PROD.nameKm=this.value" placeholder="ត្រកួន"></div>
+      <div><label class="f">${esc(T('aNameEnLabel'))}</label>
+      <input value="${esc(PROD.nameEn)}" oninput="PROD.nameEn=this.value" placeholder="Water spinach"></div></div>
+    <div class="row"><div><label class="f">${esc(T('aPriceUsdLabel'))}<span class="req">*</span></label>
+      <input inputmode="decimal" value="${centsToDollars(PROD.priceCents)}" oninput="PROD.priceCents=dollarsToCents(this.value)" placeholder="1.50"></div>
+      <div><label class="f">${esc(T('aStockLabel'))}</label>
+      <input type="number" min="0" value="${n(PROD.stock)}" oninput="PROD.stock=this.value"></div></div>
+    <div class="row"><div><label class="f">${esc(T('aUnitKoLabel'))}</label>
+      <input value="${esc(PROD.unit)}" oninput="PROD.unit=this.value" placeholder="묶음"></div>
+      <div><label class="f">${esc(T('aUnitKmLabel'))}</label>
+      <input value="${esc(PROD.unitKm)}" oninput="PROD.unitKm=this.value"></div>
+      <div><label class="f">${esc(T('aUnitEnLabel'))}</label>
+      <input value="${esc(PROD.unitEn)}" oninput="PROD.unitEn=this.value"></div></div>
+    <label class="f">${esc(T('aSaleStartLabel'))}</label>
+    <input type="date" value="${esc(PROD.saleStartDate)}" onchange="PROD.saleStartDate=this.value">
+    <div class="hint">${esc(T('aSaleStartHint'))}</div>
+    <label class="f">${esc(T('aPhotoLabel'))}</label>
+    ${PROD.image&&PROD.image.length>50?`<img src="${PROD.image}" style="width:100%;max-width:200px;border-radius:11px;display:block;margin-bottom:8px">`:''}
+    <input type="file" accept="image/*" onchange="pickProdImg(this)" style="padding:9px">
+    <div class="row" style="margin-top:18px">
+      <button class="btn ghost" onclick="PROD=null;closeModal()">${esc(T('cancel'))}</button>
+      <button class="btn" style="flex:2" onclick="saveProd()">${esc(T('save'))}</button></div>`);
+}
+async function pickProdImg(el){
+  if(!el.files||!el.files[0]) return;
+  toast(T('aCompressing'));
+  try{ PROD.image = await compress(el.files[0], 500, 0.72); renderProd(); }
+  catch(e){ toast(T('aPhotoFail'),true); }
+}
+window.pickProdImg = pickProdImg;
+async function saveProd(){
+  if(!PROD.name.trim()){ toast(T('aNameRequired'),true); return; }
+  try{
+    await api('saveProduct',{pin:S.admin.pin,product:PROD},30000);
+    PROD=null; closeModal(); await loadAdmin(); render(); toast(T('saved'));
+  }catch(e){ toast(e.message,true); }
+}
+window.saveProd = saveProd;
+async function toggleProd(id){
+  const p = S.products.find(x=>x.id===id); if(!p) return;
+  const v = String(p.active)==='Y'?'':'Y';
+  p.active = v; render();
+  try{ await api('saveProduct',{pin:S.admin.pin,product:{id,active:v}}); }
+  catch(e){ toast(e.message,true); await loadAdmin(); render(); }
+}
+window.toggleProd = toggleProd;
+function delProd(id,name){
+  modal(`<h3 class="display">${esc(T('aProductDeleteTitle'))}</h3><div>${esc(T('aProductDeleteConfirm').replace('{name}',name))}</div>
+    <div class="mini" style="margin-top:6px">${esc(T('aProductDeleteHint'))}</div>
+    <div class="row" style="margin-top:18px">
+      <button class="btn ghost" onclick="closeModal()">${esc(T('aGiveUp'))}</button>
+      <button class="btn danger" onclick="doDelProd('${id}')">${esc(T('del'))}</button></div>`);
+}
+window.delProd = delProd;
+async function doDelProd(id){
+  closeModal();
+  try{ await api('deleteProduct',{pin:S.admin.pin,id}); await loadAdmin(); render(); toast(T('aDeletedToast')); }
+  catch(e){ toast(e.message,true); }
+}
+window.doDelProd = doDelProd;
+
+/* ---------- ④ 상주 일정 ---------- */
+let SLOT = {date:'',start:'08:00',end:'17:00'};
+function tabAvail(){
+  const list = S.availability.slice().sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  return `<div class="card" style="margin-top:12px">
+    <div style="font-weight:700;margin-bottom:6px">${esc(T('aAvailAddTitle'))}</div>
+    <div class="mini" style="margin-bottom:8px">${esc(T('aAvailHint'))}</div>
+    <label class="f" style="margin-top:0">${esc(T('aDateLabel'))}</label>
+    <input type="date" id="slotDate" min="${todayISO()}" value="${esc(SLOT.date)}" onchange="SLOT.date=this.value">
+    <div class="row" style="margin-top:10px">
+      <div><label class="f" style="margin-top:0">${esc(T('aStartLabel'))}</label>
+        <input type="time" value="${esc(SLOT.start)}" onchange="SLOT.start=this.value"></div>
+      <div><label class="f" style="margin-top:0">${esc(T('aEndLabel'))}</label>
+        <input type="time" value="${esc(SLOT.end)}" onchange="SLOT.end=this.value"></div>
+    </div>
+    <button class="btn" style="margin-top:14px" onclick="addSlot()">${esc(T('aAddBtn'))}</button>
+  </div>
+  ${list.length?list.map(s=>`
+    <div class="card" style="display:flex;align-items:center;gap:10px;${String(s.date)<todayISO()?'opacity:.5':''}">
+      <div style="flex:1">
+        <div style="font-weight:700">${esc(fmtDate(s.date))}</div>
+        <div class="mini">${esc(s.start)} – ${esc(s.end)}</div>
+      </div>
+      <button class="btn sm danger" onclick="delSlot('${s.id}')">${esc(T('del'))}</button>
+    </div>`).join('')
+  :`<div class="state"><span class="em">📅</span>${esc(T('aNoAvail'))}</div>`}`;
+}
+async function addSlot(){
+  if(!SLOT.date){ toast(T('aPickDate'),true); return; }
+  try{ await api('saveAvailability',{pin:S.admin.pin,slot:{date:SLOT.date,start:SLOT.start,end:SLOT.end}});
+    SLOT.date=''; await loadAdmin(); render(); toast(T('aAddedToast')); }
+  catch(e){ toast(e.message,true); }
+}
+window.addSlot = addSlot;
+async function delSlot(id){
+  try{ await api('deleteAvailability',{pin:S.admin.pin,id}); await loadAdmin(); render(); }
+  catch(e){ toast(e.message,true); }
+}
+window.delSlot = delSlot;
+
+/* ---------- ⑤ 농장 소식 ---------- */
+let NEWS = null;
+function tabNews(){
+  return `<button class="btn" style="margin-top:12px" onclick="editNews()">${esc(T('aNewsWriteBtn'))}</button>
+  ${S.admin.news.length?S.admin.news.slice().reverse().map(x=>`
+    <div class="card" style="${String(x.active)!=='Y'?'opacity:.55':''}">
+      <div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:700">${esc(x.title)}</div>
+          <div class="mini">${esc(String(x.createdAt).slice(0,16))}</div>
+        </div>
+        ${String(x.active)==='Y'?`<span class="badge">${esc(T('aPublicBadge'))}</span>`:`<span class="badge gray">${esc(T('aPrivateBadge'))}</span>`}
+      </div>
+      <div class="mini" style="margin-top:8px;white-space:pre-wrap;max-height:76px;overflow:hidden">${esc(x.body)}</div>
+      <div style="display:flex;gap:6px;margin-top:11px">
+        <button class="btn sm ghost" style="flex:1" onclick="toggleNews('${x.id}')">${String(x.active)==='Y'?esc(T('aMakePrivate')):esc(T('aMakePublic'))}</button>
+        <button class="btn sm ghost" onclick="editNews('${x.id}')">${esc(T('edit'))}</button>
+        <button class="btn sm danger" onclick="delNews('${x.id}')">${esc(T('del'))}</button>
+      </div>
+    </div>`).join('')
+  :`<div class="state"><span class="em">📢</span>${esc(T('aNoNews'))}</div>`}`;
+}
+function editNews(id){
+  const x = id ? S.admin.news.find(v=>v.id===id) : null;
+  NEWS = x ? Object.assign({},x) : {id:'',title:'',body:'',image:'',active:'Y'};
+  renderNews();
+}
+window.editNews = editNews;
+function renderNews(){
+  modal(`<h3 class="display">${NEWS.id?esc(T('aNewsEditTitle')):esc(T('aNewsNewTitle'))}</h3>
+    <label class="f" style="margin-top:0">${esc(T('aTitleLabel'))}<span class="req">*</span></label>
+    <input value="${esc(NEWS.title)}" oninput="NEWS.title=this.value" placeholder="이번 주 수확 안내">
+    <label class="f">${esc(T('aContentLabel'))}</label>
+    <textarea style="min-height:130px" oninput="NEWS.body=this.value">${esc(NEWS.body)}</textarea>
+    <label class="f">${esc(T('aPhotoOptional'))}</label>
+    ${NEWS.image&&NEWS.image.length>50?`<img src="${NEWS.image}" style="width:100%;border-radius:11px;margin-bottom:8px">`:''}
+    <input type="file" accept="image/*" onchange="pickNewsImg(this)" style="padding:9px">
+    <div class="row" style="margin-top:18px">
+      <button class="btn ghost" onclick="NEWS=null;closeModal()">${esc(T('cancel'))}</button>
+      <button class="btn alt" onclick="saveNews('')">${esc(T('aPrivateSaveBtn'))}</button>
+      <button class="btn" onclick="saveNews('Y')">${esc(T('aPublicSaveBtn'))}</button></div>`);
+}
+async function pickNewsImg(el){
+  if(!el.files||!el.files[0]) return;
+  toast(T('aCompressing'));
+  try{ NEWS.image = await compress(el.files[0], 640, 0.72); renderNews(); }
+  catch(e){ toast(T('aPhotoFail'),true); }
+}
+window.pickNewsImg = pickNewsImg;
+async function saveNews(active){
+  if(!NEWS.title.trim()){ toast(T('aTitleRequired'),true); return; }
+  NEWS.active = active;
+  try{ await api('saveNews',{pin:S.admin.pin,news:NEWS},30000);
+    NEWS=null; closeModal(); await loadAdmin(); render(); toast(T('saved')); }
+  catch(e){ toast(e.message,true); }
+}
+window.saveNews = saveNews;
+async function toggleNews(id){
+  const x = S.admin.news.find(v=>v.id===id); if(!x) return;
+  const v = String(x.active)==='Y'?'':'Y';
+  x.active = v; render();
+  try{ await api('saveNews',{pin:S.admin.pin,news:{id,active:v}}); }
+  catch(e){ toast(e.message,true); await loadAdmin(); render(); }
+}
+window.toggleNews = toggleNews;
+async function delNews(id){
+  try{ await api('deleteNews',{pin:S.admin.pin,id}); await loadAdmin(); render(); toast(T('aDeletedToast')); }
+  catch(e){ toast(e.message,true); }
+}
+window.delNews = delNews;
+
+/* ---------- ⑥ 가게 설정 ---------- */
+function tabSettings(){
+  const st = S.settings, a = S.account;
+  return `
+  <div class="card" style="margin-top:12px">
+    <div style="font-weight:700;margin-bottom:4px">${esc(T('aSettingsHero'))}</div>
+    <div class="mini" style="margin-bottom:10px">${esc(T('aSettingsHeroHint'))}</div>
+    ${[1,2,3].map(i=>{
+      const v = st['landingPhoto'+i]||'';
+      return `<div style="display:flex;gap:10px;align-items:center;margin-bottom:9px">
+        <div style="width:70px;height:52px;border-radius:9px;flex:0 0 auto;${v.length>50?`background:url('${v}') center/cover`:'background:var(--leaf-sf)'};display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)">${v.length>50?'':i}</div>
+        <input type="file" accept="image/*" onchange="pickHero(this,${i})" style="flex:1;padding:7px;font-size:13px">
+        ${v.length>50?`<button class="btn sm danger" onclick="clearHero(${i})">${esc(T('aClearBtn'))}</button>`:''}
+      </div>`;}).join('')}
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px">${esc(T('aSettingsBasic'))}</div>
+    <label class="f" style="margin-top:0">${esc(T('aFarmNameLabel'))}</label>
+    <input value="${esc(st.businessName||'')}" oninput="setS('businessName',this.value)">
+    <label class="f">${esc(T('aFarmAddrLabel'))}</label>
+    <input value="${esc(st.farmAddress||'')}" oninput="setS('farmAddress',this.value)">
+    <label class="f">${esc(T('aFarmMapLabel'))}</label>
+    <input value="${esc(st.farmMapLink||'')}" oninput="setS('farmMapLink',this.value)" placeholder="https://maps.app.goo.gl/…">
+    <label class="f">${esc(T('aFarmPhoneLabel'))}</label>
+    <input type="tel" value="${esc(st.farmPhone||'')}" oninput="setS('farmPhone',this.value)">
+    <label class="f">${esc(T('aGreetingLabel'))}</label>
+    <textarea oninput="setS('greeting',this.value)" placeholder="${esc(T('aGreetingHint'))}">${esc(st.greeting||'')}</textarea>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px">${esc(T('aSettingsMoney'))}</div>
+    <label class="f" style="margin-top:0">${esc(T('aExchangeLabel'))}</label>
+    <input inputmode="numeric" value="${esc(st.exchangeRate||'4100')}" oninput="setS('exchangeRate',this.value)">
+    <label style="display:flex;align-items:center;gap:9px;margin-top:11px;cursor:pointer">
+      <input type="checkbox" style="width:21px;height:21px;accent-color:var(--leaf)" ${String(st.showRiel||'Y')==='Y'?'checked':''}
+        onchange="setS('showRiel',this.checked?'Y':'')"> <span>${esc(T('aShowRielLabel'))}</span></label>
+    <div class="row" style="margin-top:11px">
+      <div><label class="f" style="margin-top:0">${esc(T('aDeliveryFeeLabel'))}</label>
+        <input inputmode="decimal" value="${centsToDollars(st.deliveryFeeCents||150)}" oninput="setS('deliveryFeeCents',dollarsToCents(this.value))"></div>
+      <div><label class="f" style="margin-top:0">${esc(T('aFreeThresholdLabel'))}</label>
+        <input inputmode="decimal" value="${centsToDollars(st.freeDeliveryThresholdCents||2000)}" oninput="setS('freeDeliveryThresholdCents',dollarsToCents(this.value))"></div>
+    </div>
+    <div class="hint">${esc(T('aFeeHint'))}</div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:4px">${esc(T('aSettingsPay'))}</div>
+    <div class="mini" style="margin-bottom:10px">${esc(T('aPayHint'))}</div>
+    ${a.khqrImage&&a.khqrImage.length>50?`<img class="qr" src="${a.khqrImage}" style="max-width:200px;margin-bottom:9px">`:''}
+    <input type="file" accept="image/*" onchange="pickQR(this)" style="padding:9px">
+    <div class="row" style="margin-top:11px">
+      <div><label class="f" style="margin-top:0">${esc(T('bank'))}</label>
+        <input value="${esc(a.bank||'')}" oninput="setA('bank',this.value)" placeholder="ABA Bank"></div>
+      <div><label class="f" style="margin-top:0">${esc(T('holder'))}</label>
+        <input value="${esc(a.holder||'')}" oninput="setA('holder',this.value)"></div>
+    </div>
+    <label class="f">${esc(T('aAcctLabel'))}</label>
+    <input value="${esc(a.number||'')}" oninput="setA('number',this.value)">
+    <button class="btn sm" style="width:100%;margin-top:12px" onclick="saveAcct()">${esc(T('aSavePay'))}</button>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px">${esc(T('aSettingsNotify'))}</div>
+    <label class="f" style="margin-top:0">${esc(T('aNotifyEmailLabel'))}</label>
+    <input type="email" inputmode="email" value="${esc(st.notifyEmail||'')}" oninput="setS('notifyEmail',this.value)">
+    <div class="hint">${esc(T('aNotifyEmailHint'))}</div>
+    <label class="f">${esc(T('aTgTokenLabel'))}</label>
+    <input value="${esc(st.telegramToken||'')}" oninput="setS('telegramToken',this.value)" placeholder="123456:ABC-DEF…">
+    <label class="f">${esc(T('aTgChatIdLabel'))}</label>
+    <input value="${esc(st.telegramChatId||'')}" oninput="setS('telegramChatId',this.value)">
+    <div class="hint">${T('aTgHint')}</div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px">${esc(T('aSettingsSms'))}</div>
+    <label class="f" style="margin-top:0">${esc(T('aSmsDefaultLabel'))}</label>
+    <textarea oninput="setS('smsTemplate',this.value)" placeholder="${esc(T('aSmsDefaultPh'))}">${esc(st.smsTemplate||'')}</textarea>
+    <label class="f">${esc(T('aSmsDelayLabel'))}</label>
+    <textarea oninput="setS('smsTemplateDelay',this.value)" placeholder="${esc(T('aSmsDelayPh'))}">${esc(st.smsTemplateDelay||'')}</textarea>
+    <label class="f">${esc(T('aSmsWhichLabel'))}</label>
+    <select onchange="setS('smsDefault',this.value)">
+      <option value="basic" ${st.smsDefault!=='delay'?'selected':''}>${esc(T('aSmsBasicOpt'))}</option>
+      <option value="delay" ${st.smsDefault==='delay'?'selected':''}>${esc(T('aSmsDelayOpt'))}</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px">${esc(T('aSettingsPin'))}</div>
+    <input inputmode="numeric" value="${esc(st.adminPin||'')}" oninput="setS('adminPin',this.value)">
+    <div class="hint">${esc(T('aPinHint'))}</div>
+  </div>
+
+  <button class="btn" style="margin-top:16px" onclick="saveSettings()">${esc(T('aSaveSettingsBtn'))}</button>`;
+}
+function setS(k,v){ S.settings[k]=v; }
+function setA(k,v){ S.account[k]=v; }
+window.setS=setS; window.setA=setA;
+
+async function pickHero(el,i){
+  if(!el.files||!el.files[0]) return;
+  toast(T('aCompressing'));
+  try{
+    S.settings['landingPhoto'+i] = await compress(el.files[0], 500, 0.7);
+    await api('saveSettings',{pin:S.admin.pin,settings:{['landingPhoto'+i]:S.settings['landingPhoto'+i]}},30000);
+    render(); toast(T('aPhotoUploaded'));
+  }catch(e){ toast(T('aPhotoSaveFail'),true); }
+}
+window.pickHero = pickHero;
+async function clearHero(i){
+  S.settings['landingPhoto'+i]='';
+  try{ await api('saveSettings',{pin:S.admin.pin,settings:{['landingPhoto'+i]:''}}); render(); }
+  catch(e){ toast(e.message,true); }
+}
+window.clearHero = clearHero;
+async function pickQR(el){
+  if(!el.files||!el.files[0]) return;
+  toast(T('aQrProcessing'));
+  try{
+    // QR은 인식률이 중요하므로 압축을 약하게 (700px / 품질 0.92)
+    S.account.khqrImage = await compress(el.files[0], 700, 0.92);
+    render(); toast(T('aQrUploadedHint'));
+  }catch(e){ toast(T('aPhotoFail'),true); }
+}
+window.pickQR = pickQR;
+async function saveAcct(){
+  try{ await api('saveAccount',{pin:S.admin.pin,account:S.account},30000); toast(T('aAcctSaved')); }
+  catch(e){ toast(e.message,true); }
+}
+window.saveAcct = saveAcct;
+async function saveSettings(){
+  try{
+    await api('saveSettings',{pin:S.admin.pin,settings:S.settings},30000);
+    toast(T('aSettingsSaved'));
+  }catch(e){ toast(e.message,true); }
+}
+window.saveSettings = saveSettings;
+
+
+/* ═══════════ ⑭ 데이터 로드 · 부트스트랩 ═══════════ */
+
+/** 공개 데이터 불러오기. 화면을 먼저 그려두고 채우므로 백지 화면이 생기지 않는다. */
+async function loadPublic(retry){
+  if(retry){ S.failed = false; S.loaded = false; render(); }
+  const firstLoad = !S.loaded;
+  try{
+    const r = await api('public', {}, 20000);
+    S.products     = r.products     || [];
+    S.settings     = r.settings     || {};
+    S.account      = r.account      || {};
+    S.availability = r.availability || [];
+    S.news         = r.news         || [];
+    S.loaded = true; S.failed = false;
+  }catch(e){
+    S.failed = true;
+    if(!S.loaded) console.warn('공개 데이터 로드 실패:', e.message);
+  }
+  render();
+  if(firstLoad && S.loaded && needOnboard()) showOnboard();
+}
+window.loadPublic = loadPublic;
+
+/* ---------- 최초 사용 안내(온보딩) ----------
+   옆에서 설명해줄 사람 없이도 처음 온 사람이 흐름을 알 수 있게.
+   기기당 최초 1회만 표시, 현재 선택된 언어로 보여준다. */
+const OB_KEY = 'onboarded_v1';
+let obStep = 0;
+function needOnboard(){ return !localStorage.getItem(OB_KEY); }
+function showOnboard(){ obStep = 0; renderOnboard(); }
+function renderOnboard(){
+  const steps = [
+    { ic:'🧺', t:T('ob1t'), d:T('ob1d') },
+    { ic:'🛵', t:T('ob2t'), d:T('ob2d') },
+    { ic:'💳', t:T('ob3t'), d:T('ob3d') }
+  ];
+  const s = steps[obStep];
+  const last = obStep === steps.length - 1;
+  $('#onboard').innerHTML = `<div class="ob-mask">
+    <div class="ob-card">
+      <div class="ob-ic">${s.ic}</div>
+      <div class="ob-t km-safe">${esc(s.t)}</div>
+      <div class="ob-d km-safe">${esc(s.d)}</div>
+      <div class="ob-dots">${steps.map((_,i)=>`<span class="dot ${i===obStep?'on':''}"></span>`).join('')}</div>
+      <button class="btn" onclick="${last?'obFinish()':'obNext()'}">${esc(last?T('obStart'):T('obNext'))}</button>
+      ${!last?`<button class="btn sm ghost" style="margin-top:8px" onclick="obFinish()">${esc(T('obSkip'))}</button>`:''}
+    </div>
+  </div>`;
+}
+function obNext(){ obStep++; renderOnboard(); }
+function obFinish(){ localStorage.setItem(OB_KEY,'1'); $('#onboard').innerHTML=''; }
+window.obNext = obNext; window.obFinish = obFinish; window.showOnboard = showOnboard;
+
+/** 조용한 갱신 — 화면을 다시 그리되 사용자가 입력 중이면 건너뛴다 */
+async function refreshQuiet(){
+  if(document.hidden) return;
+  if(S.view === 'cart' || S.view === 'done') return;   // 작성/결제 중에는 건드리지 않음
+  const el = document.activeElement;
+  if(el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
+  if($('#modal').innerHTML.trim()) return;             // 모달 열려 있으면 건너뜀
+
+  try{
+    if(S.view === 'admin' && S.admin.on){
+      await loadAdmin();
+    }else{
+      const r = await api('public', {}, 20000);
+      S.products     = r.products     || [];
+      S.settings     = r.settings     || {};
+      S.account      = r.account      || {};
+      S.availability = r.availability || [];
+      S.news         = r.news         || [];
+      S.loaded = true; S.failed = false;
+    }
+    render();
+  }catch(e){ /* 갱신 실패는 조용히 넘긴다. 다음 주기에 다시 시도 */ }
+}
+
+/* ── 뒤로 가기 ── */
+const BACK = { shop:'landing', cart:'shop', done:'landing', lookup:'landing', admin:'landing' };
+function goBack(){
+  if(S.view === 'cart' && S.editIdx >= 0){ S.editIdx = -1; S.draft = null; render(); return; }
+  if(S.view === 'lookup' && S.lookup.editing){ S.lookup.editing = null; render(); return; }
+  if(S.view === 'lookup' && S.lookup.open){ S.lookup.open = null; render(); return; }
+  go(BACK[S.view] || 'landing');
+}
+window.goBack = goBack;
+
+/* ── 언어 전환 ── */
+function setLang(code){
+  S.lang = code;
+  localStorage.setItem('lang', code);
+  document.querySelectorAll('.langs button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.lang === code);
+  });
+  render();
+  if($('#onboard').innerHTML.trim()) renderOnboard();   // 온보딩 표시 중 언어 전환 시 즉시 반영
+}
+window.setLang = setLang;
+
+/* ── 시작 ── */
+(function boot(){
+  document.querySelectorAll('.langs button').forEach(b=>{
+    b.classList.toggle('on', b.dataset.lang === S.lang);
+    b.addEventListener('click', ()=> setLang(b.dataset.lang));
+  });
+  $('#backBtn').addEventListener('click', goBack);
+
+  // 안드로이드 물리 뒤로가기 버튼을 앱 안에서 처리
+  history.replaceState({v:'landing'}, '');
+  window.addEventListener('popstate', ()=>{
+    if(S.view !== 'landing'){ history.pushState({v:S.view}, ''); goBack(); }
+  });
+
+  render();          // 먼저 그린다 (로딩 표시)
+  loadPublic();      // 그 다음 채운다
+
+  setInterval(refreshQuiet, 15000);
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) refreshQuiet(); });
+})();
+
+</script>
+</body>
+</html>
