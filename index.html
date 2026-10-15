@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="초등교사 김재환이 학교·교회·지역 공동체의 반복 업무를 덜기 위해 AI와 함께 만든 프로젝트 모음">
+<meta property="og:title" content="김재환 프로젝트 포트폴리오">
+<meta property="og:description" content="반복 업무에 묶인 시간을 사람과 공동체에게 돌려줍니다">
+<meta property="og:type" content="website">
+<title>김재환 프로젝트 포트폴리오</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: 한 사람의 작업 노트. 좁은 본문 칼럼 + 대표 사례 하나를 크게, 나머지는 분야별 목록 */
+:root{
+  --bg:#f5f7f4; --surface:#ffffff; --ink:#18231f; --muted:#5b6862; --line:#d9e1dc;
+  --accent:#1d5a4f; --accent-soft:#e3eee9; --warm:#a3611b;
+  --display:"Gowun Batang","Nanum Myeongjo",serif;
+  --body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111816; --surface:#18211e; --ink:#e6ece8; --muted:#9aa8a1; --line:#2b3733;
+  --accent:#7cc4b2; --accent-soft:#1f2f2a; --warm:#e0a464; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111816; --surface:#18211e; --ink:#e6ece8; --muted:#9aa8a1; --line:#2b3733;
+  --accent:#7cc4b2; --accent-soft:#1f2f2a; --warm:#e0a464; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:880px;margin:0 auto;padding-block:56px 72px;display:flex;flex-direction:column;gap:64px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.35}
+p{margin:0}
+.eyebrow{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:500}
+
+/* 소개 */
+.intro{display:flex;flex-direction:column;gap:20px}
+.intro .who{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline}
+.intro .name{font-family:var(--display);font-size:22px;font-weight:700}
+.intro h1{font-size:clamp(30px,6vw,46px);font-weight:700;max-width:18ch}
+.intro h1 em{font-style:normal;color:var(--accent)}
+.intro .lead{color:var(--muted);max-width:60ch;font-size:17px}
+
+/* 대표 사례 */
+.feature{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:clamp(22px,4vw,40px);display:flex;flex-direction:column;gap:28px}
+.feature-head{display:flex;flex-direction:column;gap:10px}
+.feature h2{font-size:clamp(24px,4.5vw,32px)}
+.feature .sub{color:var(--muted)}
+.why{border-left:3px solid var(--warm);padding-left:16px;font-family:var(--display);font-size:17.5px;line-height:1.8}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.stat{background:var(--surface);padding:16px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.stat b{font-family:var(--mono);font-size:clamp(20px,3.6vw,28px);color:var(--accent);font-variant-numeric:tabular-nums;font-weight:500;line-height:1.2}
+.stat span{font-size:13px;color:var(--muted);line-height:1.5}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:24px 36px}
+.cols > div{min-width:0;display:flex;flex-direction:column;gap:8px}
+.cols h3{font-family:var(--body);font-size:14px;font-weight:600;letter-spacing:.04em;color:var(--accent)}
+.cols ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12.5px;padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-weight:500}
+
+/* 목록 */
+.list-head{display:flex;flex-direction:column;gap:16px;margin-bottom:8px}
+.list-head h2{font-size:clamp(22px,4vw,28px)}
+.filters{display:flex;flex-wrap:wrap;gap:8px}
+.filters button{font:inherit;font-size:14px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.filters button:focus-visible{outline:2px solid var(--warm);outline-offset:2px}
+.group{display:flex;flex-direction:column}
+.group-title{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:600;padding-block:28px 6px;border-bottom:1px solid var(--ink)}
+.item{display:grid;grid-template-columns:minmax(0,13rem) minmax(0,1fr);gap:8px 32px;padding-block:22px;border-bottom:1px solid var(--line)}
+.item h3{font-size:19px}
+.item .meta{display:flex;flex-direction:column;gap:10px;min-width:0}
+.item .body{display:flex;flex-direction:column;gap:12px;min-width:0}
+.item .facts{font-size:14px;color:var(--muted)}
+.item .note{font-size:13.5px;color:var(--warm)}
+.status{align-self:flex-start;font-size:12.5px;font-weight:600;padding:1px 9px;border-radius:4px;border:1px solid currentColor}
+.s-on{color:var(--accent)} .s-wip{color:var(--warm)} .s-done{color:var(--muted)}
+.closing{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:32px;color:var(--muted)}
+.closing p{max-width:62ch}
+.closing strong{color:var(--ink);font-weight:600}
+.contact{margin-top:20px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:clamp(20px,4vw,32px);display:flex;flex-direction:column;gap:12px;color:var(--ink)}
+.contact h2{font-size:clamp(20px,3.6vw,24px)}
+.contact p{color:var(--muted)}
+.contact ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.contact li{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.contact li span{font-size:13px;color:var(--muted);min-width:3.5em}
+.contact a{color:var(--accent);font-family:var(--mono);font-size:17px;text-decoration:none;border-bottom:1px solid var(--accent-soft);overflow-wrap:anywhere}
+.contact a:hover{border-bottom-color:var(--accent)}
+
+@media (max-width:640px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cols{grid-template-columns:1fr}
+  .item{grid-template-columns:1fr}
+  .wrap{padding-block:36px 56px;gap:48px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="intro">
+    <div class="who"><span class="name">김재환</span><span class="eyebrow">초등교사 · 현장 업무 자동화</span></div>
+    <h1>반복 업무에 묶인 시간을 <em>사람과 공동체</em>에게 돌려줍니다</h1>
+    <p class="lead">학교와 교회, 지역 공동체에서 매주 되풀이되는 일을 지켜보다가, 그 일을 덜어 줄 도구를 AI와 함께 직접 만들어 왔습니다. 개발자가 아닌 현장 실무자로서 문제를 발견하고, 만들고, 실제로 운영하며 고쳐 나갑니다.</p>
+  </header>
+
+  <section class="feature" aria-labelledby="f-title">
+    <div class="feature-head">
+      <span class="eyebrow">대표 사례 · 실제 운영 중</span>
+      <h2 id="f-title">교회 재정관리 시스템</h2>
+      <p class="sub">주 2시간 넘던 주일 재정 정리를 30분 안으로</p>
+    </div>
+    <p class="why">재정부 위원들이 매주 재정 정리에 많은 시간을 쏟느라, 정작 가장 중요한 공동체와의 교제를 나누지 못하는 모습이 안타까웠습니다. 위원들이 숫자가 아니라 사람 곁에 머물 수 있도록 만들었습니다.</p>
+    <div class="stats">
+      <div class="stat"><b>75%</b><span>주간 정리 시간 단축</span></div>
+      <div class="stat"><b>약 78시간</b><span>연간 절감 시간</span></div>
+      <div class="stat"><b>12명+</b><span>재정부·부서장 실사용</span></div>
+      <div class="stat"><b>2026.9</b><span>주 입력 시스템으로 운영 시작</span></div>
+    </div>
+    <div class="cols">
+      <div>
+        <h3>무엇을 하나</h3>
+        <ul>
+          <li>주간 헌금·지출 입력, 집계, 월마감</li>
+          <li>본예산·추경·결산 예상, 차년도 예산 편성</li>
+          <li>부서별 예산 신청과 집행 현황</li>
+          <li>기존 회계 프로그램 전표 입력과 은행 통장메모 자동 연동</li>
+        </ul>
+      </div>
+      <div>
+        <h3>설계 원칙</h3>
+        <ul>
+          <li>성도 개인별 헌금 정보는 저장하지 않음</li>
+          <li>삭제 대신 무효 처리로 모든 이력 보존</li>
+          <li>권한 검사는 화면이 아닌 서버에서</li>
+          <li>재정부·예산위원·부서장 역할별 권한 분리</li>
+          <li>기존 회계 프로그램은 그대로 두고 그 위에 얹음</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tags"><span class="tag">Google Apps Script</span><span class="tag">Google Sheets</span><span class="tag">유저스크립트</span><span class="tag">Claude</span></div>
+  </section>
+
+  <section aria-labelledby="l-title">
+    <div class="list-head">
+      <h2 id="l-title">그 밖의 프로젝트</h2>
+      <div class="filters" role="group" aria-label="분야 선택">
+        <button type="button" data-f="all" aria-pressed="true">전체</button>
+        <button type="button" data-f="biz" aria-pressed="false">사업체·농원</button>
+        <button type="button" data-f="church" aria-pressed="false">교회·공동체</button>
+        <button type="button" data-f="gov" aria-pressed="false">공공·행정</button>
+        <button type="button" data-f="school" aria-pressed="false">학교·교육</button>
+        <button type="button" data-f="learn" aria-pressed="false">배움과 기록</button>
+      </div>
+    </div>
+    <div id="list"></div>
+  </section>
+
+  <footer class="closing">
+    <p><strong>작업 방식.</strong> 문제를 겪는 사람 곁에서 시작하고, 작게 만들어 실제로 써 보며 고칩니다. 프로젝트마다 현재 상태, 다음 할 일, 설계 결정, 주의할 점을 문서로 남겨 다른 사람도 이어받을 수 있게 합니다. 실제로 촬영 스튜디오의 업무 시스템은 운영 방법을 업체에 전수해, 지금은 업체가 직접 고쳐 가며 쓰고 있습니다.</p>
+    <p>개인정보가 담긴 시스템은 실제 화면 대신 설명으로 소개합니다.</p>
+    <div class="contact" aria-labelledby="c-title">
+      <h2 id="c-title">함께 일하고 싶으시다면</h2>
+      <p>여러분의 현장에서 되풀이되는 일이 있다면 편하게 연락 주세요.</p>
+      <ul>
+        <li><span>전화</span><a href="tel:010-4320-2770">010-4320-2770</a></li>
+        <li><span>이메일</span><a href="mailto:idkjh01@naver.com">idkjh01@naver.com</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+
+<script>
+const GROUPS={biz:"사업체·농원",church:"교회·공동체",gov:"공공·행정",school:"학교·교육",learn:"배움과 기록"};
+const ST={on:["운영 중","s-on"],wip:["작업 중","s-wip"],test:["시험 중","s-wip"],talk:["협의 중","s-wip"],pre:["배포 전","s-wip"],done:["완료","s-done"],sold:["판매 완료","s-done"]};
+const P=[
+ {g:"biz",s:"on",t:"SPOTPLAN 촬영 스튜디오 업무 시스템",w:"푸드스타일리스트인 지인은 스튜디오에 거의 매일 들어오는 요청서를 보고 참고 사진을 찾아 정리한 뒤 촬영 담당자와 협의합니다. 이 일에만 2시간 가까이 걸려, 그 시간을 줄여 주고 싶어 만들었습니다. 운영 방법을 업체에 직접 전수해, 지금은 업체가 스스로 고쳐 가며 쓰고 있습니다.",f:"요청서 한 건의 자료 조사·협의 약 2시간 → 30분 이내 · 고객 요청서 → 회차별 제안서 → 촬영팀 인계 → 결과물 납품 → 입금 기록 · 통화 내용을 Claude로 요청서로 정리 · 직원·촬영팀 권한별 계정 관리",k:["Supabase","GitHub Pages","Claude API"]},
+ {g:"biz",s:"talk",t:"촬영 제안서 생성기",w:"지인이 일하는 스튜디오의 업무를 보니 비효율적인 단계가 있었고, 재방문 고객에 비해 신규 고객이 훨씬 적었습니다. 홍보와 첫 상담에 문제가 있다고 보고, 첫 연락부터 계약·진행·납품까지 한 흐름으로 보면서 신규 고객이 실제 계약까지 이어지도록 돕고 싶었습니다.",f:"요청서 분석 → 참고 사진 검색 → Claude 자동 선별 → 예전 제안서와 겹치는 사진 제거 → PDF·PPTX 출력 · 직원 로그인",k:["Python","Flask","Claude API","Firestore"]},
+ {g:"biz",s:"sold",t:"과수원 직거래 장터",w:"교우가 운영하는 과수원이 판로를 찾지 못해 어려움을 겪고 있었습니다. 홍보부터 주문, 배송 관리까지 쉽고 빠르게 할 수 있는 시스템을 만들어 드리고 싶었습니다.",f:"앱을 연 지 3주 만에 전량 판매",k:["Apps Script","Google Sheets"]},
+ {g:"biz",s:"pre",t:"팜슈가 농원 주문 앱",w:"선교사님의 캄보디아 팜슈가 농원 제품이 어떻게 팔리고 있는지 궁금했습니다. 과수원 직거래 장터가 3주 만에 완판되는 것을 보면서, 교회가 파송한 선교사님의 일터사역 농원 제품도 그렇게 잘 팔리기를 바라며 만들었습니다.",f:"한국어·영어·크메르어 · 장바구니와 주문 조회 · 농장주와 대화 · 농장 관리 화면 · 2027년 1월 현지 방문 때 선교사님과 배포 결정",k:["Apps Script","Google Sheets"]},
+ {g:"church",s:"on",t:"예배 영상 자동 편집·업로드",w:"현장에 오지 못하는 성도들도 예배의 감동을 좋은 소리로 함께 누리기를 바랐습니다. 매주 반복되는 편집 작업이 봉사자에게 짐이 되지 않도록 자동화했습니다.",f:"녹화본에서 찬양·설교 구간 자동 분리 · 고음질 음원 싱크 · 찬양 가사자막과 설교 음성자막 자동 생성 · 유튜브·드라이브 업로드와 보관까지 한 번에 · 6.15판",k:["Python","Flask","FFmpeg","음성 인식","글자 인식"]},
+ {g:"church",s:"test",t:"예배 쇼츠 만들기",w:"목사님께서 설교와 찬양을 쇼츠로 올리고 싶어 하셨지만, 편집 프로그램으로 자르고 자막을 넣어 올리는 일은 쉽지 않습니다. 원하는 구간만 고르면 자막이 들어간 쇼츠가 만들어지고 유튜브·인스타그램까지 올라가는 도구를 드리고 싶었습니다.",f:"세로 쇼츠·릴스 제작과 자막 · 컴퓨터에 익숙하지 않은 사역자도 더블클릭으로 설치",k:["Python","Flask","FFmpeg"]},
+ {g:"church",s:"wip",t:"교회 카페 결제 앱",w:"작은 교회 카페에서는 몇 안 되는 봉사자가 결제, 주문, 제조, 전달까지 모두 감당해야 합니다. 이 과정을 덜어 봉사자들이 지치지 않고 즐겁게 섬길 수 있도록 만들었습니다.",f:"메뉴 주문 → 제조 → 전달 흐름 완성 · 카드 결제 연동 작업 중",k:["Firebase"]},
+ {g:"church",s:"on",t:"교회 시설 예약 시스템",w:"공간 예약이 겹치거나 누가 어디를 쓰는지 몰라 생기는 혼선이 잦았습니다. 공간 때문에 생기는 불편이 모임의 즐거움을 가리지 않기를 바랐습니다.",f:"4개 공간 · 30분 단위 예약 · 반복 예약 지원 · 2.0판",k:["Apps Script","Sheets","Firestore"]},
+ {g:"church",s:"on",t:"주차 차량 관리 시스템",w:"손으로 적어 관리하던 교인 차량 등록부를 온라인으로 옮겨, 주차위원들이 더 쉽고 정확하게 차량을 관리할 수 있도록 돕고 싶었습니다.",f:"교인 차량 등록과 조회",k:["Apps Script"]},
+ {g:"church",s:"on",t:"캄보디아 선교 답사 운영",w:"답사팀이 일정을 함께 보는 것은 물론, 선교지와 캄보디아 문화를 미리 이해하고 떠나기를 바랐습니다. 다녀온 뒤 답사 보고서와 영상도 더 쉽게 만들고 싶어 참가자용 웹북과 운영 시트를 만들었습니다.",f:"참가자 7명 · 운영 시트와 웹북 자동 연동 · 명단·방 배정·예산 자동 맞춤 · 2027년 1월 출발",k:["Apps Script","Google Sheets","GitHub Pages"]},
+ {g:"gov",s:"on",t:"도 체육대회 경기 운영 협업 앱",w:"지자체 체육 부서 팀장인 지인이 2027년 장애인 경기까지 포함된 대규모 도 단위 체육대회를 맡게 되었습니다. 경기 운영을 맡은 시·도 담당자와 종목별 담당자가 중요한 연락을 그동안 메신저 단체방으로만 주고받아 왔는데, 이를 더 쉽고 체계적으로 하고 싶어 해 만들어 드렸습니다. 지금은 팀장님이 직접 고쳐 가며 쓰고 있습니다.",f:"경기장 안내 · 운영 매뉴얼 · 경기 일정 · 현장 특이사항 공동 관리 · 경기장 준비 현황",k:["Astro","Firebase","ChatGPT"]},
+ {g:"school",s:"on",t:"상담기록 앱",w:"학생, 학부모와의 다양한 갈등과 상담 내용을 손으로 정리하는 데 한계가 많았습니다. 녹음, 학습지, 상담지, 성격검사지를 그대로 스캔하고 정리해 기록 시간을 줄이고, 상담의 본질인 아이와 부모에게 집중하고 싶었습니다.",f:"손글씨 자료 사진을 글로 옮기기 · 기록 유형 자동 분류 · 진로검사(홀랜드 6유형)·성격검사 정리 · 학부모 상담 기록",n:"학생 정보 보호를 위해 화면은 공개하지 않습니다.",k:["Claude API","Google Sheets"]},
+ {g:"school",s:"on",t:"평가지 영문 변환 파이프라인",w:"한국어가 서툰 다문화 학생이 평가지를 이해하지 못해 실력과 상관없이 낮은 점수를 받는 것이 안타까웠습니다. 언어가 아니라 배운 내용으로 평가받을 수 있도록 만들었습니다.",f:"8차례 개선 · 자동 자가검증 후 출력 · 수학·국어 평가지 실제 적용",k:["Claude Vision","Python","WeasyPrint"]},
+ {g:"school",s:"on",t:"NEIS 시간표 대조 도구",w:"교사들이 학기마다 시간표를 한 칸씩 눈으로 대조하는 시간이 아까웠습니다. 그 시간을 수업 준비와 아이들에게 돌려주고 싶었습니다.",f:"여러 학년·학기 대조에 사용 · 수정 부분을 빨간색으로 표시한 문서 생성",k:["Claude 스킬","DOCX"]},
+ {g:"learn",s:"on",t:"Arrow English 학습앱",w:"영어를 다시 배우고 싶어도 마땅한 교재와 꾸준히 공부할 방법을 찾기 어려운 실버 세대 성도들을 돕고 싶었습니다.",f:"7단계 · 481문항 · 오답 추적과 학습 통계",k:["웹앱"]},
+ {g:"learn",s:"on",t:"수어공부방 앱",w:"수어를 배우며 익힌 단어와 아직 익히지 못한 단어를 구분해 효율적으로 공부하고 싶었습니다. 이 자료를 함께 배우는 수강생들과 나누어, 결석한 분들도 뒤처지거나 중도에 포기하지 않기를 바랐습니다.",f:"5주차까지 단어 266개 · 대화 102개 · 국립국어원 사전 수형 그림을 이용 허락 범위 안에서 사용 · 매주 갱신",k:["GitHub Pages","웹앱"]},
+ {g:"learn",s:"done",t:"대디캠프 15주년 웹북",w:"꿈의학교 대디캠프 15주년을 맞아 그 역사를 정리하고, 새로운 세대의 스태프와 참석자들이 캠프의 목적을 바르게 이해하고 준비하며 참여하기를 바라는 마음으로 만들었습니다.",f:"15년의 발자취 · 참가자 고백 · 준비 8주 전부터 마무리까지 운영 가이드 · 영상·사진 기록",k:["웹북"]},
+ {g:"learn",s:"wip",t:"응용근신경학(AK) 학습 노트",w:"새로운 분야를 공부하며 배운 내용을 체계적으로 정리하고 싶어 만들었습니다.",f:"12주 과정 강의별 정리 · 직접 그린 도해",k:["HTML","Python"]}
+];
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function render(f){
+  const keys=f==="all"?Object.keys(GROUPS):[f];
+  document.getElementById("list").innerHTML=keys.map(g=>`
+    <div class="group"><div class="group-title">${GROUPS[g]}</div>
+    ${P.filter(p=>p.g===g).map(p=>`
+      <article class="item">
+        <div class="meta"><h3>${esc(p.t)}</h3>${p.s?`<span class="status ${ST[p.s][1]}">${ST[p.s][0]}</span>`:""}${p.k.length?`<div class="tags">${p.k.map(k=>`<span class="tag">${esc(k)}</span>`).join("")}</div>`:""}</div>
+        <div class="body"><p>${esc(p.w)}</p>${p.f?`<p class="facts">${esc(p.f)}</p>`:""}${p.n?`<p class="note">${esc(p.n)}</p>`:""}</div>
+      </article>`).join("")}
+    </div>`).join("");
+}
+document.querySelectorAll(".filters button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  render(b.dataset.f);
+  try{localStorage.setItem("pf-filter",b.dataset.f)}catch(e){}
+}));
+let start="all";try{start=localStorage.getItem("pf-filter")||"all"}catch(e){}
+if(!GROUPS[start])start="all";
+document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.f===start));
+render(start);
+</script>
+
+</body>
+</html>
