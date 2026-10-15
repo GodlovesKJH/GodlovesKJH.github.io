@@ -235,3 +235,22 @@ function demoExtract(text) {
   return r;
 }
 const DB = DEMO ? makeDemoDB() : makeSupabaseDB();
+/* ===== 포트폴리오 체험판: 화면 보기 전용 — 저장·변경은 막는다 ===== */
+(function () {
+  const WRITE = ['submitRequest', 'submitPicks', 'confirmRequest', 'changePassword', 'createProject', 'updateProject', 'regenToken', 'deleteProjects',
+    'createRound', 'updateRound', 'deleteRound', 'addSamples', 'updateSample', 'deleteSamples', 'addLog', 'uploadAttachment', 'upload', 'fn',
+    'saveCrew', 'deleteCrew', 'saveHandoff', 'crewSetStatus', 'addResults', 'updateResult', 'deleteResults', 'uploadResult', 'confirmDelivery'];
+  const MSG = '체험판은 화면 보기 전용이라 입력·저장은 되지 않습니다.';
+  function notice() {
+    let t = document.getElementById('ro-notice');
+    if (!t) {
+      t = document.createElement('div'); t.id = 'ro-notice'; t.setAttribute('role', 'status');
+      t.style.cssText = 'position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:99999;max-width:calc(100% - 32px);' +
+        'background:#18231f;color:#f5f7f4;padding:10px 16px;border-radius:10px;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;box-shadow:0 6px 20px rgba(0,0,0,.25)';
+      document.body.appendChild(t);
+    }
+    t.textContent = MSG; t.hidden = false;
+    clearTimeout(notice.timer); notice.timer = setTimeout(() => { t.hidden = true; }, 2600);
+  }
+  WRITE.forEach(k => { if (typeof DB[k] === 'function') DB[k] = async function () { notice(); throw new Error(MSG); }; });
+})();
